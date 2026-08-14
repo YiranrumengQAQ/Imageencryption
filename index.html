@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>在线网页代理</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --primary: #3b82f6;
+      --text: #f8fafc;
+      --border: #334155;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    .header {
+      background: var(--card);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .logo {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--primary);
+    }
+    .input-group {
+      flex: 1;
+      display: flex;
+      gap: 8px;
+    }
+    input {
+      flex: 1;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+    }
+    input:focus { border-color: var(--primary); }
+    button {
+      padding: 10px 18px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    button:hover { opacity: 0.9; }
+    button.alt-btn { background: #475569; }
+    .status-bar {
+      font-size: 0.8rem;
+      color: #94a3b8;
+    }
+    .status-online { color: #10b981; }
+    .status-offline { color: #ef4444; }
+    #frameContainer {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    .empty-state {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="logo">ProxyWeb</div>
+    <div class="input-group">
+      <input type="text" id="targetUrl" placeholder="输入网址，例如 https://wikipedia.org" autofocus />
+      <button onclick="navigate('frame')">内嵌加载</button>
+      <button class="alt-btn" onclick="navigate('tab')">新标签打开</button>
+    </div>
+    <div id="backendStatus" class="status-bar">检测节点状态...</div>
+  </div>
+
+  <div id="emptyView" class="empty-state">
+    <p>在上方输入链接以开始访问</p>
+  </div>
+  <iframe id="frameContainer" style="display: none;"></iframe>
+
+  <script>
+    const BACKEND_BASE = "https://156.246.95.165.nip.io";
+
+    function formatUrl(url) {
+      let target = url.trim();
+      if (!target) return null;
+      if (!/^https?:\/\//i.test(target)) {
+        target = "https://" + target;
+      }
+      return target;
+    }
+
+    function navigate(mode) {
+      const input = document.getElementById("targetUrl");
+      const url = formatUrl(input.value);
+      if (!url) return;
+
+      const proxyUrl = `${BACKEND_BASE}/proxy/${url}`;
+
+      if (mode === 'tab') {
+        window.open(proxyUrl, '_blank');
+      } else {
+        document.getElementById("emptyView").style.display = "none";
+        const iframe = document.getElementById("frameContainer");
+        iframe.style.display = "block";
+        iframe.src = proxyUrl;
+      }
+    }
+
+    document.getElementById("targetUrl").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") navigate('frame');
+    });
+
+    // 探测后端健康状态
+    fetch(`${BACKEND_BASE}/health`)
+      .then(res => res.json())
+      .then(data => {
+        const el = document.getElementById("backendStatus");
+        el.innerText = "● 节点在线 (HTTPS 正常)";
+        el.className = "status-bar status-online";
+      })
+      .catch(err => {
+        const el = document.getElementById("backendStatus");
+        el.innerText = "● 节点离线或网络异常";
+        el.className = "status-bar status-offline";
+      });
+  </script>
+</body>
+</html>
