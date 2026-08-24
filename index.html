@@ -1,1894 +1,1195 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="light">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>星语心愿 · 浪漫留言板</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0a0a1a">
+    <meta name="description" content="图片元数据清除器 - 前端/后端双模式处理，隐私安全">
+    <title>元数据清除器 - Glassmorphism</title>
     <style>
-        /* ==================== CSS 变量与主题 ==================== */
         :root {
-            --bg-gradient-start: #f8e8f0;
-            --bg-gradient-mid: #e8d5f5;
-            --bg-gradient-end: #d5e8f5;
-            --glass-bg: rgba(255, 255, 255, 0.45);
-            --glass-bg-strong: rgba(255, 255, 255, 0.65);
-            --glass-border: rgba(255, 255, 255, 0.55);
-            --glass-shadow: 0 8px 40px rgba(120, 80, 140, 0.12);
-            --text-primary: #2d1b3d;
-            --text-secondary: #6b5a7d;
-            --text-muted: #9a8aaa;
-            --accent-1: #ff6b9d;
-            --accent-2: #a18cd1;
-            --accent-3: #6ba6ff;
-            --accent-gradient: linear-gradient(135deg, #ff6b9d, #a18cd1, #6ba6ff);
-            --accent-gradient-soft: linear-gradient(135deg, rgba(255, 107, 157, 0.15), rgba(161, 140, 209, 0.15), rgba(107, 166, 255, 0.15));
-            --success: #4caf50;
-            --error: #e74c3c;
-            --warning: #f39c12;
-            --input-bg: rgba(255, 255, 255, 0.55);
-            --input-border: rgba(255, 255, 255, 0.7);
-            --card-hover-transform: translateY(-4px);
-            --transition-speed: 0.35s;
-            --radius-sm: 10px;
-            --radius-md: 18px;
-            --radius-lg: 26px;
-            --radius-xl: 36px;
-            --font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
-            --nav-height: 70px;
-            --particle-opacity: 0.5;
-            --scrollbar-thumb: rgba(161, 140, 209, 0.4);
-            --scrollbar-thumb-hover: rgba(161, 140, 209, 0.7);
+            --bg-gradient-light: linear-gradient(135deg, #d4e4ff 0%, #f0e6ff 25%, #e8f0fe 50%, #fce4ec 75%, #e0f7fa 100%);
+            --bg-gradient-dark: linear-gradient(135deg, #0a0a1a 0%, #1a0a2e 25%, #0d1b2a 50%, #1a0a20 75%, #0a1a1a 100%);
+            --glass-bg-light: rgba(255, 255, 255, 0.45);
+            --glass-bg-dark: rgba(20, 20, 40, 0.55);
+            --glass-border-light: rgba(255, 255, 255, 0.55);
+            --glass-border-dark: rgba(255, 255, 255, 0.12);
+            --glass-shadow-light: 0 8px 32px rgba(31, 38, 135, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            --glass-shadow-dark: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+            --text-primary-light: #1a1a2e;
+            --text-primary-dark: #f0f0f8;
+            --text-secondary-light: #4a4a6a;
+            --text-secondary-dark: #a0a0c0;
+            --accent-1: #6366f1;
+            --accent-2: #8b5cf6;
+            --accent-3: #d946ef;
+            --accent-gradient: linear-gradient(135deg, #6366f1, #8b5cf6, #d946ef);
+            --success-color: #10b981;
+            --error-color: #ef4444;
+            --warning-color: #f59e0b;
+            --info-color: #3b82f6;
+            --card-radius: 24px;
+            --card-radius-sm: 16px;
+            --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --blur-amount: 24px;
+            --saturate-amount: 180%;
+            --orb-size: 500px;
         }
 
-        [data-theme="dark"] {
-            --bg-gradient-start: #0d0a1a;
-            --bg-gradient-mid: #1a1028;
-            --bg-gradient-end: #0f1a2e;
-            --glass-bg: rgba(20, 15, 35, 0.55);
-            --glass-bg-strong: rgba(25, 18, 45, 0.75);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --glass-shadow: 0 8px 40px rgba(0, 0, 0, 0.35);
-            --text-primary: #f0e8ff;
-            --text-secondary: #c5b8d9;
-            --text-muted: #8a7a9e;
-            --accent-1: #ff7eb3;
-            --accent-2: #b39ddb;
-            --accent-3: #82b1ff;
-            --accent-gradient: linear-gradient(135deg, #ff7eb3, #b39ddb, #82b1ff);
-            --accent-gradient-soft: linear-gradient(135deg, rgba(255, 126, 179, 0.12), rgba(179, 157, 219, 0.12), rgba(130, 177, 255, 0.12));
-            --input-bg: rgba(255, 255, 255, 0.07);
-            --input-border: rgba(255, 255, 255, 0.15);
-            --card-hover-transform: translateY(-4px);
-            --particle-opacity: 0.35;
-            --scrollbar-thumb: rgba(179, 157, 219, 0.35);
-            --scrollbar-thumb-hover: rgba(179, 157, 219, 0.6);
-        }
-
-        /* ==================== 全局样式 ==================== */
-        * {
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
         html {
-            scroll-behavior: smooth;
             font-size: 16px;
+            -webkit-text-size-adjust: 100%;
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: var(--font-family);
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
             min-height: 100vh;
-            background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-mid), var(--bg-gradient-end));
+            min-height: 100dvh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-gradient-light);
             background-attachment: fixed;
-            color: var(--text-primary);
-            transition: background var(--transition-speed) ease, color var(--transition-speed) ease;
+            transition: background 0.8s var(--transition-smooth), color 0.8s var(--transition-smooth);
+            color: var(--text-primary-light);
             overflow-x: hidden;
-            position: relative;
-            line-height: 1.6;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            will-change: background, color;
         }
 
-        /* ==================== 浮动背景粒子 ==================== */
-        .bg-particles {
+        body.dark {
+            background: var(--bg-gradient-dark);
+            background-attachment: fixed;
+            color: var(--text-primary-dark);
+        }
+
+        .bg-orbs {
             position: fixed;
             inset: 0;
             pointer-events: none;
             z-index: 0;
             overflow: hidden;
+            filter: blur(80px);
+            opacity: 0.7;
+            transition: opacity 0.8s var(--transition-smooth);
         }
-        .bg-particle {
+        body.dark .bg-orbs {
+            opacity: 0.5;
+        }
+        .bg-orb {
             position: absolute;
             border-radius: 50%;
-            background: var(--accent-gradient);
-            opacity: var(--particle-opacity);
-            animation: floatParticle var(--duration, 20s) ease-in-out infinite;
-            animation-delay: var(--delay, 0s);
-            filter: blur(2px);
+            animation: orbFloat 18s ease-in-out infinite alternate;
+            will-change: transform;
         }
-        @keyframes floatParticle {
-            0%,
-            100% {
-                transform: translate(0, 0) scale(1);
-            }
-            25% {
-                transform: translate(var(--dx1, 30px), var(--dy1, -40px)) scale(1.1);
-            }
-            50% {
-                transform: translate(var(--dx2, -20px), var(--dy2, -60px)) scale(0.95);
-            }
-            75% {
-                transform: translate(var(--dx3, 40px), var(--dy3, -20px)) scale(1.05);
-            }
+        .bg-orb:nth-child(1) {
+            width: var(--orb-size);
+            height: var(--orb-size);
+            background: radial-gradient(circle at 30% 30%, #818cf8, transparent 70%);
+            top: -15%;
+            left: -10%;
+            animation-duration: 22s;
+            animation-delay: 0s;
+        }
+        .bg-orb:nth-child(2) {
+            width: calc(var(--orb-size) * 0.8);
+            height: calc(var(--orb-size) * 0.8);
+            background: radial-gradient(circle at 60% 40%, #e879f9, transparent 70%);
+            bottom: -20%;
+            right: -5%;
+            animation-duration: 25s;
+            animation-delay: -5s;
+        }
+        .bg-orb:nth-child(3) {
+            width: calc(var(--orb-size) * 0.6);
+            height: calc(var(--orb-size) * 0.6);
+            background: radial-gradient(circle at 50% 50%, #38bdf8, transparent 70%);
+            top: 40%;
+            left: 50%;
+            animation-duration: 20s;
+            animation-delay: -10s;
+        }
+        .bg-orb:nth-child(4) {
+            width: calc(var(--orb-size) * 0.5);
+            height: calc(var(--orb-size) * 0.5);
+            background: radial-gradient(circle at 40% 60%, #a78bfa, transparent 70%);
+            top: 60%;
+            left: 5%;
+            animation-duration: 28s;
+            animation-delay: -3s;
         }
 
-        /* ==================== 滚动条 ==================== */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--scrollbar-thumb);
-            border-radius: 3px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--scrollbar-thumb-hover);
+        @keyframes orbFloat {
+            0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+            33% { transform: translate(60px, -40px) scale(1.1) rotate(5deg); }
+            66% { transform: translate(-30px, 50px) scale(0.95) rotate(-3deg); }
+            100% { transform: translate(20px, -20px) scale(1.05) rotate(2deg); }
         }
 
-        /* ==================== 容器 ==================== */
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 20px;
+        .app-container {
             position: relative;
             z-index: 1;
+            width: 100%;
+            max-width: 720px;
+            padding: 16px;
+            margin: 0 auto;
         }
 
-        /* ==================== 顶部导航 ==================== */
-        .navbar {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            padding: 14px 0;
-            backdrop-filter: blur(24px) saturate(1.4);
-            -webkit-backdrop-filter: blur(24px) saturate(1.4);
-            background: var(--glass-bg);
-            border-bottom: 1px solid var(--glass-border);
-            transition: all var(--transition-speed) ease;
-        }
-        .navbar-inner {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 16px;
-            flex-wrap: wrap;
-        }
-        .navbar-logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 700;
-            font-size: 1.3rem;
-            letter-spacing: 1px;
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            user-select: none;
-            text-decoration: none;
-            white-space: nowrap;
-        }
-        .navbar-logo svg {
-            width: 36px;
-            height: 36px;
-            flex-shrink: 0;
-        }
-        .navbar-actions {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-        .nav-user-badge {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
-            border-radius: 50px;
-            background: var(--glass-bg-strong);
-            border: 1px solid var(--glass-border);
-            backdrop-filter: blur(12px);
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: var(--text-secondary);
-            transition: all var(--transition-speed) ease;
-            cursor: default;
-            user-select: none;
-        }
-        .nav-user-badge .account-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--success);
-            animation: pulseDot 2s ease-in-out infinite;
-        }
-        @keyframes pulseDot {
-            0%,
-            100% {
-                box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.5);
-            }
-            50% {
-                box-shadow: 0 0 0 6px rgba(76, 175, 80, 0);
-            }
-        }
-
-        /* 主题切换按钮 */
-        .theme-toggle-btn {
-            width: 46px;
-            height: 46px;
-            border-radius: 50%;
-            border: 1px solid var(--glass-border);
-            background: var(--glass-bg-strong);
-            backdrop-filter: blur(12px);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all var(--transition-speed) ease;
-            color: var(--text-primary);
-            position: relative;
-            overflow: hidden;
-        }
-        .theme-toggle-btn:hover {
-            transform: scale(1.08);
-            box-shadow: 0 4px 20px rgba(161, 140, 209, 0.25);
-        }
-        .theme-toggle-btn svg {
-            width: 22px;
-            height: 22px;
-            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        [data-theme="dark"] .theme-toggle-btn .icon-sun {
-            transform: rotate(0deg) scale(1);
-            opacity: 1;
-        }
-        [data-theme="dark"] .theme-toggle-btn .icon-moon {
-            transform: rotate(90deg) scale(0);
-            opacity: 0;
-            position: absolute;
-        }
-        [data-theme="light"] .theme-toggle-btn .icon-sun {
-            transform: rotate(-90deg) scale(0);
-            opacity: 0;
-            position: absolute;
-        }
-        [data-theme="light"] .theme-toggle-btn .icon-moon {
-            transform: rotate(0deg) scale(1);
-            opacity: 1;
-        }
-
-        /* ==================== 英雄区域 ==================== */
-        .hero {
-            text-align: center;
-            padding: 50px 0 30px;
-            position: relative;
-        }
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 20px;
-            border-radius: 50px;
-            font-size: 0.82rem;
-            font-weight: 600;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            background: var(--accent-gradient-soft);
-            border: 1px solid var(--glass-border);
-            backdrop-filter: blur(8px);
-            color: var(--text-secondary);
-            margin-bottom: 20px;
-            animation: fadeInUp 0.8s ease-out;
-        }
-        .hero-badge svg {
-            width: 16px;
-            height: 16px;
-        }
-        .hero h1 {
-            font-size: clamp(2.2rem, 6vw, 4rem);
-            font-weight: 800;
-            letter-spacing: 2px;
-            line-height: 1.15;
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 16px;
-            animation: fadeInUp 0.8s ease-out 0.15s both;
-        }
-        .hero-subtitle {
-            font-size: clamp(1rem, 2.5vw, 1.25rem);
-            color: var(--text-secondary);
-            max-width: 640px;
-            margin: 0 auto 10px;
-            animation: fadeInUp 0.8s ease-out 0.3s both;
-        }
-        .hero-divider {
-            width: 80px;
-            height: 3px;
-            border-radius: 2px;
-            background: var(--accent-gradient);
-            margin: 16px auto 0;
-            animation: fadeInUp 0.8s ease-out 0.45s both;
-        }
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(25px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* ==================== 统计面板 ==================== */
-        .stats-panel {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 14px;
-            margin: 30px 0 40px;
-            animation: fadeInUp 0.8s ease-out 0.5s both;
-        }
-        .stat-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius-md);
-            padding: 18px 16px;
-            text-align: center;
-            transition: all var(--transition-speed) ease;
-            box-shadow: var(--glass-shadow);
-        }
-        .stat-card:hover {
-            transform: var(--card-hover-transform);
-            border-color: var(--accent-2);
-        }
-        .stat-card .stat-icon {
-            width: 40px;
-            height: 40px;
-            margin: 0 auto 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 12px;
-            background: var(--accent-gradient-soft);
-            color: var(--accent-2);
-        }
-        .stat-card .stat-icon svg {
-            width: 22px;
-            height: 22px;
-        }
-        .stat-card .stat-number {
-            font-size: 1.7rem;
-            font-weight: 800;
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            line-height: 1.2;
-        }
-        .stat-card .stat-label {
-            font-size: 0.78rem;
-            color: var(--text-muted);
-            font-weight: 500;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        /* ==================== 主布局 ==================== */
-        .main-layout {
-            display: grid;
-            grid-template-columns: 1fr 380px;
-            gap: 24px;
-            margin-bottom: 50px;
-            align-items: start;
-        }
-
-        @media (max-width: 960px) {
-            .main-layout {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* ==================== 玻璃卡片通用 ==================== */
         .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px) saturate(1.3);
-            -webkit-backdrop-filter: blur(20px) saturate(1.3);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--glass-shadow);
-            padding: 24px;
-            transition: all var(--transition-speed) ease;
+            background: var(--glass-bg-light);
+            backdrop-filter: blur(var(--blur-amount)) saturate(var(--saturate-amount));
+            -webkit-backdrop-filter: blur(var(--blur-amount)) saturate(var(--saturate-amount));
+            border: 1px solid var(--glass-border-light);
+            border-radius: var(--card-radius);
+            box-shadow: var(--glass-shadow-light);
+            transition: background 0.6s var(--transition-smooth), border-color 0.6s var(--transition-smooth),
+                box-shadow 0.6s var(--transition-smooth), transform 0.3s var(--transition-smooth);
+            will-change: transform, backdrop-filter;
+        }
+        body.dark .glass-card {
+            background: var(--glass-bg-dark);
+            border-color: var(--glass-border-dark);
+            box-shadow: var(--glass-shadow-dark);
         }
         .glass-card:hover {
-            border-color: rgba(161, 140, 209, 0.35);
+            transform: translateY(-2px);
         }
 
-        /* ==================== 留言发布区域 ==================== */
-        .compose-card {
-            margin-bottom: 28px;
-            animation: fadeInUp 0.8s ease-out 0.55s both;
-        }
-        .compose-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 16px;
-            font-weight: 600;
-            font-size: 1.05rem;
-            color: var(--text-primary);
-        }
-        .compose-header svg {
-            width: 22px;
-            height: 22px;
-            color: var(--accent-2);
-        }
-        .compose-textarea {
-            width: 100%;
-            min-height: 100px;
-            max-height: 200px;
-            resize: vertical;
-            padding: 16px 18px;
-            border-radius: var(--radius-md);
-            border: 1.5px solid var(--input-border);
-            background: var(--input-bg);
-            backdrop-filter: blur(8px);
-            font-family: var(--font-family);
-            font-size: 0.95rem;
-            color: var(--text-primary);
-            transition: all var(--transition-speed) ease;
-            outline: none;
-            line-height: 1.6;
-            letter-spacing: 0.3px;
-        }
-        .compose-textarea:focus {
-            border-color: var(--accent-2);
-            box-shadow: 0 0 0 3px rgba(161, 140, 209, 0.2);
-            background: var(--glass-bg-strong);
-        }
-        .compose-textarea::placeholder {
-            color: var(--text-muted);
-            font-style: italic;
-        }
-        .compose-footer {
+        .app-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 12px;
-            margin-top: 14px;
+            padding: 16px 20px;
+            margin-bottom: 16px;
             flex-wrap: wrap;
+            gap: 10px;
         }
-        .color-picker-group {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-        .color-picker-group .color-label {
-            font-size: 0.82rem;
-            color: var(--text-muted);
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .color-picker-group .color-label svg {
-            width: 14px;
-            height: 14px;
-        }
-        .color-swatches {
-            display: flex;
-            gap: 6px;
-        }
-        .color-swatch {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 2.5px solid transparent;
-            transition: all 0.25s ease;
-            position: relative;
-        }
-        .color-swatch:hover {
-            transform: scale(1.15);
-        }
-        .color-swatch.active {
-            border-color: var(--text-primary);
-            box-shadow: 0 0 12px rgba(161, 140, 209, 0.5);
-        }
-        .color-swatch .check-icon {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-        }
-        .color-swatch.active .check-icon {
-            opacity: 1;
-        }
-        .compose-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 24px;
-            border-radius: 50px;
-            border: none;
-            background: var(--accent-gradient);
-            color: #fff;
-            font-weight: 600;
-            font-size: 0.9rem;
-            font-family: var(--font-family);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            letter-spacing: 0.5px;
-            white-space: nowrap;
-            position: relative;
-            overflow: hidden;
-        }
-        .compose-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 28px rgba(161, 140, 209, 0.4);
-        }
-        .compose-btn:active {
-            transform: translateY(0);
-        }
-        .compose-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-        .compose-btn svg {
-            width: 18px;
-            height: 18px;
-        }
-        .compose-btn.loading svg {
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            from {
-                transform: rotate(0);
-            }
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* ==================== 筛选/排序 ==================== */
-        .filter-bar {
+        .app-logo {
             display: flex;
             align-items: center;
             gap: 10px;
-            margin-bottom: 18px;
-            flex-wrap: wrap;
-        }
-        .filter-bar .filter-label {
-            font-size: 0.82rem;
-            color: var(--text-muted);
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .filter-bar .filter-label svg {
-            width: 14px;
-            height: 14px;
-        }
-        .filter-pills {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
-        .filter-pill {
-            padding: 6px 14px;
-            border-radius: 50px;
-            font-size: 0.78rem;
-            font-weight: 500;
-            cursor: pointer;
-            border: 1px solid var(--glass-border);
-            background: var(--glass-bg-strong);
-            color: var(--text-secondary);
-            transition: all 0.25s ease;
+            font-weight: 700;
+            font-size: 1.25rem;
+            letter-spacing: -0.02em;
             user-select: none;
-            font-family: var(--font-family);
-            letter-spacing: 0.3px;
         }
-        .filter-pill:hover {
-            border-color: var(--accent-2);
-            color: var(--text-primary);
-        }
-        .filter-pill.active {
-            background: var(--accent-gradient);
-            color: #fff;
-            border-color: transparent;
-            box-shadow: 0 4px 14px rgba(161, 140, 209, 0.3);
-        }
-
-        /* ==================== 留言列表 ==================== */
-        .messages-list {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-        .message-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius-md);
-            padding: 18px 20px;
-            transition: all var(--transition-speed) ease;
-            box-shadow: var(--glass-shadow);
-            position: relative;
-            overflow: hidden;
-        }
-        .message-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background: var(--msg-color, var(--accent-1));
-            border-radius: 0 2px 2px 0;
-            transition: all 0.3s ease;
-        }
-        .message-card:hover {
-            transform: var(--card-hover-transform);
-            box-shadow: 0 12px 40px rgba(120, 80, 140, 0.18);
-        }
-        .message-card-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
-            flex-wrap: wrap;
-        }
-        .message-avatar {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--accent-gradient-soft);
+        .app-logo svg {
+            width: 28px;
+            height: 28px;
             color: var(--accent-2);
-            flex-shrink: 0;
-            border: 1.5px solid var(--glass-border);
+            transition: color 0.4s var(--transition-smooth);
         }
-        .message-avatar svg {
-            width: 22px;
-            height: 22px;
+        .logo-text {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            font-size: 1.3rem;
         }
-        .message-author {
-            flex: 1;
-            min-width: 0;
-        }
-        .message-author .author-name {
-            font-weight: 600;
-            font-size: 0.95rem;
-            color: var(--text-primary);
+        .header-actions {
             display: flex;
             align-items: center;
-            gap: 6px;
-        }
-        .message-author .author-account {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            letter-spacing: 0.8px;
-            font-family: 'Courier New', monospace;
-        }
-        .message-time {
-            font-size: 0.72rem;
-            color: var(--text-muted);
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            white-space: nowrap;
-        }
-        .message-time svg {
-            width: 12px;
-            height: 12px;
-        }
-        .message-content {
-            font-size: 0.95rem;
-            color: var(--text-primary);
-            line-height: 1.7;
-            letter-spacing: 0.3px;
-            margin-bottom: 12px;
-            word-break: break-word;
-            padding-left: 4px;
-        }
-        .message-footer {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
             gap: 8px;
-            flex-wrap: wrap;
         }
-        .like-btn {
-            display: inline-flex;
+        .header-btn {
+            display: flex;
             align-items: center;
             gap: 6px;
-            padding: 6px 16px;
-            border-radius: 50px;
-            border: 1px solid var(--glass-border);
-            background: var(--glass-bg-strong);
+            padding: 8px 14px;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border-light);
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             cursor: pointer;
-            font-size: 0.82rem;
-            font-weight: 500;
-            color: var(--text-secondary);
-            transition: all 0.28s ease;
-            font-family: var(--font-family);
-            letter-spacing: 0.4px;
-        }
-        .like-btn:hover {
-            border-color: var(--accent-1);
-            color: var(--accent-1);
-            transform: scale(1.05);
-        }
-        .like-btn.liked {
-            background: rgba(255, 107, 157, 0.2);
-            border-color: var(--accent-1);
-            color: var(--accent-1);
-            animation: likePop 0.4s ease;
-        }
-        .like-btn svg {
-            width: 16px;
-            height: 16px;
-            transition: transform 0.3s ease;
-        }
-        .like-btn.liked svg {
-            transform: scale(1.25);
-            fill: var(--accent-1);
-        }
-        @keyframes likePop {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.2);
-            }
-            100% {
-                transform: scale(1);
-            }
-        }
-        .like-count {
-            font-weight: 700;
             font-size: 0.85rem;
-        }
-
-        /* ==================== 侧边栏 ==================== */
-        .sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            animation: fadeInUp 0.8s ease-out 0.6s both;
-        }
-        .sidebar-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius-md);
-            box-shadow: var(--glass-shadow);
-            padding: 20px;
-            transition: all var(--transition-speed) ease;
-        }
-        .sidebar-card:hover {
-            border-color: rgba(161, 140, 209, 0.3);
-        }
-        .sidebar-card .card-title {
             font-weight: 600;
-            font-size: 0.95rem;
-            color: var(--text-primary);
-            margin-bottom: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            letter-spacing: 0.5px;
+            color: var(--text-primary-light);
+            transition: all 0.3s var(--transition-smooth);
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            will-change: transform, background;
         }
-        .sidebar-card .card-title svg {
+        body.dark .header-btn {
+            border-color: var(--glass-border-dark);
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-primary-dark);
+        }
+        .header-btn:hover {
+            background: rgba(255, 255, 255, 0.5);
+            transform: scale(1.05);
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.25);
+        }
+        body.dark .header-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 4px 16px rgba(139, 92, 246, 0.3);
+        }
+        .header-btn:active {
+            transform: scale(0.95);
+        }
+        .header-btn svg {
             width: 18px;
             height: 18px;
-            color: var(--accent-2);
+            flex-shrink: 0;
         }
-
-        /* 账号面板 */
-        .account-display {
-            text-align: center;
-            padding: 10px 0;
-        }
-        .account-display .big-avatar {
-            width: 72px;
-            height: 72px;
-            border-radius: 50%;
-            margin: 0 auto 12px;
-            background: var(--accent-gradient);
-            display: flex;
+        .mode-badge {
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            color: #fff;
-            box-shadow: 0 6px 24px rgba(161, 140, 209, 0.35);
-        }
-        .account-display .big-avatar svg {
-            width: 36px;
-            height: 36px;
-        }
-        .account-display .nickname {
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: var(--text-primary);
-            margin-bottom: 4px;
-        }
-        .account-display .account-number {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            font-family: 'Courier New', monospace;
-            letter-spacing: 1.5px;
-            margin-bottom: 8px;
-        }
-        .account-display .created-at {
+            gap: 5px;
+            padding: 4px 10px;
+            border-radius: 20px;
             font-size: 0.72rem;
-            color: var(--text-muted);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            background: var(--accent-gradient);
+            color: #fff;
+            transition: all 0.5s var(--transition-smooth);
+            user-select: none;
         }
-        .account-display .created-at svg {
+        .mode-badge svg {
             width: 12px;
             height: 12px;
         }
-        .account-divider {
-            height: 1px;
-            background: var(--glass-border);
-            margin: 14px 0;
-        }
-        .account-actions {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-        }
-        .account-action-btn {
-            padding: 8px 16px;
-            border-radius: 50px;
-            font-size: 0.78rem;
-            font-weight: 500;
-            cursor: pointer;
-            border: 1px solid var(--glass-border);
-            background: var(--glass-bg-strong);
-            color: var(--text-secondary);
-            transition: all 0.25s ease;
-            font-family: var(--font-family);
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .account-action-btn:hover {
-            border-color: var(--accent-2);
-            color: var(--text-primary);
-        }
-        .account-action-btn.danger:hover {
-            border-color: var(--error);
-            color: var(--error);
-        }
 
-        /* 表单样式 */
-        .form-group {
-            margin-bottom: 12px;
-        }
-        .form-group label {
-            display: block;
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            font-weight: 500;
-            margin-bottom: 5px;
-            letter-spacing: 0.5px;
-        }
-        .form-input {
-            width: 100%;
-            padding: 11px 16px;
-            border-radius: var(--radius-sm);
-            border: 1.5px solid var(--input-border);
-            background: var(--input-bg);
-            backdrop-filter: blur(8px);
-            font-family: var(--font-family);
-            font-size: 0.9rem;
-            color: var(--text-primary);
-            transition: all var(--transition-speed) ease;
-            outline: none;
-            letter-spacing: 0.3px;
-        }
-        .form-input:focus {
-            border-color: var(--accent-2);
-            box-shadow: 0 0 0 3px rgba(161, 140, 209, 0.15);
-        }
-        .form-input::placeholder {
-            color: var(--text-muted);
-        }
-        .form-submit-btn {
-            width: 100%;
-            padding: 12px;
-            border-radius: 50px;
-            border: none;
-            background: var(--accent-gradient);
-            color: #fff;
-            font-weight: 600;
-            font-size: 0.88rem;
-            font-family: var(--font-family);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            letter-spacing: 0.5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        .form-submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(161, 140, 209, 0.35);
-        }
-        .form-submit-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        /* 标签页切换 */
-        .tab-switcher {
+        .tab-nav {
             display: flex;
             gap: 6px;
+            padding: 6px;
             margin-bottom: 16px;
-            background: var(--glass-bg-strong);
-            border-radius: 50px;
-            padding: 4px;
-            border: 1px solid var(--glass-border);
+            border-radius: var(--card-radius-sm);
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border-light);
+            transition: all 0.5s var(--transition-smooth);
+        }
+        body.dark .tab-nav {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: var(--glass-border-dark);
         }
         .tab-btn {
             flex: 1;
-            padding: 8px 12px;
-            border-radius: 50px;
-            border: none;
-            background: transparent;
-            font-family: var(--font-family);
-            font-size: 0.82rem;
-            font-weight: 600;
-            cursor: pointer;
-            color: var(--text-muted);
-            transition: all 0.3s ease;
-            letter-spacing: 0.5px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 5px;
+            gap: 8px;
+            padding: 12px 8px;
+            border-radius: 12px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text-secondary-light);
+            transition: all 0.35s var(--transition-smooth);
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            position: relative;
+            will-change: transform, background, color;
         }
-        .tab-btn.active {
-            background: var(--accent-gradient);
-            color: #fff;
-            box-shadow: 0 4px 14px rgba(161, 140, 209, 0.3);
+        body.dark .tab-btn {
+            color: var(--text-secondary-dark);
         }
         .tab-btn svg {
-            width: 16px;
-            height: 16px;
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+        .tab-btn:hover {
+            color: var(--text-primary-light);
+            background: rgba(255, 255, 255, 0.25);
+        }
+        body.dark .tab-btn:hover {
+            color: var(--text-primary-dark);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .tab-btn.active {
+            color: #fff;
+            background: var(--accent-gradient);
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.35);
+            transform: scale(1.02);
+        }
+        .tab-btn.active:hover {
+            color: #fff;
+            background: var(--accent-gradient);
+        }
+        .tab-btn:active {
+            transform: scale(0.97);
+        }
+        .tab-btn.active:active {
+            transform: scale(0.98);
         }
 
-        /* ==================== 通知 Toast ==================== */
-        .toast-container {
-            position: fixed;
-            top: 80px;
-            right: 20px;
-            z-index: 1000;
+        .tab-panel {
+            display: none;
+            animation: panelFadeIn 0.4s var(--transition-smooth) forwards;
+        }
+        .tab-panel.active {
+            display: block;
+        }
+        @keyframes panelFadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card-content {
+            padding: 24px 20px;
+        }
+        @media (min-width: 640px) {
+            .card-content { padding: 32px 28px; }
+        }
+
+        .upload-zone {
+            border: 2px dashed rgba(99, 102, 241, 0.35);
+            border-radius: var(--card-radius-sm);
+            padding: 36px 20px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            pointer-events: none;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.4s var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            will-change: transform, border-color, background;
         }
-        .toast {
-            pointer-events: auto;
-            min-width: 260px;
-            max-width: 380px;
-            padding: 14px 18px;
-            border-radius: var(--radius-sm);
-            background: var(--glass-bg-strong);
-            backdrop-filter: blur(20px) saturate(1.4);
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        body.dark .upload-zone {
+            border-color: rgba(139, 92, 246, 0.4);
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .upload-zone.dragover {
+            border-color: var(--accent-2);
+            background: rgba(139, 92, 246, 0.1);
+            transform: scale(1.02);
+            box-shadow: 0 0 40px rgba(139, 92, 246, 0.2);
+        }
+        .upload-zone:active {
+            transform: scale(0.98);
+        }
+        .upload-zone svg.upload-icon {
+            width: 48px;
+            height: 48px;
+            color: var(--accent-2);
+            transition: all 0.3s var(--transition-smooth);
+            animation: bounceIn 0.6s var(--transition-bounce);
+        }
+        .upload-zone:hover svg.upload-icon {
+            transform: translateY(-4px) scale(1.05);
+        }
+        @keyframes bounceIn {
+            0% { transform: scale(0) rotate(-10deg); opacity: 0; }
+            60% { transform: scale(1.1) rotate(2deg); opacity: 1; }
+            100% { transform: scale(1) rotate(0); }
+        }
+        .upload-zone .upload-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: -0.01em;
+        }
+        .upload-zone .upload-subtitle {
             font-size: 0.85rem;
-            font-weight: 500;
-            color: var(--text-primary);
+            color: var(--text-secondary-light);
+            text-align: center;
+            transition: color 0.4s var(--transition-smooth);
+        }
+        body.dark .upload-zone .upload-subtitle {
+            color: var(--text-secondary-dark);
+        }
+        .upload-zone .upload-formats {
+            font-size: 0.75rem;
+            color: var(--text-secondary-light);
+            opacity: 0.8;
+            transition: color 0.4s var(--transition-smooth);
+        }
+        body.dark .upload-zone .upload-formats {
+            color: var(--text-secondary-dark);
+        }
+        .upload-zone input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+
+        .preview-thumb {
+            max-width: 200px;
+            max-height: 160px;
+            border-radius: 12px;
+            object-fit: contain;
+            margin-top: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            transition: all 0.4s var(--transition-smooth);
+            animation: panelFadeIn 0.4s var(--transition-smooth);
+        }
+        .preview-thumb.hidden {
+            display: none;
+        }
+
+        .progress-container {
+            margin-top: 16px;
+            display: none;
+            animation: panelFadeIn 0.3s var(--transition-smooth);
+        }
+        .progress-container.visible {
+            display: block;
+        }
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-secondary-light);
+            transition: color 0.4s var(--transition-smooth);
+        }
+        body.dark .progress-label {
+            color: var(--text-secondary-dark);
+        }
+        .progress-percent {
+            font-weight: 700;
+            color: var(--accent-2);
+            font-variant-numeric: tabular-nums;
+        }
+        .progress-track {
+            width: 100%;
+            height: 8px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.25);
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        body.dark .progress-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .progress-fill {
+            height: 100%;
+            border-radius: 10px;
+            background: var(--accent-gradient);
+            background-size: 200% 100%;
+            animation: progressShimmer 1.8s ease-in-out infinite;
+            transition: width 0.4s var(--transition-smooth);
+            width: 0%;
+            will-change: width;
+        }
+        @keyframes progressShimmer {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .result-section {
+            margin-top: 16px;
+            display: none;
+            animation: panelFadeIn 0.5s var(--transition-smooth);
+        }
+        .result-section.visible {
+            display: block;
+        }
+        .result-box {
+            padding: 16px;
+            border-radius: var(--card-radius-sm);
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            transition: all 0.4s var(--transition-smooth);
+        }
+        body.dark .result-box {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(139, 92, 246, 0.35);
+        }
+        .result-code {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            padding: 8px 0;
+            user-select: all;
+            font-variant-numeric: tabular-nums;
+        }
+        .result-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 10px;
+            font-size: 0.82rem;
+            color: var(--text-secondary-light);
+        }
+        body.dark .result-info {
+            color: var(--text-secondary-dark);
+        }
+        .result-info span {
             display: flex;
             align-items: center;
-            gap: 10px;
-            animation: toastIn 0.4s cubic-bezier(0.21, 1.02, 0.73, 1);
-            transition: all 0.4s ease;
-            letter-spacing: 0.3px;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.25);
+            transition: background 0.3s var(--transition-smooth);
+        }
+        body.dark .result-info span {
+            background: rgba(255, 255, 255, 0.08);
+        }
+        .result-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 18px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            font-family: inherit;
+            transition: all 0.3s var(--transition-smooth);
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            will-change: transform, box-shadow;
+            letter-spacing: 0.01em;
+        }
+        .btn svg {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+        }
+        .btn-primary {
+            background: var(--accent-gradient);
+            color: #fff;
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.35);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(99, 102, 241, 0.5);
+        }
+        .btn-primary:active {
+            transform: scale(0.96);
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.4);
+            color: var(--text-primary-light);
+            border: 1px solid var(--glass-border-light);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+        body.dark .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary-dark);
+            border-color: var(--glass-border-dark);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.55);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+        body.dark .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.18);
+        }
+        .btn-secondary:active {
+            transform: scale(0.96);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .input-code {
+            flex: 1;
+            min-width: 120px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border-light);
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            color: var(--text-primary-light);
+            transition: all 0.3s var(--transition-smooth);
+            font-family: inherit;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body.dark .input-code {
+            border-color: var(--glass-border-dark);
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-primary-dark);
+        }
+        .input-code:focus {
+            border-color: var(--accent-2);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+        }
+        .input-code::placeholder {
+            color: var(--text-secondary-light);
+            opacity: 0.6;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+        }
+        body.dark .input-code::placeholder {
+            color: var(--text-secondary-dark);
+        }
+
+        .info-card {
+            padding: 20px;
+            border-radius: var(--card-radius-sm);
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid var(--glass-border-light);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            transition: all 0.4s var(--transition-smooth);
+        }
+        body.dark .info-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--glass-border-dark);
+        }
+        .info-card .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            font-size: 0.88rem;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .info-card .info-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-secondary-light);
+            font-weight: 500;
+            transition: color 0.4s var(--transition-smooth);
+        }
+        body.dark .info-card .info-label {
+            color: var(--text-secondary-dark);
+        }
+        .info-card .info-label svg {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+        }
+        .info-card .info-value {
+            font-weight: 700;
+            font-size: 0.92rem;
+        }
+
+        .mode-explanation {
+            margin-top: 16px;
+            padding: 16px;
+            border-radius: var(--card-radius-sm);
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid var(--glass-border-light);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            font-size: 0.82rem;
+            line-height: 1.7;
+            color: var(--text-secondary-light);
+            transition: all 0.4s var(--transition-smooth);
+        }
+        body.dark .mode-explanation {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--glass-border-dark);
+            color: var(--text-secondary-dark);
+        }
+        .mode-explanation strong {
+            color: var(--accent-2);
+            font-weight: 700;
+        }
+        .mode-explanation .pros { color: var(--success-color); }
+        .mode-explanation .cons { color: var(--error-color); }
+
+        .toast-container {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            pointer-events: none;
+            width: calc(100% - 32px);
+            max-width: 400px;
+        }
+        .toast {
+            padding: 14px 18px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--glass-border-light);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            pointer-events: auto;
+            animation: toastIn 0.4s var(--transition-bounce);
+            transition: opacity 0.4s var(--transition-smooth), transform 0.4s var(--transition-smooth);
+            color: var(--text-primary-light);
+        }
+        body.dark .toast {
+            background: rgba(20, 20, 40, 0.85);
+            border-color: var(--glass-border-dark);
+            color: var(--text-primary-dark);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
         }
         .toast.removing {
             opacity: 0;
-            transform: translateX(120%);
+            transform: translateY(16px) scale(0.95);
         }
-        .toast .toast-icon {
-            width: 22px;
-            height: 22px;
+        .toast svg {
+            width: 18px;
+            height: 18px;
             flex-shrink: 0;
         }
-        .toast.success .toast-icon {
-            color: var(--success);
-        }
-        .toast.error .toast-icon {
-            color: var(--error);
-        }
-        .toast.info .toast-icon {
-            color: var(--accent-3);
-        }
+        .toast.success svg { color: var(--success-color); }
+        .toast.error svg { color: var(--error-color); }
+        .toast.warning svg { color: var(--warning-color); }
+        .toast.info svg { color: var(--info-color); }
         @keyframes toastIn {
-            from {
-                opacity: 0;
-                transform: translateX(120%);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+            from { opacity: 0; transform: translateY(20px) scale(0.9); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
-        /* ==================== 加载动画 ==================== */
-        .loading-spinner {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 20px;
-            gap: 14px;
-            color: var(--text-muted);
-            font-size: 0.85rem;
+        .perf-badge {
+            position: fixed;
+            top: 12px;
+            right: 12px;
+            z-index: 100;
+            font-size: 0.7rem;
+            padding: 4px 8px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: var(--text-secondary-light);
+            opacity: 0;
+            transition: opacity 0.5s var(--transition-smooth);
+            pointer-events: none;
+            user-select: none;
+            font-weight: 600;
         }
-        .loading-spinner .spinner-ring {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            border: 3px solid var(--glass-border);
-            border-top-color: var(--accent-2);
-            animation: spin 0.9s linear infinite;
+        body.dark .perf-badge {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-secondary-dark);
         }
+        .perf-badge.visible { opacity: 1; }
 
-        /* ==================== 空状态 ==================== */
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--text-muted);
-        }
-        .empty-state svg {
-            width: 56px;
-            height: 56px;
-            color: var(--text-muted);
-            margin-bottom: 12px;
-            opacity: 0.6;
-        }
-        .empty-state p {
-            font-size: 0.9rem;
-            letter-spacing: 0.5px;
-        }
-
-        /* ==================== 底部 ==================== */
-        .footer {
-            text-align: center;
-            padding: 30px 0 20px;
-            color: var(--text-muted);
-            font-size: 0.78rem;
-            letter-spacing: 0.8px;
-            border-top: 1px solid var(--glass-border);
-            backdrop-filter: blur(12px);
-        }
-        .footer a {
-            color: var(--accent-2);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-        .footer a:hover {
-            color: var(--accent-1);
-        }
-
-        /* ==================== 响应式 ==================== */
-        @media (max-width: 768px) {
-            .container {
-                padding: 0 14px;
-            }
-            .navbar {
-                padding: 10px 0;
-            }
-            .navbar-logo {
-                font-size: 1.05rem;
-            }
-            .navbar-logo svg {
-                width: 28px;
-                height: 28px;
-            }
-            .glass-card {
-                padding: 18px 16px;
-                border-radius: var(--radius-md);
-            }
-            .hero {
-                padding: 30px 0 20px;
-            }
-            .compose-footer {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .color-picker-group {
-                justify-content: center;
-            }
-            .compose-btn {
-                justify-content: center;
-            }
-            .message-card {
-                padding: 14px 16px;
-            }
-            .message-card-header {
-                gap: 8px;
-            }
-            .message-avatar {
-                width: 36px;
-                height: 36px;
-            }
-            .message-avatar svg {
-                width: 18px;
-                height: 18px;
-            }
-            .toast-container {
-                top: 70px;
-                right: 10px;
-                left: 10px;
-                align-items: stretch;
-            }
-            .toast {
-                min-width: auto;
-                max-width: none;
-            }
-            .stats-panel {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
-            }
-            .stat-card {
-                padding: 12px 10px;
-            }
-            .stat-card .stat-number {
-                font-size: 1.3rem;
-            }
-        }
         @media (max-width: 480px) {
-            .navbar-inner {
-                flex-direction: column;
-                gap: 8px;
-            }
-            .navbar-actions {
-                width: 100%;
-                justify-content: center;
-            }
-            .stats-panel {
-                grid-template-columns: 1fr 1fr;
-            }
-            .filter-bar {
-                flex-direction: column;
-                align-items: flex-start;
-            }
+            .app-header { padding: 12px 14px; gap: 6px; }
+            .app-logo { font-size: 1rem; }
+            .logo-text { font-size: 1.1rem; }
+            .header-btn { padding: 6px 10px; font-size: 0.75rem; gap: 4px; }
+            .header-btn svg { width: 14px; height: 14px; }
+            .mode-badge { font-size: 0.65rem; padding: 3px 8px; }
+            .card-content { padding: 16px 14px; }
+            .tab-btn { font-size: 0.75rem; padding: 10px 4px; gap: 4px; }
+            .tab-btn svg { width: 14px; height: 14px; }
+            .upload-zone { padding: 24px 14px; }
+            .upload-zone svg.upload-icon { width: 36px; height: 36px; }
+            .upload-zone .upload-title { font-size: 0.95rem; }
+            .result-code { font-size: 1.5rem; }
+            .btn { padding: 8px 14px; font-size: 0.78rem; }
+            .input-code { padding: 10px 12px; font-size: 0.9rem; }
+            .app-container { padding: 8px; }
+            .glass-card { border-radius: 18px; }
         }
 
-        /* ==================== 工具类 ==================== */
-        .hidden {
-            display: none !important;
+        @media (min-width: 641px) and (max-width: 1024px) {
+            .app-container { max-width: 640px; padding: 20px; }
         }
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border-width: 0;
+
+        @media (min-width: 1025px) {
+            .app-container { max-width: 760px; padding: 24px; }
         }
-        .text-truncate {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            .bg-orb { animation: none !important; }
         }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            flex-shrink: 0;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .spinner-sm { width: 12px; height: 12px; border-width: 1.5px; }
+        .spinner-dark { border-color: rgba(0, 0, 0, 0.2); border-top-color: var(--accent-2); }
     </style>
 </head>
 <body>
 
-    <!-- ==================== 浮动背景粒子 ==================== -->
-    <div class="bg-particles" id="bgParticles" aria-hidden="true"></div>
+    <!-- Background Orbs -->
+    <div class="bg-orbs" aria-hidden="true">
+        <div class="bg-orb"></div>
+        <div class="bg-orb"></div>
+        <div class="bg-orb"></div>
+        <div class="bg-orb"></div>
+    </div>
 
-    <!-- ==================== Toast 通知容器 ==================== -->
-    <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+    <!-- Performance Badge -->
+    <div class="perf-badge" id="perfBadge" aria-hidden="true"></div>
 
-    <!-- ==================== 顶部导航 ==================== -->
-    <nav class="navbar" role="navigation" aria-label="主导航">
-        <div class="container navbar-inner">
-            <a class="navbar-logo" href="#" aria-label="星语心愿首页">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M12 21s-6.7-4.35-9.33-8.11C.9 10.2 1.6 6.5 4.5 5.2c1.8-.8 3.8-.3 5.2 1.1L12 8l2.3-1.7c1.4-1.4 3.4-1.9 5.2-1.1 2.9 1.3 3.6 5 1.83 7.69C18.7 16.65 12 21 12 21z"/>
+    <!-- Main App -->
+    <div class="app-container">
+        <!-- Header -->
+        <header class="glass-card app-header" role="banner">
+            <div class="app-logo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="4" ry="4"/>
+                    <circle cx="9" cy="9" r="2"/>
+                    <path d="M21 15l-4.35-4.35a1.5 1.5 0 00-2.12 0L9 16"/>
+                    <path d="M3 21l4.35-4.35a1.5 1.5 0 012.12 0L15 22"/>
                 </svg>
-                <span>星语心愿</span>
-            </a>
-            <div class="navbar-actions">
-                <div class="nav-user-badge" id="navUserBadge">
-                    <span class="account-dot" aria-hidden="true"></span>
-                    <span id="navUserText">未登录</span>
-                </div>
-                <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="切换主题" title="切换暗色/亮色模式">
-                    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <circle cx="12" cy="12" r="4"/>
-                        <path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
-                    </svg>
-                    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-                    </svg>
+                <span class="logo-text">元数据清除器</span>
+            </div>
+            <div class="header-actions">
+                <span class="mode-badge" id="modeBadge" title="当前处理模式">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><circle cx="7" cy="6" r="1" fill="currentColor"/><circle cx="7" cy="18" r="1" fill="currentColor"/></svg>
+                    <span id="modeBadgeText">后端处理</span>
+                </span>
+                <button class="header-btn" id="modeToggleBtn" title="切换处理模式" aria-label="切换处理模式">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 100 20 10 10 0 000-20z"/><path d="M12 6v6l4 2"/></svg>
+                    <span id="modeToggleText">切换前端</span>
+                </button>
+                <button class="header-btn" id="themeToggleBtn" title="切换主题" aria-label="切换主题">
+                    <svg id="themeIconSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                    <svg id="themeIconMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
                 </button>
             </div>
-        </div>
-    </nav>
+        </header>
 
-    <!-- ==================== 主内容区 ==================== -->
-    <main class="container" role="main">
-        <!-- 英雄区 -->
-        <section class="hero" aria-label="欢迎">
-            <div class="hero-badge">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2z"/>
-                    <path d="M19 15l.75 2.25L22 18l-2.25.75L19 21l-.75-2.25L16 18l2.25-.75L19 15z"/>
-                    <path d="M5 15l.75 2.25L8 18l-2.25.75L5 21l-.75-2.25L2 18l2.25-.75L5 15z"/>
-                </svg>
-                <span>浪漫留言板</span>
-            </div>
-            <h1>写下你的星语心愿</h1>
-            <p class="hero-subtitle">在这片温柔的星空下，用文字传递最真挚的情感。每一条留言都是一颗闪耀的星。</p>
-            <div class="hero-divider" aria-hidden="true"></div>
-        </section>
+        <!-- Tab Navigation -->
+        <nav class="tab-nav" role="tablist" aria-label="功能导航">
+            <button class="tab-btn active" id="tabUploadBtn" role="tab" aria-selected="true" aria-controls="panel-upload" data-tab="upload">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 16l-4-4-4 4M12 12v9"/><path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3"/><path d="M16 16l-4-4-4 4"/></svg>
+                上传处理
+            </button>
+            <button class="tab-btn" id="tabQueryBtn" role="tab" aria-selected="false" aria-controls="panel-query" data-tab="query">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                查询信息
+            </button>
+            <button class="tab-btn" id="tabDownloadBtn" role="tab" aria-selected="false" aria-controls="panel-download" data-tab="download">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
+                取件下载
+            </button>
+        </nav>
 
-        <!-- 统计面板 -->
-        <section class="stats-panel" id="statsPanel" aria-label="留言统计">
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                    </svg>
-                </div>
-                <div class="stat-number" id="statTotalMessages">0</div>
-                <div class="stat-label">总留言</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M12 21s-6.7-4.35-9.33-8.11C.9 10.2 1.6 6.5 4.5 5.2c1.8-.8 3.8-.3 5.2 1.1L12 8l2.3-1.7c1.4-1.4 3.4-1.9 5.2-1.1 2.9 1.3 3.6 5 1.83 7.69C18.7 16.65 12 21 12 21z"/>
-                    </svg>
-                </div>
-                <div class="stat-number" id="statTotalLikes">0</div>
-                <div class="stat-label">总点赞</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                        <circle cx="9" cy="7" r="4"/>
-                        <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
-                    </svg>
-                </div>
-                <div class="stat-number" id="statTotalUsers">0</div>
-                <div class="stat-label">留言用户</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M12 3v12m0 0l-4-4m4 4l4-4"/>
-                        <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/>
-                    </svg>
-                </div>
-                <div class="stat-number" id="statLatestTime">--</div>
-                <div class="stat-label">最新留言</div>
-            </div>
-        </section>
-
-        <!-- 主布局 -->
-        <div class="main-layout">
-            <!-- 左侧：发布与留言 -->
-            <div class="main-content">
-                <!-- 发布留言 -->
-                <section class="glass-card compose-card" aria-label="发布留言">
-                    <div class="compose-header">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <path d="M12 20h9"/>
-                            <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+        <!-- Upload Panel -->
+        <section class="tab-panel active" id="panel-upload" role="tabpanel" aria-labelledby="tabUploadBtn">
+            <div class="glass-card">
+                <div class="card-content">
+                    <div class="upload-zone" id="uploadZone" role="button" tabindex="0" aria-label="上传图片文件">
+                        <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 19V5M5 12l7-7 7 7"/>
+                            <path d="M4 19h16"/>
                         </svg>
-                        <span>写下你的心意</span>
+                        <div class="upload-title">拖拽图片到此处 或 点击上传</div>
+                        <div class="upload-subtitle">选择图片后自动清除所有 EXIF / GPS / 设备信息</div>
+                        <div class="upload-formats">支持 JPG · PNG · WEBP · TIFF</div>
+                        <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp,image/tiff,image/*" aria-label="选择图片文件">
                     </div>
-                    <textarea id="composeTextarea" class="compose-textarea" placeholder="此刻你想对谁说些什么？让文字化作星光，传递你的心意..." maxlength="500" aria-label="留言内容"></textarea>
-                    <div class="compose-footer">
-                        <div class="color-picker-group">
-                            <span class="color-label">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                    <circle cx="12" cy="12" r="3"/>
-                                    <path d="M12 2v3m0 14v3M2 12h3m14 0h3M4.93 4.93l2.12 2.12m9.9 9.9l2.12 2.12M19.07 4.93l-2.12 2.12m-9.9 9.9l-2.12 2.12"/>
-                                </svg>
-                                心情色彩
-                            </span>
-                            <div class="color-swatches" id="colorSwatches">
-                                <button class="color-swatch active" data-color="#ff758c" style="background:#ff758c" aria-label="选择粉色" title="粉色浪漫"><span class="check-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></button>
-                                <button class="color-swatch" data-color="#a18cd1" style="background:#a18cd1" aria-label="选择紫色" title="紫色梦幻"><span class="check-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></button>
-                                <button class="color-swatch" data-color="#6ba6ff" style="background:#6ba6ff" aria-label="选择蓝色" title="蓝色温柔"><span class="check-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></button>
-                                <button class="color-swatch" data-color="#f9d976" style="background:#f9d976" aria-label="选择黄色" title="黄色温暖"><span class="check-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5a4a00" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></button>
-                                <button class="color-swatch" data-color="#7bc8a4" style="background:#7bc8a4" aria-label="选择绿色" title="绿色清新"><span class="check-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></button>
-                                <button class="color-swatch" data-color="#ff9f7b" style="background:#ff9f7b" aria-label="选择橙色" title="橙色活力"><span class="check-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></button>
-                            </div>
+
+                    <img id="previewThumb" class="preview-thumb hidden" alt="图片预览" />
+
+                    <div class="progress-container" id="progressContainer">
+                        <div class="progress-label">
+                            <span id="progressLabel">处理中...</span>
+                            <span class="progress-percent" id="progressPercent">0%</span>
                         </div>
-                        <button class="compose-btn" id="composeSubmitBtn" aria-label="发布留言">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                <line x1="22" y1="2" x2="11" y2="13"/>
-                                <polygon points="22 2 15 22 11 13 2 9 22 2"/>
-                            </svg>
-                            <span>寄出心意</span>
+                        <div class="progress-track">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                    </div>
+
+                    <div class="result-section" id="resultSection">
+                        <div class="result-box">
+                            <div class="result-code" id="resultCode">------</div>
+                            <div class="result-info" id="resultInfo"></div>
+                            <div class="result-actions" id="resultActions"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Query Panel -->
+        <section class="tab-panel" id="panel-query" role="tabpanel" aria-labelledby="tabQueryBtn">
+            <div class="glass-card">
+                <div class="card-content">
+                    <div class="input-group">
+                        <input type="text" class="input-code" id="queryCodeInput" placeholder="输入 6 位物件码" maxlength="6" inputmode="numeric" pattern="[0-9]{6}" autocomplete="off" aria-label="物件码输入">
+                        <button class="btn btn-primary" id="queryBtn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                            查询
                         </button>
                     </div>
-                </section>
-
-                <!-- 筛选栏 -->
-                <div class="filter-bar" role="toolbar" aria-label="留言筛选">
-                    <span class="filter-label">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
-                        </svg>
-                        排序：
-                    </span>
-                    <div class="filter-pills" id="filterPills">
-                        <button class="filter-pill active" data-sort="latest" aria-pressed="true">最新优先</button>
-                        <button class="filter-pill" data-sort="likes" aria-pressed="false">最多点赞</button>
-                        <button class="filter-pill" data-sort="oldest" aria-pressed="false">最早发布</button>
-                    </div>
+                    <div id="queryResult" style="margin-top:16px;display:none;"></div>
+                    <div id="queryError" style="margin-top:16px;display:none;"></div>
                 </div>
-
-                <!-- 留言列表 -->
-                <section class="messages-list" id="messagesList" aria-label="留言列表">
-                    <div class="loading-spinner" id="messagesLoading">
-                        <div class="spinner-ring" aria-hidden="true"></div>
-                        <span>正在加载星语...</span>
-                    </div>
-                </section>
             </div>
+        </section>
 
-            <!-- 右侧边栏 -->
-            <aside class="sidebar" aria-label="侧边栏">
-                <!-- 账号面板 -->
-                <div class="sidebar-card" id="accountPanel">
-                    <div class="card-title">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                            <circle cx="12" cy="7" r="4"/>
-                        </svg>
-                        我的账号
+        <!-- Download Panel -->
+        <section class="tab-panel" id="panel-download" role="tabpanel" aria-labelledby="tabDownloadBtn">
+            <div class="glass-card">
+                <div class="card-content">
+                    <div class="input-group">
+                        <input type="text" class="input-code" id="downloadCodeInput" placeholder="输入 6 位物件码" maxlength="6" inputmode="numeric" pattern="[0-9]{6}" autocomplete="off" aria-label="物件码输入">
+                        <button class="btn btn-primary" id="previewBtn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                            预览
+                        </button>
+                        <button class="btn btn-secondary" id="downloadBtn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
+                            下载
+                        </button>
                     </div>
-                    <div id="accountContent">
-                        <div class="account-display" id="loggedOutDisplay">
-                            <div class="big-avatar">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                                    <circle cx="12" cy="7" r="4"/>
-                                </svg>
-                            </div>
-                            <p style="color:var(--text-muted);font-size:0.85rem;">登录后即可发布留言</p>
-                            <div class="tab-switcher" style="margin-top:14px;">
-                                <button class="tab-btn active" data-tab="login" aria-selected="true">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>
-                                    登录
-                                </button>
-                                <button class="tab-btn" data-tab="create" aria-selected="false">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
-                                    创建
-                                </button>
-                            </div>
-                            <div id="loginForm" class="tab-panel">
-                                <div class="form-group">
-                                    <label for="loginAccountInput">16位账号</label>
-                                    <input type="text" id="loginAccountInput" class="form-input" placeholder="请输入16位账号" maxlength="19" aria-label="登录账号">
-                                </div>
-                                <button class="form-submit-btn" id="loginBtn">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:16px;height:16px;"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>
-                                    登录账号
-                                </button>
-                            </div>
-                            <div id="createForm" class="tab-panel hidden">
-                                <div class="form-group">
-                                    <label for="createNicknameInput">昵称（可选）</label>
-                                    <input type="text" id="createNicknameInput" class="form-input" placeholder="给自己取个浪漫的名字" maxlength="20" aria-label="昵称">
-                                </div>
-                                <button class="form-submit-btn" id="createBtn">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:16px;height:16px;"><path d="M12 5v14M5 12h14"/></svg>
-                                    创建新账号
-                                </button>
-                            </div>
-                        </div>
-                        <div class="account-display hidden" id="loggedInDisplay">
-                            <div class="big-avatar" id="loggedInAvatar">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                                    <circle cx="12" cy="7" r="4"/>
-                                </svg>
-                            </div>
-                            <div class="nickname" id="loggedInNickname">--</div>
-                            <div class="account-number" id="loggedInAccount">---- ---- ---- ----</div>
-                            <div class="created-at" id="loggedInCreatedAt">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                                <span>--</span>
-                            </div>
-                            <div class="account-divider" aria-hidden="true"></div>
-                            <div class="account-actions">
-                                <button class="account-action-btn" id="refreshUserInfoBtn" title="刷新信息">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:14px;height:14px;"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-                                    刷新
-                                </button>
-                                <button class="account-action-btn danger" id="logoutBtn" title="退出登录">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:14px;height:14px;"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
-                                    退出
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    <div id="downloadPreview" style="margin-top:16px;display:none;"></div>
+                    <div id="downloadError" style="margin-top:16px;display:none;"></div>
                 </div>
+            </div>
+        </section>
 
-                <!-- 关于卡片 -->
-                <div class="sidebar-card">
-                    <div class="card-title">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <circle cx="12" cy="12" r="10"/>
-                            <line x1="12" y1="16" x2="12" y2="12"/>
-                            <line x1="12" y1="8" x2="12.01" y2="8"/>
-                        </svg>
-                        关于
-                    </div>
-                    <p style="font-size:0.82rem;color:var(--text-secondary);line-height:1.8;letter-spacing:0.3px;">
-                        这里是一个温柔的空间，每一句留言都是一颗星。使用16位账号登录，写下你的心情，或者为喜欢的留言送上点赞。
-                    </p>
-                    <div style="margin-top:14px;padding:12px;border-radius:var(--radius-sm);background:var(--accent-gradient-soft);border:1px solid var(--glass-border);font-size:0.78rem;color:var(--text-muted);">
-                        <strong style="color:var(--text-secondary);">提示：</strong> 账号可随时登录，请妥善保管。
-                    </div>
-                </div>
-            </aside>
+        <!-- Mode Explanation -->
+        <div class="glass-card" style="margin-top:16px;">
+            <div class="mode-explanation" id="modeExplanation">
+                <strong>后端处理模式</strong>：图片会上传到服务器，服务器清除元数据后返回 6 位物件码，2 小时内可取件下载。
+                <span class="pros">优点：不占本地资源、支持 TIFF 等更多格式。</span>
+                <span class="cons">缺点：需联网、图片经过服务器。</span>
+            </div>
         </div>
-    </main>
+    </div>
 
-    <!-- ==================== 底部 ==================== -->
-    <footer class="footer" role="contentinfo">
-        <div class="container">
-            <p>星语心愿 · 浪漫留言板 &mdash; 用心意连接彼此</p>
-        </div>
-    </footer>
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer" aria-live="polite"></div>
 
-    <!-- ==================== JavaScript ==================== -->
     <script>
         (function() {
             'use strict';
 
-            // ==================== 配置 ====================
+            // ===== Constants =====
             const API_BASE = 'https://156.246.95.165.nip.io';
-            const TOKEN_KEY = 'love_board_token';
-            const ACCOUNT_KEY = 'love_board_account';
-            const NICKNAME_KEY = 'love_board_nickname';
-            const THEME_KEY = 'love_board_theme';
+            const API_UPLOAD = `${API_BASE}/api/upload`;
+            const API_INFO = `${API_BASE}/api/info`;
+            const API_DOWNLOAD = `${API_BASE}/api/download`;
+            const MAX_FILE_SIZE = 50 * 1024 * 1024;
+            const EXPIRE_SECONDS = 7200;
+            const MAX_CANVAS_DIMENSION = 4096;
+            const PERF_CHECK_INTERVAL = 3000;
+            const FRAME_SAMPLE_SIZE = 60;
+            const IDB_DB_NAME = 'meta-cleaner-db';
+            const IDB_STORE_NAME = 'blobs';
 
-            // ==================== DOM 引用 ====================
-            const $ = (sel, ctx) => (ctx || document).querySelector(sel);
-            const $$ = (sel, ctx) => Array.from((ctx || document).querySelectorAll(sel));
+            // ===== State =====
+            let currentMode = localStorage.getItem('metaCleanerMode') || 'backend';
+            let currentTheme = localStorage.getItem('metaCleanerTheme') || 'light';
+            let activeTab = 'upload';
+            let uploadedFileName = '';
+            let uploadedFileSize = 0;
+            let currentObjectUrl = null; // For immediate preview only, not persistent
+            let currentPreviewUrl = null; // For preview thumbnail
+            let expireTimer = null;
+            let perfFrameCount = 0;
+            let perfLastTime = performance.now();
+            let perfFPS = 60;
+            let perfLowFrames = 0;
+            let perfMonitorRunning = false;
+            let orbCount = 4;
+            let isOffline = !navigator.onLine;
+            let currentController = null;
 
-            const themeToggleBtn = $('#themeToggleBtn');
-            const navUserText = $('#navUserText');
-            const composeTextarea = $('#composeTextarea');
-            const composeSubmitBtn = $('#composeSubmitBtn');
-            const colorSwatches = $$('.color-swatch');
-            const messagesList = $('#messagesList');
-            const messagesLoading = $('#messagesLoading');
-            const filterPills = $$('.filter-pill');
-            const statTotalMessages = $('#statTotalMessages');
-            const statTotalLikes = $('#statTotalLikes');
-            const statTotalUsers = $('#statTotalUsers');
-            const statLatestTime = $('#statLatestTime');
-            const toastContainer = $('#toastContainer');
-            const bgParticles = $('#bgParticles');
-            const loggedOutDisplay = $('#loggedOutDisplay');
-            const loggedInDisplay = $('#loggedInDisplay');
-            const loginForm = $('#loginForm');
-            const createForm = $('#createForm');
-            const loginAccountInput = $('#loginAccountInput');
-            const createNicknameInput = $('#createNicknameInput');
-            const loginBtn = $('#loginBtn');
-            const createBtn = $('#createBtn');
-            const loggedInNickname = $('#loggedInNickname');
-            const loggedInAccount = $('#loggedInAccount');
-            const loggedInCreatedAt = $('#loggedInCreatedAt');
-            const refreshUserInfoBtn = $('#refreshUserInfoBtn');
-            const logoutBtn = $('#logoutBtn');
-            const tabBtns = $$('.tab-btn');
+            // ===== DOM Elements =====
+            const body = document.body;
+            const themeToggleBtn = document.getElementById('themeToggleBtn');
+            const themeIconSun = document.getElementById('themeIconSun');
+            const themeIconMoon = document.getElementById('themeIconMoon');
+            const modeToggleBtn = document.getElementById('modeToggleBtn');
+            const modeToggleText = document.getElementById('modeToggleText');
+            const modeBadge = document.getElementById('modeBadge');
+            const modeBadgeText = document.getElementById('modeBadgeText');
+            const modeExplanation = document.getElementById('modeExplanation');
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabPanels = document.querySelectorAll('.tab-panel');
+            const uploadZone = document.getElementById('uploadZone');
+            const fileInput = document.getElementById('fileInput');
+            const previewThumb = document.getElementById('previewThumb');
+            const progressContainer = document.getElementById('progressContainer');
+            const progressLabel = document.getElementById('progressLabel');
+            const progressPercent = document.getElementById('progressPercent');
+            const progressFill = document.getElementById('progressFill');
+            const resultSection = document.getElementById('resultSection');
+            const resultCode = document.getElementById('resultCode');
+            const resultInfo = document.getElementById('resultInfo');
+            const resultActions = document.getElementById('resultActions');
+            const queryCodeInput = document.getElementById('queryCodeInput');
+            const queryBtn = document.getElementById('queryBtn');
+            const queryResult = document.getElementById('queryResult');
+            const queryError = document.getElementById('queryError');
+            const downloadCodeInput = document.getElementById('downloadCodeInput');
+            const previewBtn = document.getElementById('previewBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const downloadPreview = document.getElementById('downloadPreview');
+            const downloadError = document.getElementById('downloadError');
+            const toastContainer = document.getElementById('toastContainer');
+            const perfBadge = document.getElementById('perfBadge');
 
-            // ==================== 状态 ====================
-            let authToken = localStorage.getItem(TOKEN_KEY) || '';
-            let currentAccount = localStorage.getItem(ACCOUNT_KEY) || '';
-            let currentNickname = localStorage.getItem(NICKNAME_KEY) || '';
-            let selectedColor = '#ff758c';
-            let currentSort = 'latest';
-            let allMessages = [];
-            let likedMessages = new Set();
-
-            // ==================== SVG 图标库 ====================
+            // ===== Icons (SVG strings) =====
             const ICONS = {
-                heart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.7-4.35-9.33-8.11C.9 10.2 1.6 6.5 4.5 5.2c1.8-.8 3.8-.3 5.2 1.1L12 8l2.3-1.7c1.4-1.4 3.4-1.9 5.2-1.1 2.9 1.3 3.6 5 1.83 7.69C18.7 16.65 12 21 12 21z"/></svg>',
-                heartFilled: '<svg viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M12 21s-6.7-4.35-9.33-8.11C.9 10.2 1.6 6.5 4.5 5.2c1.8-.8 3.8-.3 5.2 1.1L12 8l2.3-1.7c1.4-1.4 3.4-1.9 5.2-1.1 2.9 1.3 3.6 5 1.83 7.69C18.7 16.65 12 21 12 21z"/></svg>',
-                user: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
-                clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
-                checkCircle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
-                errorCircle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',
-                infoCircle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>',
-                inbox: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>',
-                star: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2z"/><path d="M19 15l.75 2.25L22 18l-2.25.75L19 21l-.75-2.25L16 18l2.25-.75L19 15z"/><path d="M5 15l.75 2.25L8 18l-2.25.75L5 21l-.75-2.25L2 18l2.25-.75L5 15z"/></svg>',
-                send: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>',
-                calendar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
-                logout: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>',
-                refresh: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>',
-                key: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>',
-                plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>',
-                sparkle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v3m0 12v3M3 12h3m12 0h3M5.6 5.6l2.1 2.1m8.6 8.6l2.1 2.1M18.4 5.6l-2.1 2.1M7.5 16.3l-2.1 2.1"/></svg>',
+                success: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
+                error: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',
+                warning: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+                info: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>',
+                copy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>',
+                clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+                file: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>',
+                image: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3" ry="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>',
+                server: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><circle cx="7" cy="6" r="1" fill="currentColor"/><circle cx="7" cy="18" r="1" fill="currentColor"/></svg>',
+                browser: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>',
             };
 
-            // ==================== 背景粒子生成 ====================
-            function generateParticles() {
-                const count = window.innerWidth < 768 ? 15 : 30;
-                let html = '';
-                for (let i = 0; i < count; i++) {
-                    const size = Math.random() * 8 + 4;
-                    const x = Math.random() * 100;
-                    const y = Math.random() * 100;
-                    const duration = Math.random() * 20 + 15;
-                    const delay = Math.random() * 10;
-                    const dx1 = Math.random() * 60 - 30;
-                    const dy1 = Math.random() * 60 - 30;
-                    const dx2 = Math.random() * 60 - 30;
-                    const dy2 = Math.random() * 60 - 30;
-                    const dx3 = Math.random() * 60 - 30;
-                    const dy3 = Math.random() * 60 - 30;
-                    html += `<div class="bg-particle" style="width:${size}px;height:${size}px;left:${x}%;top:${y}%;--duration:${duration}s;--delay:${delay}s;--dx1:${dx1}px;--dy1:${dy1}px;--dx2:${dx2}px;--dy2:${dy2}px;--dx3:${dx3}px;--dy3:${dy3}px;"></div>`;
+            // ===== Theme Management =====
+            function applyTheme(theme, persist = true) {
+                currentTheme = theme;
+                if (theme === 'dark') {
+                    body.classList.add('dark');
+                    themeIconSun.style.display = 'none';
+                    themeIconMoon.style.display = 'block';
+                } else {
+                    body.classList.remove('dark');
+                    themeIconSun.style.display = 'block';
+                    themeIconMoon.style.display = 'none';
                 }
-                bgParticles.innerHTML = html;
+                if (persist) {
+                    try { localStorage.setItem('metaCleanerTheme', theme); } catch (e) { /* ignore */ }
+                }
             }
-            generateParticles();
-            window.addEventListener('resize', () => {
-                generateParticles();
-            });
-
-            // ==================== 主题切换 ====================
-            function getSavedTheme() {
-                return localStorage.getItem(THEME_KEY) || 'light';
-            }
-
-            function applyTheme(theme) {
-                document.documentElement.setAttribute('data-theme', theme);
-                localStorage.setItem(THEME_KEY, theme);
-            }
-            applyTheme(getSavedTheme());
 
             themeToggleBtn.addEventListener('click', () => {
-                const current = document.documentElement.getAttribute('data-theme');
-                const next = current === 'light' ? 'dark' : 'light';
-                applyTheme(next);
-                showToast(next === 'dark' ? '已切换到暗色模式' : '已切换到亮色模式', 'info');
+                applyTheme(currentTheme === 'light' ? 'dark' : 'light');
             });
 
-            // ==================== Toast 通知 ====================
-            function showToast(message, type = 'info') {
+            // ===== Mode Management =====
+            function applyMode(mode, persist = true) {
+                currentMode = mode;
+                if (mode === 'frontend') {
+                    modeBadgeText.textContent = '前端处理';
+                    modeToggleText.textContent = '切换后端';
+                    modeExplanation.innerHTML =
+                        '<strong>前端处理模式</strong>：图片在浏览器本地用 Canvas 重新绘制，元数据自动剥离，不上传任何数据到服务器。' +
+                        '<span class="pros">优点：完全离线可用、隐私安全、速度极快。</span>' +
+                        '<span class="cons">缺点：不支持 TIFF、大图可能卡顿、依赖浏览器能力。</span>';
+                    modeBadge.querySelector('svg').outerHTML = ICONS.browser;
+                } else {
+                    modeBadgeText.textContent = '后端处理';
+                    modeToggleText.textContent = '切换前端';
+                    modeExplanation.innerHTML =
+                        '<strong>后端处理模式</strong>：图片上传到服务器，服务器清除元数据后返回 6 位物件码，2 小时内可取件下载。' +
+                        '<span class="pros">优点：不占本地资源、支持 TIFF 等更多格式。</span>' +
+                        '<span class="cons">缺点：需联网、图片经过服务器。</span>';
+                    modeBadge.querySelector('svg').outerHTML = ICONS.server;
+                }
+                if (persist) {
+                    try { localStorage.setItem('metaCleanerMode', mode); } catch (e) { /* ignore */ }
+                }
+            }
+
+            modeToggleBtn.addEventListener('click', () => {
+                const newMode = currentMode === 'backend' ? 'frontend' : 'backend';
+                applyMode(newMode);
+                showToast(
+                    newMode === 'frontend' ? '已切换到前端处理模式，图片不会离开浏览器' : '已切换到后端处理模式，图片将上传服务器',
+                    'info'
+                );
+                resetUploadResult();
+            });
+
+            // ===== Tab Management =====
+            function switchTab(tabId) {
+                activeTab = tabId;
+                tabButtons.forEach(btn => {
+                    const isActive = btn.dataset.tab === tabId;
+                    btn.classList.toggle('active', isActive);
+                    btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+                });
+                tabPanels.forEach(panel => {
+                    panel.classList.toggle('active', panel.id === `panel-${tabId}`);
+                });
+            }
+
+            tabButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    switchTab(btn.dataset.tab);
+                });
+            });
+
+            // ===== Toast System =====
+            function showToast(message, type = 'info', duration = 3500) {
                 const toast = document.createElement('div');
                 toast.className = `toast ${type}`;
-                const icon = type === 'success' ? ICONS.checkCircle :
-                    type === 'error' ? ICONS.errorCircle :
-                    ICONS.infoCircle;
-                toast.innerHTML = `<span class="toast-icon">${icon}</span><span>${message}</span>`;
+                toast.innerHTML = (ICONS[type] || ICONS.info) + `<span>${escapeHtml(message)}</span>`;
                 toastContainer.appendChild(toast);
-                setTimeout(() => {
-                    toast.classList.add('removing');
-                    setTimeout(() => {
-                        if (toast.parentNode) toast.parentNode.removeChild(toast);
-                    }, 400);
-                }, 3000);
-            }
-
-            // ==================== 颜色选择 ====================
-            colorSwatches.forEach(swatch => {
-                swatch.addEventListener('click', () => {
-                    colorSwatches.forEach(s => s.classList.remove('active'));
-                    swatch.classList.add('active');
-                    selectedColor = swatch.dataset.color;
-                });
-            });
-
-            // ==================== 账号格式化 ====================
-            function formatAccount(account) {
-                if (!account) return '---- ---- ---- ----';
-                const clean = account.replace(/\s+/g, '');
-                if (clean.length !== 16) return clean;
-                return `${clean.slice(0,4)} ${clean.slice(4,8)} ${clean.slice(8,12)} ${clean.slice(12,16)}`;
-            }
-
-            function maskAccount(account) {
-                if (!account) return '---- **** **** ----';
-                const clean = account.replace(/\s+/g, '');
-                if (clean.length < 8) return clean;
-                return `${clean.slice(0,4)} **** **** ${clean.slice(-4)}`;
-            }
-
-            // ==================== 账号登录/创建 ====================
-            function updateAuthUI() {
-                if (authToken && currentAccount) {
-                    loggedOutDisplay.classList.add('hidden');
-                    loggedInDisplay.classList.remove('hidden');
-                    loggedInNickname.textContent = currentNickname || '星语者';
-                    loggedInAccount.textContent = formatAccount(currentAccount);
-                    navUserText.textContent = currentNickname || formatAccount(currentAccount);
-                    refreshUserInfo();
-                } else {
-                    loggedOutDisplay.classList.remove('hidden');
-                    loggedInDisplay.classList.add('hidden');
-                    navUserText.textContent = '未登录';
-                }
-            }
-
-            // 标签页切换
-            tabBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    tabBtns.forEach(b => {
-                        b.classList.remove('active');
-                        b.setAttribute('aria-selected', 'false');
-                    });
-                    btn.classList.add('active');
-                    btn.setAttribute('aria-selected', 'true');
-                    const tab = btn.dataset.tab;
-                    if (tab === 'login') {
-                        loginForm.classList.remove('hidden');
-                        createForm.classList.add('hidden');
-                    } else {
-                        loginForm.classList.add('hidden');
-                        createForm.classList.remove('hidden');
+                const removeToast = () => {
+                    if (toast.isConnected) {
+                        toast.classList.add('removing');
+                        setTimeout(() => {
+                            if (toast.isConnected) toast.remove();
+                        }, 400);
                     }
-                });
-            });
-
-            // 登录
-            loginBtn.addEventListener('click', async () => {
-                const rawAccount = loginAccountInput.value.trim();
-                if (!rawAccount) {
-                    showToast('请输入账号', 'error');
-                    return;
-                }
-                const account = rawAccount.replace(/\s+/g, '');
-                if (account.length !== 16 || !/^\d{16}$/.test(account)) {
-                    showToast('请输入有效的16位数字账号', 'error');
-                    return;
-                }
-                loginBtn.disabled = true;
-                loginBtn.innerHTML = '登录中...';
-                try {
-                    const res = await fetch(`${API_BASE}/api/auth/login`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ account_number: account })
-                    });
-                    const data = await res.json();
-                    if (data.success) {
-                        authToken = data.token;
-                        currentAccount = data.account_number;
-                        currentNickname = data.nickname;
-                        localStorage.setItem(TOKEN_KEY, authToken);
-                        localStorage.setItem(ACCOUNT_KEY, currentAccount);
-                        localStorage.setItem(NICKNAME_KEY, currentNickname);
-                        updateAuthUI();
-                        showToast('登录成功', 'success');
-                        loginAccountInput.value = '';
-                        await fetchMessages();
-                    } else {
-                        showToast(data.message || '登录失败', 'error');
-                    }
-                } catch (err) {
-                    showToast('网络错误，请稍后重试', 'error');
-                } finally {
-                    loginBtn.disabled = false;
-                    loginBtn.innerHTML =
-                        `${ICONS.key} 登录账号`;
-                }
-            });
-
-            // 创建账号
-            createBtn.addEventListener('click', async () => {
-                const nickname = createNicknameInput.value.trim();
-                createBtn.disabled = true;
-                createBtn.innerHTML = '创建中...';
-                try {
-                    const res = await fetch(`${API_BASE}/api/auth/create`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ nickname: nickname || undefined })
-                    });
-                    const data = await res.json();
-                    if (data.success) {
-                        authToken = data.token;
-                        currentAccount = data.account_number;
-                        currentNickname = data.nickname;
-                        localStorage.setItem(TOKEN_KEY, authToken);
-                        localStorage.setItem(ACCOUNT_KEY, currentAccount);
-                        localStorage.setItem(NICKNAME_KEY, currentNickname);
-                        updateAuthUI();
-                        showToast(`账号创建成功：${formatAccount(data.account_number)}`, 'success');
-                        createNicknameInput.value = '';
-                        await fetchMessages();
-                    } else {
-                        showToast(data.message || '创建失败', 'error');
-                    }
-                } catch (err) {
-                    showToast('网络错误，请稍后重试', 'error');
-                } finally {
-                    createBtn.disabled = false;
-                    createBtn.innerHTML = `${ICONS.plus} 创建新账号`;
-                }
-            });
-
-            // 刷新用户信息
-            async function refreshUserInfo() {
-                if (!authToken) return;
-                try {
-                    const res = await fetch(`${API_BASE}/api/user/info`, {
-                        headers: { 'Authorization': `Bearer ${authToken}` }
-                    });
-                    const data = await res.json();
-                    if (data.success) {
-                        currentNickname = data.nickname;
-                        currentAccount = data.account_number;
-                        localStorage.setItem(NICKNAME_KEY, currentNickname);
-                        localStorage.setItem(ACCOUNT_KEY, currentAccount);
-                        loggedInNickname.textContent = data.nickname;
-                        loggedInAccount.textContent = formatAccount(data.account_number);
-                        navUserText.textContent = data.nickname;
-                        if (data.created_at) {
-                            const date = new Date(data.created_at);
-                            loggedInCreatedAt.innerHTML =
-                                `${ICONS.calendar} <span>${date.toLocaleDateString('zh-CN')}</span>`;
-                        }
-                    } else {
-                        // token可能失效
-                        authToken = '';
-                        currentAccount = '';
-                        localStorage.removeItem(TOKEN_KEY);
-                        localStorage.removeItem(ACCOUNT_KEY);
-                        updateAuthUI();
-                    }
-                } catch (err) {
-                    // 静默处理
-                }
-            }
-            refreshUserInfoBtn.addEventListener('click', refreshUserInfo);
-
-            // 退出
-            logoutBtn.addEventListener('click', () => {
-                authToken = '';
-                currentAccount = '';
-                currentNickname = '';
-                localStorage.removeItem(TOKEN_KEY);
-                localStorage.removeItem(ACCOUNT_KEY);
-                localStorage.removeItem(NICKNAME_KEY);
-                updateAuthUI();
-                showToast('已退出登录', 'info');
-            });
-
-            // ==================== 留言相关 ====================
-            async function fetchMessages() {
-                messagesLoading.classList.remove('hidden');
-                messagesList.innerHTML = '';
-                const loadingDiv = document.createElement('div');
-                loadingDiv.className = 'loading-spinner';
-                loadingDiv.id = 'messagesLoading';
-                loadingDiv.innerHTML =
-                    '<div class="spinner-ring" aria-hidden="true"></div><span>正在加载星语...</span>';
-                messagesList.appendChild(loadingDiv);
-                try {
-                    const res = await fetch(`${API_BASE}/api/messages`);
-                    const data = await res.json();
-                    if (data.success) {
-                        allMessages = data.list || [];
-                        renderMessages();
-                        updateStats();
-                    } else {
-                        showToast(data.message || '加载留言失败', 'error');
-                        allMessages = [];
-                        renderMessages();
-                        updateStats();
-                    }
-                } catch (err) {
-                    showToast('网络错误，无法加载留言', 'error');
-                    allMessages = [];
-                    renderMessages();
-                    updateStats();
-                } finally {
-                    const spinner = $('#messagesLoading');
-                    if (spinner) spinner.remove();
-                }
-            }
-
-            function renderMessages() {
-                messagesList.innerHTML = '';
-                if (!allMessages.length) {
-                    const emptyDiv = document.createElement('div');
-                    emptyDiv.className = 'empty-state';
-                    emptyDiv.innerHTML =
-                        `${ICONS.inbox}<p>还没有留言，来写下第一条星语吧</p>`;
-                    messagesList.appendChild(emptyDiv);
-                    return;
-                }
-
-                let sorted = [...allMessages];
-                if (currentSort === 'likes') {
-                    sorted.sort((a, b) => (b.likes || 0) - (a.likes || 0));
-                } else if (currentSort === 'oldest') {
-                    sorted.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
-                } else {
-                    sorted.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-                }
-
-                sorted.forEach(msg => {
-                    const card = document.createElement('div');
-                    card.className = 'message-card';
-                    card.style.setProperty('--msg-color', msg.mood_color || '#ff758c');
-                    const isLiked = likedMessages.has(msg.id);
-                    const time = msg.created_at ? new Date(msg.created_at) : null;
-                    const timeStr = time ? time.toLocaleDateString('zh-CN') + ' ' + time.toLocaleTimeString(
-                        'zh-CN', { hour: '2-digit', minute: '2-digit' }) : '--';
-
-                    card.innerHTML = `
-                        <div class="message-card-header">
-                            <div class="message-avatar">${ICONS.user}</div>
-                            <div class="message-author">
-                                <div class="author-name">${escapeHtml(msg.nickname || '匿名')}</div>
-                                <div class="author-account">${escapeHtml(msg.masked_account || '---- **** **** ----')}</div>
-                            </div>
-                            <div class="message-time">${ICONS.clock} ${timeStr}</div>
-                        </div>
-                        <div class="message-content">${escapeHtml(msg.content)}</div>
-                        <div class="message-footer">
-                            <button class="like-btn ${isLiked ? 'liked' : ''}" data-id="${escapeHtml(msg.id)}" aria-label="点赞">
-                                ${isLiked ? ICONS.heartFilled : ICONS.heart}
-                                <span class="like-count">${msg.likes || 0}</span>
-                            </button>
-                        </div>
-                    `;
-                    messagesList.appendChild(card);
-
-                    const likeBtn = card.querySelector('.like-btn');
-                    likeBtn.addEventListener('click', () => handleLike(msg.id, likeBtn));
+                };
+                toast._removeTimer = setTimeout(removeToast, duration);
+                toast.addEventListener('click', () => {
+                    clearTimeout(toast._removeTimer);
+                    removeToast();
                 });
             }
 
@@ -1898,151 +1199,1037 @@
                 return div.innerHTML;
             }
 
-            async function handleLike(msgId, btn) {
-                try {
-                    const res = await fetch(`${API_BASE}/api/messages/${encodeURIComponent(msgId)}/like`, {
-                        method: 'POST'
+            // ===== Progress Bar =====
+            function showProgress(label) {
+                progressContainer.classList.add('visible');
+                progressLabel.textContent = label;
+                setProgress(0);
+            }
+
+            function setProgress(value) {
+                const clamped = Math.max(0, Math.min(100, value));
+                progressFill.style.width = clamped + '%';
+                progressPercent.textContent = Math.round(clamped) + '%';
+            }
+
+            function hideProgress() {
+                progressContainer.classList.remove('visible');
+                setProgress(0);
+            }
+
+            // ===== Upload Result =====
+            function resetUploadResult() {
+                resultSection.classList.remove('visible');
+                previewThumb.classList.add('hidden');
+                previewThumb.src = '';
+                if (currentPreviewUrl) {
+                    URL.revokeObjectURL(currentPreviewUrl);
+                    currentPreviewUrl = null;
+                }
+                if (currentObjectUrl) {
+                    URL.revokeObjectURL(currentObjectUrl);
+                    currentObjectUrl = null;
+                }
+                if (expireTimer) {
+                    clearInterval(expireTimer);
+                    expireTimer = null;
+                }
+            }
+
+            function showUploadResult(code, filename, expiresInSeconds, extraActions) {
+                resultSection.classList.add('visible');
+                resultCode.textContent = code;
+                resultInfo.innerHTML = '';
+
+                const fileNameSpan = document.createElement('span');
+                fileNameSpan.innerHTML = ICONS.file + ` <span>${escapeHtml(filename)}</span>`;
+                resultInfo.appendChild(fileNameSpan);
+
+                if (expiresInSeconds !== undefined && expiresInSeconds !== null) {
+                    const expirySpan = document.createElement('span');
+                    expirySpan.id = 'expiryCountdown';
+                    expirySpan.innerHTML = ICONS.clock + ` <span>剩余 ${formatTime(expiresInSeconds)}</span>`;
+                    resultInfo.appendChild(expirySpan);
+                    startExpiryCountdown(expiresInSeconds, expirySpan);
+                }
+
+                resultActions.innerHTML = '';
+                if (extraActions) {
+                    extraActions.forEach(action => {
+                        const btn = document.createElement('button');
+                        btn.className = `btn ${action.className || 'btn-secondary'}`;
+                        btn.innerHTML = (action.icon || '') + (action.label || '');
+                        btn.addEventListener('click', action.onClick);
+                        resultActions.appendChild(btn);
                     });
-                    const data = await res.json();
-                    if (data.success) {
-                        likedMessages.add(msgId);
-                        const countEl = btn.querySelector('.like-count');
-                        if (countEl) countEl.textContent = data.likes;
-                        btn.classList.add('liked');
-                        btn.innerHTML = `${ICONS.heartFilled} <span class="like-count">${data.likes}</span>`;
-                        // 更新本地数据
-                        const msg = allMessages.find(m => m.id === msgId);
-                        if (msg) msg.likes = data.likes;
-                        updateStats();
-                        btn.querySelector('.like-count').addEventListener('click', (e) => {
-                            e.stopPropagation();
-                            handleLike(msgId, btn);
-                        });
+                }
+            }
+
+            function startExpiryCountdown(seconds, element) {
+                if (expireTimer) clearInterval(expireTimer);
+                let remaining = seconds;
+                expireTimer = setInterval(() => {
+                    remaining--;
+                    if (remaining <= 0) {
+                        clearInterval(expireTimer);
+                        expireTimer = null;
+                        element.innerHTML = ICONS.clock + ' <span>已过期</span>';
                     } else {
-                        showToast(data.message || '点赞失败', 'error');
+                        element.innerHTML = ICONS.clock + ` <span>剩余 ${formatTime(remaining)}</span>`;
                     }
-                } catch (err) {
-                    showToast('网络错误，点赞失败', 'error');
-                }
+                }, 1000);
             }
 
-            function updateStats() {
-                const totalMsgs = allMessages.length;
-                const totalLikes = allMessages.reduce((sum, m) => sum + (m.likes || 0), 0);
-                const uniqueUsers = new Set(allMessages.map(m => m.masked_account)).size;
-                statTotalMessages.textContent = totalMsgs;
-                statTotalLikes.textContent = totalLikes;
-                statTotalUsers.textContent = uniqueUsers;
-                if (allMessages.length > 0) {
-                    const times = allMessages.map(m => new Date(m.created_at));
-                    const latest = new Date(Math.max(...times));
-                    const now = new Date();
-                    const diffMs = now - latest;
-                    const diffMin = Math.floor(diffMs / 60000);
-                    if (diffMin < 1) statLatestTime.textContent = '刚刚';
-                    else if (diffMin < 60) statLatestTime.textContent = diffMin + '分前';
-                    else if (diffMin < 1440) statLatestTime.textContent = Math.floor(diffMin / 60) + '小时前';
-                    else statLatestTime.textContent = Math.floor(diffMin / 1440) + '天前';
-                } else {
-                    statLatestTime.textContent = '--';
-                }
+            function formatTime(seconds) {
+                const h = Math.floor(seconds / 3600);
+                const m = Math.floor((seconds % 3600) / 60);
+                const s = Math.floor(seconds % 60);
+                if (h > 0) return `${h}时${m}分${s}秒`;
+                if (m > 0) return `${m}分${s}秒`;
+                return `${s}秒`;
             }
 
-            // ==================== 发布留言 ====================
-            composeSubmitBtn.addEventListener('click', async () => {
-                const content = composeTextarea.value.trim();
-                if (!content) {
-                    showToast('请先写下你的心意', 'error');
-                    composeTextarea.focus();
-                    return;
-                }
-                if (!authToken || !currentAccount) {
-                    showToast('请先登录后再发布留言', 'error');
-                    return;
-                }
-                composeSubmitBtn.disabled = true;
-                composeSubmitBtn.classList.add('loading');
-                composeSubmitBtn.innerHTML =
-                    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> 寄出中...';
-                try {
-                    const res = await fetch(`${API_BASE}/api/messages`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${authToken}`
-                        },
-                        body: JSON.stringify({
-                            content: content,
-                            mood_color: selectedColor
-                        })
+            // ===== IndexedDB Helper (for frontend blob persistence) =====
+            let dbPromise = null;
+
+            function openIDB() {
+                if (!dbPromise) {
+                    dbPromise = new Promise((resolve, reject) => {
+                        if (!('indexedDB' in window)) {
+                            reject(new Error('当前浏览器不支持 IndexedDB，前端物件码将无法持久化'));
+                            return;
+                        }
+                        const request = indexedDB.open(IDB_DB_NAME, 1);
+                        request.onupgradeneeded = (e) => {
+                            const db = e.target.result;
+                            if (!db.objectStoreNames.contains(IDB_STORE_NAME)) {
+                                db.createObjectStore(IDB_STORE_NAME, { keyPath: 'code' });
+                            }
+                        };
+                        request.onsuccess = (e) => resolve(e.target.result);
+                        request.onerror = (e) => reject(e.target.error);
                     });
-                    const data = await res.json();
-                    if (data.success) {
-                        composeTextarea.value = '';
-                        showToast(data.message || '心意已寄出', 'success');
-                        await fetchMessages();
-                    } else {
-                        showToast(data.message || '发布失败', 'error');
-                    }
-                } catch (err) {
-                    showToast('网络错误，请稍后重试', 'error');
-                } finally {
-                    composeSubmitBtn.disabled = false;
-                    composeSubmitBtn.classList.remove('loading');
-                    composeSubmitBtn.innerHTML = `${ICONS.send} 寄出心意`;
                 }
-            });
-
-            // 回车快捷发布（Ctrl+Enter）
-            composeTextarea.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
-                    e.preventDefault();
-                    composeSubmitBtn.click();
-                }
-            });
-
-            // ==================== 筛选排序 ====================
-            filterPills.forEach(pill => {
-                pill.addEventListener('click', () => {
-                    filterPills.forEach(p => {
-                        p.classList.remove('active');
-                        p.setAttribute('aria-pressed', 'false');
-                    });
-                    pill.classList.add('active');
-                    pill.setAttribute('aria-pressed', 'true');
-                    currentSort = pill.dataset.sort;
-                    renderMessages();
-                });
-            });
-
-            // ==================== 初始化 ====================
-            function init() {
-                updateAuthUI();
-                fetchMessages();
-                // 每60秒自动刷新留言（可选）
-                setInterval(() => {
-                    if (!document.hidden) fetchMessages();
-                }, 60000);
+                return dbPromise;
             }
 
-            init();
-
-            // 从localStorage恢复点赞记录（简单本地记录）
-            const savedLikes = localStorage.getItem('love_board_liked');
-            if (savedLikes) {
+            async function storeBlobInIDB(code, blob) {
                 try {
-                    likedMessages = new Set(JSON.parse(savedLikes));
+                    const db = await openIDB();
+                    return new Promise((resolve, reject) => {
+                        const tx = db.transaction(IDB_STORE_NAME, 'readwrite');
+                        const store = tx.objectStore(IDB_STORE_NAME);
+                        store.put({ code, blob, timestamp: Date.now() });
+                        tx.oncomplete = () => resolve();
+                        tx.onerror = (e) => reject(e.target.error);
+                    });
+                } catch (err) {
+                    console.warn('IndexedDB 存储失败:', err);
+                    throw err;
+                }
+            }
+
+            async function getBlobFromIDB(code) {
+                try {
+                    const db = await openIDB();
+                    return new Promise((resolve, reject) => {
+                        const tx = db.transaction(IDB_STORE_NAME, 'readonly');
+                        const store = tx.objectStore(IDB_STORE_NAME);
+                        const request = store.get(code);
+                        request.onsuccess = () => {
+                            const result = request.result;
+                            if (result && result.blob) {
+                                resolve(result.blob);
+                            } else {
+                                resolve(null);
+                            }
+                        };
+                        request.onerror = (e) => reject(e.target.error);
+                    });
+                } catch (err) {
+                    console.warn('IndexedDB 读取失败:', err);
+                    return null;
+                }
+            }
+
+            async function deleteBlobFromIDB(code) {
+                try {
+                    const db = await openIDB();
+                    return new Promise((resolve, reject) => {
+                        const tx = db.transaction(IDB_STORE_NAME, 'readwrite');
+                        const store = tx.objectStore(IDB_STORE_NAME);
+                        store.delete(code);
+                        tx.oncomplete = () => resolve();
+                        tx.onerror = (e) => reject(e.target.error);
+                    });
+                } catch (err) {
+                    console.warn('IndexedDB 删除失败:', err);
+                }
+            }
+
+            async function cleanupExpiredIDB() {
+                try {
+                    const db = await openIDB();
+                    const tx = db.transaction(IDB_STORE_NAME, 'readwrite');
+                    const store = tx.objectStore(IDB_STORE_NAME);
+                    const request = store.openCursor();
+                    request.onsuccess = (event) => {
+                        const cursor = event.target.result;
+                        if (cursor) {
+                            const record = cursor.value;
+                            const code = record.code;
+                            const localData = getLocalCodeData(code);
+                            if (!localData || Date.now() > localData.expiresAt) {
+                                store.delete(code);
+                                // Also remove from localStorage if not already
+                                removeLocalCode(code);
+                            }
+                            cursor.continue();
+                        }
+                    };
                 } catch (e) {
-                    likedMessages = new Set();
+                    console.warn('IndexedDB 清理失败:', e);
                 }
             }
-            // 监听点赞变化保存
-            const originalAdd = likedMessages.add.bind(likedMessages);
-            likedMessages.add = (val) => {
-                originalAdd(val);
-                localStorage.setItem('love_board_liked', JSON.stringify([...likedMessages]));
-            };
 
+            // ===== Backend Processing =====
+            async function processBackend(file) {
+                if (currentController) currentController.abort();
+                currentController = new AbortController();
+                const formData = new FormData();
+                formData.append('file', file);
+
+                showProgress('上传图片中...');
+                setProgress(0);
+
+                try {
+                    const result = await new Promise((resolve, reject) => {
+                        const xhr = new XMLHttpRequest();
+                        xhr.open('POST', API_UPLOAD, true);
+                        xhr.responseType = 'json';
+                        xhr.timeout = 120000;
+
+                        xhr.upload.addEventListener('progress', (e) => {
+                            if (e.lengthComputable) {
+                                const percent = (e.loaded / e.total) * 100;
+                                setProgress(percent * 0.85);
+                                progressLabel.textContent = '上传中...';
+                            }
+                        });
+
+                        xhr.upload.addEventListener('load', () => {
+                            setProgress(88);
+                            progressLabel.textContent = '服务器处理中...';
+                        });
+
+                        xhr.addEventListener('load', () => {
+                            if (xhr.status >= 200 && xhr.status < 300) {
+                                setProgress(100);
+                                progressLabel.textContent = '完成！';
+                                resolve(xhr.response);
+                            } else {
+                                let errorMsg = `上传失败 (${xhr.status})`;
+                                try {
+                                    const data = xhr.response;
+                                    if (data && data.detail) errorMsg = data.detail;
+                                } catch (e) { /* ignore */ }
+                                reject(new Error(errorMsg));
+                            }
+                        });
+
+                        xhr.addEventListener('error', () => reject(new Error('网络错误，请检查连接')));
+                        xhr.addEventListener('timeout', () => reject(new Error('上传超时，请重试')));
+                        xhr.addEventListener('abort', () => reject(new Error('上传已取消')));
+
+                        xhr.send(formData);
+                        currentController._xhr = xhr;
+                        currentController.signal.addEventListener('abort', () => {
+                            try { xhr.abort(); } catch (e) { /* ignore */ }
+                        });
+                    });
+
+                    if (result && result.success && result.code) {
+                        uploadedFileName = result.filename || file.name;
+                        const expiresIn = result.expires_in_seconds || EXPIRE_SECONDS;
+                        showUploadResult(result.code, uploadedFileName, expiresIn, [
+                            {
+                                label: '复制物件码',
+                                icon: ICONS.copy,
+                                className: 'btn-secondary',
+                                onClick: () => copyText(result.code)
+                            },
+                            {
+                                label: '预览图片',
+                                icon: ICONS.image,
+                                className: 'btn-primary',
+                                onClick: () => openDownloadPreview(result.code)
+                            },
+                            {
+                                label: '下载图片',
+                                icon: ICONS.success,
+                                className: 'btn-primary',
+                                onClick: () => triggerDownload(result.code)
+                            }
+                        ]);
+                        showToast('上传成功，物件码 ' + result.code, 'success');
+                    } else {
+                        throw new Error('服务器返回异常');
+                    }
+                } catch (err) {
+                    if (err.name === 'AbortError' || err.message === '上传已取消') {
+                        showToast('上传已取消', 'warning');
+                    } else {
+                        showToast(err.message || '上传失败', 'error');
+                        showUploadError(err.message || '上传失败');
+                    }
+                } finally {
+                    setTimeout(() => {
+                        if (progressFill.style.width === '100%') hideProgress();
+                    }, 800);
+                    currentController = null;
+                }
+            }
+
+            function showUploadError(message) {
+                resultSection.classList.add('visible');
+                resultCode.textContent = 'ERROR';
+                resultInfo.innerHTML = '';
+                const errSpan = document.createElement('span');
+                errSpan.innerHTML = ICONS.error + ` <span>${escapeHtml(message)}</span>`;
+                resultInfo.appendChild(errSpan);
+                resultActions.innerHTML = '';
+            }
+
+            // ===== Frontend Processing (with transparency preservation and IDB storage) =====
+            async function processFrontend(file) {
+                showProgress('正在读取图片...');
+                setProgress(5);
+
+                try {
+                    const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
+                    if (!validTypes.includes(file.type)) {
+                        throw new Error('前端处理仅支持 JPG、PNG、WEBP。TIFF 请切换后端模式。');
+                    }
+                    if (file.size > MAX_FILE_SIZE) {
+                        throw new Error('文件超过 50MB 限制');
+                    }
+
+                    const arrayBuffer = await file.arrayBuffer();
+                    setProgress(20);
+                    progressLabel.textContent = '解码图片...';
+
+                    let bitmap;
+                    try {
+                        bitmap = await createImageBitmap(new Blob([arrayBuffer], { type: file.type }));
+                    } catch (e) {
+                        bitmap = await loadImageFallback(URL.createObjectURL(new Blob([arrayBuffer], { type: file
+                            .type })));
+                    }
+                    setProgress(45);
+                    progressLabel.textContent = '清除元数据中...';
+
+                    let width = bitmap.width;
+                    let height = bitmap.height;
+                    const originalWidth = width;
+                    const originalHeight = height;
+
+                    if (width > MAX_CANVAS_DIMENSION || height > MAX_CANVAS_DIMENSION) {
+                        const scale = Math.min(MAX_CANVAS_DIMENSION / width, MAX_CANVAS_DIMENSION / height);
+                        width = Math.round(width * scale);
+                        height = Math.round(height * scale);
+                    }
+
+                    // Determine if we need to preserve transparency
+                    const isJPEG = file.type === 'image/jpeg';
+                    const canvas = document.createElement('canvas');
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d', { alpha: !isJPEG }); // For JPEG use opaque, for PNG/WEBP keep alpha
+                    
+                    // For JPEG, fill white background to avoid black corners
+                    if (isJPEG) {
+                        ctx.fillStyle = '#ffffff';
+                        ctx.fillRect(0, 0, width, height);
+                    } else {
+                        // For PNG/WEBP, don't fill, preserve transparency
+                    }
+
+                    ctx.imageSmoothingEnabled = true;
+                    ctx.imageSmoothingQuality = 'high';
+                    ctx.drawImage(bitmap, 0, 0, width, height);
+
+                    setProgress(65);
+                    progressLabel.textContent = '生成无元数据图片...';
+
+                    if (bitmap.close) bitmap.close();
+
+                    const blob = await new Promise((resolve, reject) => {
+                        canvas.toBlob((blob) => {
+                            if (blob) resolve(blob);
+                            else reject(new Error('图片导出失败'));
+                        }, file.type || 'image/png', 0.92);
+                    });
+
+                    setProgress(85);
+                    progressLabel.textContent = '创建本地物件码...';
+
+                    const localCode = generateLocalCode();
+                    const blobUrl = URL.createObjectURL(blob);
+                    if (currentObjectUrl) URL.revokeObjectURL(currentObjectUrl);
+                    currentObjectUrl = blobUrl;
+
+                    // Store blob in IndexedDB for persistence
+                    try {
+                        await storeBlobInIDB(localCode, blob);
+                    } catch (e) {
+                        console.warn('IndexedDB 存储失败，物件码将仅在本页面有效', e);
+                    }
+
+                    // Store metadata in localStorage
+                    try {
+                        const storeKey = `metaCleanerLocal_${localCode}`;
+                        localStorage.setItem(storeKey, JSON.stringify({
+                            code: localCode,
+                            filename: file.name,
+                            size: blob.size,
+                            createdAt: Date.now(),
+                            expiresAt: Date.now() + EXPIRE_SECONDS * 1000,
+                            blobSize: blob.size
+                        }));
+                    } catch (e) { /* localStorage may be full */ }
+
+                    setProgress(100);
+                    progressLabel.textContent = '完成！';
+
+                    uploadedFileName = file.name;
+                    const expiresIn = EXPIRE_SECONDS;
+
+                    showUploadResult(localCode, file.name, expiresIn, [
+                        {
+                            label: '复制物件码',
+                            icon: ICONS.copy,
+                            className: 'btn-secondary',
+                            onClick: () => copyText(localCode)
+                        },
+                        {
+                            label: '下载图片',
+                            icon: ICONS.success,
+                            className: 'btn-primary',
+                            onClick: () => downloadFrontendBlob(localCode, file.name)
+                        },
+                        {
+                            label: '预览图片',
+                            icon: ICONS.image,
+                            className: 'btn-secondary',
+                            onClick: () => previewFrontendBlob(localCode)
+                        }
+                    ]);
+
+                    if (currentPreviewUrl) URL.revokeObjectURL(currentPreviewUrl);
+                    currentPreviewUrl = blobUrl;
+                    previewThumb.src = blobUrl;
+                    previewThumb.classList.remove('hidden');
+
+                    showToast('前端处理完成，图片未离开浏览器', 'success');
+
+                    canvas.width = 0;
+                    canvas.height = 0;
+
+                } catch (err) {
+                    showToast(err.message || '前端处理失败', 'error');
+                    showUploadError(err.message || '前端处理失败');
+                } finally {
+                    setTimeout(() => {
+                        if (progressFill.style.width === '100%') hideProgress();
+                    }, 800);
+                }
+            }
+
+            function loadImageFallback(url) {
+                return new Promise((resolve, reject) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        URL.revokeObjectURL(url); // Revoke after load
+                        resolve(img);
+                    };
+                    img.onerror = () => {
+                        URL.revokeObjectURL(url);
+                        reject(new Error('图片解码失败'));
+                    };
+                    img.src = url;
+                });
+            }
+
+            function generateLocalCode() {
+                const stored = [];
+                try {
+                    for (let i = 0; i < localStorage.length; i++) {
+                        const key = localStorage.key(i);
+                        if (key && key.startsWith('metaCleanerLocal_')) {
+                            stored.push(key.replace('metaCleanerLocal_', ''));
+                        }
+                    }
+                } catch (e) { /* ignore */ }
+                let code;
+                do {
+                    code = String(Math.floor(100000 + Math.random() * 900000));
+                } while (stored.includes(code));
+                return code;
+            }
+
+            async function downloadFrontendBlob(code, filename) {
+                try {
+                    // First try in-memory URL if available and not expired
+                    const localData = getLocalCodeData(code);
+                    if (!localData) {
+                        showToast('物件码不存在或已过期', 'error');
+                        return;
+                    }
+                    const remaining = EXPIRE_SECONDS - Math.floor((Date.now() - localData.createdAt) / 1000);
+                    if (remaining <= 0) {
+                        removeLocalCode(code);
+                        await deleteBlobFromIDB(code);
+                        showToast('物件码已过期', 'error');
+                        return;
+                    }
+
+                    // Get blob from IndexedDB
+                    const blob = await getBlobFromIDB(code);
+                    if (!blob) {
+                        showToast('图片数据已失效，请重新上传', 'error');
+                        return;
+                    }
+
+                    const a = document.createElement('a');
+                    const ext = filename.split('.').pop() || 'jpg';
+                    const cleanName = filename.replace(/\.[^.]+$/, '') + '_cleaned.' + ext;
+                    const url = URL.createObjectURL(blob);
+                    a.href = url;
+                    a.download = cleanName;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    setTimeout(() => URL.revokeObjectURL(url), 5000);
+                    showToast('下载已开始', 'success');
+                } catch (err) {
+                    console.error('下载失败:', err);
+                    showToast('下载失败，请重试', 'error');
+                }
+            }
+
+            async function previewFrontendBlob(code) {
+                try {
+                    const localData = getLocalCodeData(code);
+                    if (!localData) {
+                        showToast('物件码不存在或已过期', 'error');
+                        return;
+                    }
+                    const remaining = EXPIRE_SECONDS - Math.floor((Date.now() - localData.createdAt) / 1000);
+                    if (remaining <= 0) {
+                        removeLocalCode(code);
+                        await deleteBlobFromIDB(code);
+                        showToast('物件码已过期', 'error');
+                        return;
+                    }
+
+                    const blob = await getBlobFromIDB(code);
+                    if (!blob) {
+                        showToast('图片数据已失效，请重新上传', 'error');
+                        return;
+                    }
+
+                    const url = URL.createObjectURL(blob);
+                    const win = window.open();
+                    if (win) {
+                        win.document.write(
+                            `<title>预览 - ${escapeHtml(localData.filename || '图片')}</title><body style="margin:0;display:flex;align-items:center;justify-content:center;background:#0a0a1a;min-height:100vh;"><img src="${url}" alt="预览" style="max-width:100%;max-height:100vh;object-fit:contain;"></body>`
+                        );
+                    } else {
+                        window.location.href = url;
+                    }
+                    setTimeout(() => URL.revokeObjectURL(url), 60000);
+                } catch (err) {
+                    console.error('预览失败:', err);
+                    showToast('预览失败，请重试', 'error');
+                }
+            }
+
+            // ===== Upload Zone Events =====
+            uploadZone.addEventListener('click', (e) => {
+                if (e.target !== fileInput) fileInput.click();
+            });
+            uploadZone.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    fileInput.click();
+                }
+            });
+
+            fileInput.addEventListener('change', () => {
+                if (fileInput.files && fileInput.files.length > 0) {
+                    handleFile(fileInput.files[0]);
+                }
+            });
+
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                uploadZone.addEventListener(eventName, preventDefaults, false);
+            });
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            uploadZone.addEventListener('dragenter', () => uploadZone.classList.add('dragover'));
+            uploadZone.addEventListener('dragover', () => uploadZone.classList.add('dragover'));
+            uploadZone.addEventListener('dragleave', (e) => {
+                if (!uploadZone.contains(e.relatedTarget)) uploadZone.classList.remove('dragover');
+            });
+            uploadZone.addEventListener('drop', (e) => {
+                uploadZone.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) handleFile(files[0]);
+            });
+
+            document.addEventListener('paste', (e) => {
+                if (activeTab !== 'upload') return;
+                const items = e.clipboardData && e.clipboardData.items;
+                if (items) {
+                    for (const item of items) {
+                        if (item.type.startsWith('image/')) {
+                            const file = item.getAsFile();
+                            if (file) {
+                                handleFile(file);
+                                e.preventDefault();
+                                break;
+                            }
+                        }
+                    }
+                }
+            });
+
+            async function handleFile(file) {
+                resetUploadResult();
+                uploadedFileName = file.name;
+                uploadedFileSize = file.size;
+
+                const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/tiff', 'image/gif', 'image/bmp'];
+                if (!file.type.startsWith('image/') && !validTypes.includes(file.type)) {
+                    showToast('不支持的图片格式', 'error');
+                    return;
+                }
+                if (file.size > MAX_FILE_SIZE) {
+                    showToast('文件超过 50MB 限制', 'error');
+                    return;
+                }
+                if (file.size === 0) {
+                    showToast('文件为空', 'error');
+                    return;
+                }
+
+                if (file.type !== 'image/tiff') {
+                    const previewUrl = URL.createObjectURL(file);
+                    if (currentPreviewUrl) URL.revokeObjectURL(currentPreviewUrl);
+                    currentPreviewUrl = previewUrl;
+                    previewThumb.src = previewUrl;
+                    previewThumb.classList.remove('hidden');
+                } else {
+                    previewThumb.classList.add('hidden');
+                }
+
+                if (currentMode === 'frontend') {
+                    await processFrontend(file);
+                } else {
+                    await processBackend(file);
+                }
+            }
+
+            // ===== Query Functions =====
+            queryBtn.addEventListener('click', async () => {
+                const code = queryCodeInput.value.trim();
+                if (!/^\d{6}$/.test(code)) {
+                    showToast('请输入 6 位纯数字物件码', 'warning');
+                    queryError.style.display = 'block';
+                    queryError.innerHTML =
+                        `<div class="info-card" style="border-color:rgba(239,68,68,0.4);">${ICONS.error} <span>请输入 6 位纯数字物件码</span></div>`;
+                    queryResult.style.display = 'none';
+                    return;
+                }
+                await performQuery(code);
+            });
+
+            queryCodeInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') queryBtn.click();
+            });
+            queryCodeInput.addEventListener('input', () => {
+                queryCodeInput.value = queryCodeInput.value.replace(/\D/g, '').slice(0, 6);
+                queryError.style.display = 'none';
+                queryResult.style.display = 'none';
+            });
+
+            async function performQuery(code) {
+                queryResult.style.display = 'none';
+                queryError.style.display = 'none';
+                queryBtn.disabled = true;
+                queryBtn.innerHTML = '<span class="spinner spinner-sm"></span> 查询中...';
+
+                try {
+                    const localData = getLocalCodeData(code);
+                    if (localData) {
+                        const elapsed = Date.now() - localData.createdAt;
+                        const remaining = Math.max(0, EXPIRE_SECONDS - Math.floor(elapsed / 1000));
+                        if (remaining <= 0) {
+                            removeLocalCode(code);
+                            await deleteBlobFromIDB(code);
+                            throw new Error('物件码已过期');
+                        }
+                        queryResult.style.display = 'block';
+                        queryResult.innerHTML = `
+                            <div class="info-card">
+                                <div class="info-row">
+                                    <span class="info-label">${ICONS.file} 文件名</span>
+                                    <span class="info-value">${escapeHtml(localData.filename)}</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">${ICONS.clock} 剩余时间</span>
+                                    <span class="info-value">${formatTime(remaining)}</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">${ICONS.server} 处理方式</span>
+                                    <span class="info-value">前端本地处理</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">${ICONS.info} 物件码</span>
+                                    <span class="info-value">${code}</span>
+                                </div>
+                            </div>`;
+                        showToast('查询成功', 'success');
+                        return;
+                    }
+
+                    // Backend query
+                    const response = await fetch(`${API_INFO}/${code}`, {
+                        method: 'GET',
+                        headers: { 'Accept': 'application/json' },
+                        signal: AbortSignal.timeout(10000)
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.success) {
+                            queryResult.style.display = 'block';
+                            queryResult.innerHTML = `
+                                <div class="info-card">
+                                    <div class="info-row">
+                                        <span class="info-label">${ICONS.file} 文件名</span>
+                                        <span class="info-value">${escapeHtml(data.filename || '未知')}</span>
+                                    </div>
+                                    <div class="info-row">
+                                        <span class="info-label">${ICONS.clock} 剩余时间</span>
+                                        <span class="info-value">${formatTime(data.remaining_seconds || 0)}</span>
+                                    </div>
+                                    <div class="info-row">
+                                        <span class="info-label">${ICONS.server} 处理方式</span>
+                                        <span class="info-value">后端服务器处理</span>
+                                    </div>
+                                    <div class="info-row">
+                                        <span class="info-label">${ICONS.info} 物件码</span>
+                                        <span class="info-value">${code}</span>
+                                    </div>
+                                </div>`;
+                            showToast('查询成功', 'success');
+                        } else {
+                            throw new Error('查询失败');
+                        }
+                    } else if (response.status === 404) {
+                        throw new Error('物件码不存在或已过期');
+                    } else {
+                        throw new Error(`查询失败 (${response.status})`);
+                    }
+                } catch (err) {
+                    queryError.style.display = 'block';
+                    queryError.innerHTML =
+                        `<div class="info-card" style="border-color:rgba(239,68,68,0.4);">${ICONS.error} <span>${escapeHtml(err.message || '查询失败')}</span></div>`;
+                    showToast(err.message || '查询失败', 'error');
+                } finally {
+                    queryBtn.disabled = false;
+                    queryBtn.innerHTML = `${ICONS.info} 查询`;
+                }
+            }
+
+            function getLocalCodeData(code) {
+                try {
+                    const data = localStorage.getItem(`metaCleanerLocal_${code}`);
+                    return data ? JSON.parse(data) : null;
+                } catch (e) { return null; }
+            }
+
+            function removeLocalCode(code) {
+                try {
+                    localStorage.removeItem(`metaCleanerLocal_${code}`);
+                } catch (e) { /* ignore */ }
+            }
+
+            // ===== Download Functions =====
+            downloadBtn.addEventListener('click', () => {
+                const code = downloadCodeInput.value.trim();
+                if (!/^\d{6}$/.test(code)) {
+                    showToast('请输入 6 位纯数字物件码', 'warning');
+                    downloadError.style.display = 'block';
+                    downloadError.innerHTML =
+                        `<div class="info-card" style="border-color:rgba(239,68,68,0.4);">${ICONS.error} <span>请输入 6 位纯数字物件码</span></div>`;
+                    downloadPreview.style.display = 'none';
+                    return;
+                }
+                triggerDownload(code);
+            });
+
+            previewBtn.addEventListener('click', () => {
+                const code = downloadCodeInput.value.trim();
+                if (!/^\d{6}$/.test(code)) {
+                    showToast('请输入 6 位纯数字物件码', 'warning');
+                    downloadError.style.display = 'block';
+                    downloadError.innerHTML =
+                        `<div class="info-card" style="border-color:rgba(239,68,68,0.4);">${ICONS.error} <span>请输入 6 位纯数字物件码</span></div>`;
+                    downloadPreview.style.display = 'none';
+                    return;
+                }
+                openDownloadPreview(code);
+            });
+
+            downloadCodeInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') triggerDownload(downloadCodeInput.value.trim());
+            });
+            downloadCodeInput.addEventListener('input', () => {
+                downloadCodeInput.value = downloadCodeInput.value.replace(/\D/g, '').slice(0, 6);
+                downloadError.style.display = 'none';
+                downloadPreview.style.display = 'none';
+            });
+
+            async function triggerDownload(code) {
+                const localData = getLocalCodeData(code);
+                if (localData) {
+                    const remaining = EXPIRE_SECONDS - Math.floor((Date.now() - localData.createdAt) / 1000);
+                    if (remaining <= 0) {
+                        removeLocalCode(code);
+                        await deleteBlobFromIDB(code);
+                        showToast('本地物件码已过期', 'error');
+                        return;
+                    }
+                    await downloadFrontendBlob(code, localData.filename);
+                    return;
+                }
+                // Backend download
+                window.location.href = `${API_DOWNLOAD}/${code}`;
+                showToast('下载已触发，请查看浏览器下载', 'success');
+            }
+
+            async function openDownloadPreview(code) {
+                const localData = getLocalCodeData(code);
+                if (localData) {
+                    const remaining = EXPIRE_SECONDS - Math.floor((Date.now() - localData.createdAt) / 1000);
+                    if (remaining <= 0) {
+                        removeLocalCode(code);
+                        await deleteBlobFromIDB(code);
+                        showToast('本地物件码已过期', 'error');
+                        return;
+                    }
+                    downloadPreview.style.display = 'block';
+                    downloadPreview.innerHTML = `<div class="info-card" style="text-align:center;">${ICONS.image} <span>本地图片预览：</span><br><img src="${currentObjectUrl || ''}" alt="本地预览" style="max-width:100%;max-height:300px;border-radius:12px;margin-top:8px;"></div>`;
+                    downloadError.style.display = 'none';
+                    // If currentObjectUrl is not available (page reload), try loading from IDB
+                    if (!currentObjectUrl) {
+                        const blob = await getBlobFromIDB(code);
+                        if (blob) {
+                            const url = URL.createObjectURL(blob);
+                            downloadPreview.innerHTML = `<div class="info-card" style="text-align:center;">${ICONS.image} <span>本地图片预览：</span><br><img src="${url}" alt="本地预览" style="max-width:100%;max-height:300px;border-radius:12px;margin-top:8px;"></div>`;
+                            setTimeout(() => URL.revokeObjectURL(url), 30000);
+                        } else {
+                            downloadPreview.innerHTML = `<div class="info-card" style="border-color:rgba(239,68,68,0.4);">${ICONS.error} <span>图片数据丢失，请重新上传</span></div>`;
+                        }
+                    }
+                    return;
+                }
+                // Backend preview
+                downloadPreview.style.display = 'block';
+                downloadPreview.innerHTML = `<div class="info-card" style="text-align:center;"><span class="spinner spinner-dark"></span> 加载预览中...</div>`;
+                downloadError.style.display = 'none';
+
+                const img = new Image();
+                img.onload = () => {
+                    downloadPreview.innerHTML = `<div class="info-card" style="text-align:center;">${ICONS.image} <span>图片预览：</span><br><img src="${API_DOWNLOAD}/${code}" alt="预览" style="max-width:100%;max-height:300px;border-radius:12px;margin-top:8px;"></div>`;
+                };
+                img.onerror = () => {
+                    downloadPreview.style.display = 'none';
+                    downloadError.style.display = 'block';
+                    downloadError.innerHTML = `<div class="info-card" style="border-color:rgba(239,68,68,0.4);">${ICONS.error} <span>预览失败，物件码可能已过期</span></div>`;
+                    showToast('预览失败，物件码可能已过期', 'error');
+                };
+                img.src = `${API_DOWNLOAD}/${code}?t=${Date.now()}`;
+            }
+
+            // ===== Copy Text =====
+            async function copyText(text) {
+                try {
+                    await navigator.clipboard.writeText(text);
+                    showToast('已复制到剪贴板', 'success');
+                } catch (e) {
+                    const textarea = document.createElement('textarea');
+                    textarea.value = text;
+                    textarea.style.position = 'fixed';
+                    textarea.style.opacity = '0';
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    try {
+                        document.execCommand('copy');
+                        showToast('已复制到剪贴板', 'success');
+                    } catch (err) {
+                        showToast('复制失败，请手动复制', 'warning');
+                    }
+                    document.body.removeChild(textarea);
+                }
+            }
+
+            // ===== Performance Monitor (Frame Generation) =====
+            function startPerfMonitor() {
+                if (perfMonitorRunning) return;
+                perfMonitorRunning = true;
+                perfFrameCount = 0;
+                perfLastTime = performance.now();
+                perfFPS = 60;
+                perfLowFrames = 0;
+
+                function checkPerf() {
+                    const now = performance.now();
+                    const delta = now - perfLastTime;
+                    if (delta >= PERF_CHECK_INTERVAL) {
+                        perfFPS = (perfFrameCount * 1000) / delta;
+                        perfFrameCount = 0;
+                        perfLastTime = now;
+
+                        if (perfFPS < 30) {
+                            perfLowFrames++;
+                            if (perfLowFrames >= 3 && orbCount > 2) {
+                                orbCount--;
+                                applyOrbCount(orbCount);
+                                perfLowFrames = 0;
+                                if (perfBadge) {
+                                    perfBadge.textContent = `性能优化: ${orbCount} 光斑 · ${Math.round(perfFPS)} FPS`;
+                                    perfBadge.classList.add('visible');
+                                    setTimeout(() => {
+                                        if (perfFPS > 40) perfBadge.classList.remove('visible');
+                                    }, 3000);
+                                }
+                            }
+                        } else if (perfFPS > 50) {
+                            perfLowFrames = 0;
+                            if (orbCount < 4) {
+                                orbCount++;
+                                applyOrbCount(orbCount);
+                            }
+                        }
+                    }
+                    perfFrameCount++;
+                    requestAnimationFrame(checkPerf);
+                }
+                requestAnimationFrame(checkPerf);
+            }
+
+            function applyOrbCount(count) {
+                const orbs = document.querySelectorAll('.bg-orb');
+                orbs.forEach((orb, index) => {
+                    orb.style.display = index < count ? 'block' : 'none';
+                });
+            }
+
+            // ===== Network Status =====
+            function updateNetworkStatus() {
+                isOffline = !navigator.onLine;
+                if (isOffline) {
+                    showToast('网络已断开，前端处理模式仍可用', 'warning');
+                }
+            }
+            window.addEventListener('online', () => {
+                isOffline = false;
+                showToast('网络已恢复', 'success');
+            });
+            window.addEventListener('offline', () => {
+                isOffline = true;
+                showToast('网络已断开，前端处理模式仍可用', 'warning');
+            });
+
+            // ===== Cleanup Local Expired Codes =====
+            function cleanupExpiredLocalCodes() {
+                try {
+                    const keys = [];
+                    for (let i = 0; i < localStorage.length; i++) {
+                        const key = localStorage.key(i);
+                        if (key && key.startsWith('metaCleanerLocal_')) {
+                            keys.push(key);
+                        }
+                    }
+                    keys.forEach(key => {
+                        try {
+                            const data = JSON.parse(localStorage.getItem(key));
+                            if (data && data.expiresAt && Date.now() > data.expiresAt) {
+                                localStorage.removeItem(key);
+                                const code = key.replace('metaCleanerLocal_', '');
+                                deleteBlobFromIDB(code);
+                            }
+                        } catch (e) {
+                            localStorage.removeItem(key);
+                        }
+                    });
+                } catch (e) { /* ignore */ }
+                cleanupExpiredIDB();
+            }
+
+            // ===== Memory Management =====
+            function cleanupMemory() {
+                if (currentPreviewUrl && !previewThumb.src.includes(currentPreviewUrl)) {
+                    URL.revokeObjectURL(currentPreviewUrl);
+                    currentPreviewUrl = null;
+                }
+                cleanupExpiredLocalCodes();
+            }
+
+            const memoryCleanupInterval = setInterval(cleanupMemory, 60000);
+
+            // ===== Initialization =====
+            function init() {
+                applyTheme(currentTheme, false);
+                applyMode(currentMode, false);
+                applyOrbCount(orbCount);
+                startPerfMonitor();
+                updateNetworkStatus();
+                cleanupExpiredLocalCodes();
+
+                document.addEventListener('visibilitychange', () => {
+                    if (document.hidden) {
+                        cleanupMemory();
+                    }
+                });
+
+                window.addEventListener('beforeunload', () => {
+                    if (currentPreviewUrl) URL.revokeObjectURL(currentPreviewUrl);
+                    if (currentObjectUrl) URL.revokeObjectURL(currentObjectUrl);
+                    if (expireTimer) clearInterval(expireTimer);
+                    clearInterval(memoryCleanupInterval);
+                    if (currentController) {
+                        try { currentController.abort(); } catch (e) { /* ignore */ }
+                    }
+                });
+
+                console.log('[Init] 元数据清除器已加载');
+                console.log(`[Init] 模式: ${currentMode} | 主题: ${currentTheme}`);
+                console.log('[Init] Service Worker 已移除，离线支持由前端模式提供');
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
         })();
     </script>
 </body>
