@@ -933,6 +933,23 @@
                 browser: '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>',
             };
 
+            // ===== Helper Functions =====
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            function formatTime(seconds) {
+                if (seconds <= 0) return '已过期';
+                const h = Math.floor(seconds / 3600);
+                const m = Math.floor((seconds % 3600) / 60);
+                const s = Math.floor(seconds % 60);
+                if (h > 0) return `${h}小时 ${m}分 ${s}秒`;
+                if (m > 0) return `${m}分 ${s}秒`;
+                return `${s}秒`;
+            }
+
             // ===== Theme Management =====
             function applyTheme(theme, persist = true) {
                 currentTheme = theme;
@@ -1023,12 +1040,6 @@
                 });
             }
 
-            function escapeHtml(text) {
-                const div = document.createElement('div');
-                div.textContent = text;
-                return div.innerHTML;
-            }
-
             // ===== Progress =====
             function showProgress(label) {
                 progressContainer.classList.add('visible');
@@ -1057,6 +1068,47 @@
                 if (expireTimer) { clearInterval(expireTimer); expireTimer = null; }
                 metadataSection.style.display = 'none';
                 currentMetadata = [];
+            }
+
+            // ===== Show Upload Result (补全函数) =====
+            function showUploadResult(code, filename, expireSeconds, actions = []) {
+                resultSection.classList.add('visible');
+                resultCode.textContent = code;
+                resultInfo.innerHTML = `
+                    <span class="info-pill">${ICONS.file} <span>${escapeHtml(filename)}</span></span>
+                    <span class="info-pill">${ICONS.clock} <span id="expireCountText">${formatTime(expireSeconds)}</span></span>
+                `;
+                resultActions.innerHTML = '';
+                actions.forEach(act => {
+                    const btn = document.createElement('button');
+                    btn.className = `m3-btn ${act.className || 'm3-btn-filled'}`;
+                    btn.innerHTML = (act.icon || '') + ` <span>${escapeHtml(act.label)}</span>`;
+                    btn.onclick = act.onClick;
+                    resultActions.appendChild(btn);
+                });
+                if (expireTimer) clearInterval(expireTimer);
+                let remaining = expireSeconds;
+                expireTimer = setInterval(() => {
+                    remaining--;
+                    const expireEl = document.getElementById('expireCountText');
+                    if (expireEl) expireEl.textContent = formatTime(Math.max(0, remaining));
+                    if (remaining <= 0) {
+                        clearInterval(expireTimer);
+                        showToast('该物件码已过期', 'warning');
+                    }
+                }, 1000);
+            }
+
+            // ===== Show Upload Error =====
+            function showUploadError(message) {
+                resultSection.classList.add('visible');
+                resultCode.textContent = 'ERROR';
+                resultInfo.innerHTML = '';
+                const errSpan = document.createElement('span');
+                errSpan.className = 'info-pill';
+                errSpan.innerHTML = ICONS.error + ` <span>${escapeHtml(message)}</span>`;
+                resultInfo.appendChild(errSpan);
+                resultActions.innerHTML = '';
             }
 
             // ===== Metadata Display =====
@@ -1113,7 +1165,6 @@
                     0x0112: '方向', 0x0131: '软件', 0x0132: '修改时间',
                     0x013B: '作者', 0x8298: '版权', 0x8769: 'Exif偏移',
                     0x8825: 'GPS偏移', 0xA002: '图片宽度', 0xA003: '图片高度',
-                    // 0x9003 已从 IFD0 中移除，标准中通常位于 SubIFD
                 };
                 const EXIF_SUB_TAGS = {
                     0x9003: '原始拍摄时间', 0x9201: '快门速度', 0x9202: '光圈值',
@@ -1124,7 +1175,6 @@
                     0x0001: '纬度参考', 0x0002: '纬度', 0x0003: '经度参考', 0x0004: '经度',
                     0x0005: 'GPS状态', 0x001D: 'GPS日期'
                 };
-                // 存储 GPS 参考标记
                 let latRef = '';
                 let lonRef = '';
 
@@ -1210,19 +1260,16 @@
                                 const gpsType = readUint16(gpsEntry + 2);
                                 const gpsCount = readUint32(gpsEntry + 4);
                                 const gpsValueOffset = gpsEntry + 8;
-                                // 捕获参考标记
                                 if (gpsTag === 0x0001) {
-                                    // 纬度参考 N/S
                                     if (gpsType === 2) {
                                         let str = '';
                                         for (let b = 0; b < gpsCount; b++) str += String.fromCharCode(dataView.getUint8(
                                             gpsValueOffset + b));
                                         latRef = str.replace(/\0+$/, '').trim();
                                     }
-                                    continue; // 不直接加入 metadata
+                                    continue;
                                 }
                                 if (gpsTag === 0x0003) {
-                                    // 经度参考 E/W
                                     if (gpsType === 2) {
                                         let str = '';
                                         for (let b = 0; b < gpsCount; b++) str += String.fromCharCode(dataView.getUint8(
@@ -1231,7 +1278,6 @@
                                     }
                                     continue;
                                 }
-                                // 解析数值标签
                                 if (gpsTag in GPS_TAGS) {
                                     let gpsValue = '';
                                     try {
@@ -1245,7 +1291,6 @@
                                             const min = readUint32(gpsValueOffset + 4) / 1;
                                             const sec = readUint32(gpsValueOffset + 8) / 1000000;
                                             gpsValue = `${deg}°${min}'${sec.toFixed(2)}"`;
-                                            // 根据参考标记添加符号
                                             if (gpsTag === 0x0002 && latRef === 'S') gpsValue = '-' + gpsValue;
                                             if (gpsTag === 0x0004 && lonRef === 'W') gpsValue = '-' + gpsValue;
                                         } else {
@@ -1387,17 +1432,6 @@
                     setTimeout(() => { if (progressFill.style.width === '100%') hideProgress(); }, 800);
                     currentController = null;
                 }
-            }
-
-            function showUploadError(message) {
-                resultSection.classList.add('visible');
-                resultCode.textContent = 'ERROR';
-                resultInfo.innerHTML = '';
-                const errSpan = document.createElement('span');
-                errSpan.className = 'info-pill';
-                errSpan.innerHTML = ICONS.error + ` <span>${escapeHtml(message)}</span>`;
-                resultInfo.appendChild(errSpan);
-                resultActions.innerHTML = '';
             }
 
             // ===== Frontend Processing =====
