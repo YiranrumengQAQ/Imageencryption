@@ -3,38 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#0a0a1a">
-    <meta name="description" content="图片元数据清除器 - 前端/后端双模式处理，隐私安全">
-    <title>元数据清除器 - Glassmorphism</title>
+    <meta name="theme-color" content="#fdfcff" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#1c1b1f" media="(prefers-color-scheme: dark)">
+    <title>元数据清除器 · Material 3</title>
     <style>
         :root {
-            --bg-gradient-light: linear-gradient(135deg, #d4e4ff 0%, #f0e6ff 25%, #e8f0fe 50%, #fce4ec 75%, #e0f7fa 100%);
-            --bg-gradient-dark: linear-gradient(135deg, #0a0a1a 0%, #1a0a2e 25%, #0d1b2a 50%, #1a0a20 75%, #0a1a1a 100%);
-            --glass-bg-light: rgba(255, 255, 255, 0.45);
-            --glass-bg-dark: rgba(20, 20, 40, 0.55);
-            --glass-border-light: rgba(255, 255, 255, 0.55);
-            --glass-border-dark: rgba(255, 255, 255, 0.12);
-            --glass-shadow-light: 0 8px 32px rgba(31, 38, 135, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.5);
-            --glass-shadow-dark: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.06);
-            --text-primary-light: #1a1a2e;
-            --text-primary-dark: #f0f0f8;
-            --text-secondary-light: #4a4a6a;
-            --text-secondary-dark: #a0a0c0;
-            --accent-1: #6366f1;
-            --accent-2: #8b5cf6;
-            --accent-3: #d946ef;
-            --accent-gradient: linear-gradient(135deg, #6366f1, #8b5cf6, #d946ef);
-            --success-color: #10b981;
-            --error-color: #ef4444;
-            --warning-color: #f59e0b;
-            --info-color: #3b82f6;
-            --card-radius: 24px;
-            --card-radius-sm: 16px;
-            --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
-            --blur-amount: 24px;
-            --saturate-amount: 180%;
-            --orb-size: 500px;
+            --m3-primary: #6750a4;
+            --m3-on-primary: #ffffff;
+            --m3-primary-container: #eaddff;
+            --m3-on-primary-container: #21005e;
+            --m3-secondary: #625b71;
+            --m3-on-secondary: #ffffff;
+            --m3-secondary-container: #e8def8;
+            --m3-on-secondary-container: #1d192b;
+            --m3-tertiary: #7d5260;
+            --m3-on-tertiary: #ffffff;
+            --m3-tertiary-container: #ffd8e4;
+            --m3-on-tertiary-container: #31111d;
+            --m3-error: #ba1a1a;
+            --m3-on-error: #ffffff;
+            --m3-error-container: #ffdad6;
+            --m3-on-error-container: #410002;
+            --m3-surface: #fdfcff;
+            --m3-on-surface: #1c1b1f;
+            --m3-surface-variant: #e7e0ec;
+            --m3-on-surface-variant: #49454f;
+            --m3-surface-container-lowest: #ffffff;
+            --m3-surface-container-low: #f7f2fa;
+            --m3-surface-container: #f3edf7;
+            --m3-surface-container-high: #ece6f0;
+            --m3-surface-container-highest: #e6e0e9;
+            --m3-outline: #79747e;
+            --m3-outline-variant: #cac4d0;
+            --m3-shadow: rgba(0, 0, 0, 0.15);
+            --m3-shadow-strong: rgba(0, 0, 0, 0.25);
+            --m3-radius-xl: 28px;
+            --m3-radius-lg: 20px;
+            --m3-radius-md: 16px;
+            --m3-radius-sm: 12px;
+            --m3-radius-xs: 8px;
+            --m3-transition: cubic-bezier(0.2, 0, 0, 1);
+            --m3-state-hover-opacity: 0.08;
+            --m3-state-focus-opacity: 0.12;
+            --m3-state-pressed-opacity: 0.16;
+            --m3-elevation-1: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 3px 1px rgba(0, 0, 0, 0.15);
+            --m3-elevation-2: 0 1px 2px rgba(0, 0, 0, 0.3), 0 2px 6px 2px rgba(0, 0, 0, 0.15);
+            --m3-elevation-3: 0 4px 8px 3px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        [data-theme="dark"] {
+            --m3-primary: #d0bcff;
+            --m3-on-primary: #381e72;
+            --m3-primary-container: #4f378b;
+            --m3-on-primary-container: #eaddff;
+            --m3-secondary: #ccc2dc;
+            --m3-on-secondary: #332d41;
+            --m3-secondary-container: #4a4458;
+            --m3-on-secondary-container: #e8def8;
+            --m3-tertiary: #efb8c8;
+            --m3-on-tertiary: #492532;
+            --m3-tertiary-container: #633b48;
+            --m3-on-tertiary-container: #ffd8e4;
+            --m3-error: #f2b8b5;
+            --m3-on-error: #601410;
+            --m3-error-container: #8c1d18;
+            --m3-on-error-container: #f9dedc;
+            --m3-surface: #1c1b1f;
+            --m3-on-surface: #e6e1e5;
+            --m3-surface-variant: #49454f;
+            --m3-on-surface-variant: #cac4d0;
+            --m3-surface-container-lowest: #0f0d13;
+            --m3-surface-container-low: #1d1b20;
+            --m3-surface-container: #211f26;
+            --m3-surface-container-high: #2b2930;
+            --m3-surface-container-highest: #36343b;
+            --m3-outline: #938f99;
+            --m3-outline-variant: #49454f;
+            --m3-shadow: rgba(0, 0, 0, 0.45);
+            --m3-shadow-strong: rgba(0, 0, 0, 0.6);
         }
 
         *,
@@ -52,118 +98,38 @@
         }
 
         body {
-            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            font-family: 'Roboto', 'Segoe UI', system-ui, -apple-system, sans-serif;
             min-height: 100vh;
             min-height: 100dvh;
+            background: var(--m3-surface);
+            color: var(--m3-on-surface);
             display: flex;
             align-items: center;
             justify-content: center;
-            background: var(--bg-gradient-light);
-            background-attachment: fixed;
-            transition: background 0.8s var(--transition-smooth), color 0.8s var(--transition-smooth);
-            color: var(--text-primary-light);
-            overflow-x: hidden;
+            transition: background 0.3s var(--m3-transition), color 0.3s var(--m3-transition);
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            will-change: background, color;
-        }
-
-        body.dark {
-            background: var(--bg-gradient-dark);
-            background-attachment: fixed;
-            color: var(--text-primary-dark);
-        }
-
-        .bg-orbs {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-            filter: blur(80px);
-            opacity: 0.7;
-            transition: opacity 0.8s var(--transition-smooth);
-        }
-        body.dark .bg-orbs {
-            opacity: 0.5;
-        }
-        .bg-orb {
-            position: absolute;
-            border-radius: 50%;
-            animation: orbFloat 18s ease-in-out infinite alternate;
-            will-change: transform;
-        }
-        .bg-orb:nth-child(1) {
-            width: var(--orb-size);
-            height: var(--orb-size);
-            background: radial-gradient(circle at 30% 30%, #818cf8, transparent 70%);
-            top: -15%;
-            left: -10%;
-            animation-duration: 22s;
-            animation-delay: 0s;
-        }
-        .bg-orb:nth-child(2) {
-            width: calc(var(--orb-size) * 0.8);
-            height: calc(var(--orb-size) * 0.8);
-            background: radial-gradient(circle at 60% 40%, #e879f9, transparent 70%);
-            bottom: -20%;
-            right: -5%;
-            animation-duration: 25s;
-            animation-delay: -5s;
-        }
-        .bg-orb:nth-child(3) {
-            width: calc(var(--orb-size) * 0.6);
-            height: calc(var(--orb-size) * 0.6);
-            background: radial-gradient(circle at 50% 50%, #38bdf8, transparent 70%);
-            top: 40%;
-            left: 50%;
-            animation-duration: 20s;
-            animation-delay: -10s;
-        }
-        .bg-orb:nth-child(4) {
-            width: calc(var(--orb-size) * 0.5);
-            height: calc(var(--orb-size) * 0.5);
-            background: radial-gradient(circle at 40% 60%, #a78bfa, transparent 70%);
-            top: 60%;
-            left: 5%;
-            animation-duration: 28s;
-            animation-delay: -3s;
-        }
-
-        @keyframes orbFloat {
-            0% { transform: translate(0, 0) scale(1) rotate(0deg); }
-            33% { transform: translate(60px, -40px) scale(1.1) rotate(5deg); }
-            66% { transform: translate(-30px, 50px) scale(0.95) rotate(-3deg); }
-            100% { transform: translate(20px, -20px) scale(1.05) rotate(2deg); }
+            padding: 16px;
         }
 
         .app-container {
-            position: relative;
-            z-index: 1;
             width: 100%;
-            max-width: 720px;
-            padding: 16px;
+            max-width: 800px;
             margin: 0 auto;
         }
 
-        .glass-card {
-            background: var(--glass-bg-light);
-            backdrop-filter: blur(var(--blur-amount)) saturate(var(--saturate-amount));
-            -webkit-backdrop-filter: blur(var(--blur-amount)) saturate(var(--saturate-amount));
-            border: 1px solid var(--glass-border-light);
-            border-radius: var(--card-radius);
-            box-shadow: var(--glass-shadow-light);
-            transition: background 0.6s var(--transition-smooth), border-color 0.6s var(--transition-smooth),
-                box-shadow 0.6s var(--transition-smooth), transform 0.3s var(--transition-smooth);
-            will-change: transform, backdrop-filter;
+        .m3-card {
+            background: var(--m3-surface-container);
+            border-radius: var(--m3-radius-lg);
+            box-shadow: var(--m3-elevation-2);
+            transition: background 0.3s var(--m3-transition), box-shadow 0.3s var(--m3-transition);
+            overflow: hidden;
         }
-        body.dark .glass-card {
-            background: var(--glass-bg-dark);
-            border-color: var(--glass-border-dark);
-            box-shadow: var(--glass-shadow-dark);
-        }
-        .glass-card:hover {
-            transform: translateY(-2px);
+        .m3-card-outlined {
+            background: var(--m3-surface-container-low);
+            border: 1px solid var(--m3-outline-variant);
+            border-radius: var(--m3-radius-lg);
+            transition: background 0.3s var(--m3-transition), border-color 0.3s var(--m3-transition);
         }
 
         .app-header {
@@ -171,257 +137,215 @@
             align-items: center;
             justify-content: space-between;
             padding: 16px 20px;
-            margin-bottom: 16px;
+            gap: 12px;
             flex-wrap: wrap;
-            gap: 10px;
+            background: var(--m3-surface-container);
+            border-radius: var(--m3-radius-lg);
+            margin-bottom: 16px;
+            box-shadow: var(--m3-elevation-1);
         }
         .app-logo {
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-weight: 700;
+            gap: 12px;
+            font-weight: 500;
             font-size: 1.25rem;
-            letter-spacing: -0.02em;
+            letter-spacing: -0.01em;
+            color: var(--m3-on-surface);
             user-select: none;
         }
         .app-logo svg {
-            width: 28px;
-            height: 28px;
-            color: var(--accent-2);
-            transition: color 0.4s var(--transition-smooth);
+            width: 32px;
+            height: 32px;
+            fill: var(--m3-primary);
         }
         .logo-text {
-            background: var(--accent-gradient);
+            font-weight: 700;
+            font-size: 1.3rem;
+            background: linear-gradient(135deg, var(--m3-primary), var(--m3-tertiary));
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-weight: 800;
-            font-size: 1.3rem;
         }
         .header-actions {
             display: flex;
             align-items: center;
             gap: 8px;
+            flex-wrap: wrap;
         }
-        .header-btn {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 14px;
-            border-radius: 12px;
-            border: 1px solid var(--glass-border-light);
-            background: rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            cursor: pointer;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-primary-light);
-            transition: all 0.3s var(--transition-smooth);
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-            will-change: transform, background;
-        }
-        body.dark .header-btn {
-            border-color: var(--glass-border-dark);
-            background: rgba(255, 255, 255, 0.08);
-            color: var(--text-primary-dark);
-        }
-        .header-btn:hover {
-            background: rgba(255, 255, 255, 0.5);
-            transform: scale(1.05);
-            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.25);
-        }
-        body.dark .header-btn:hover {
-            background: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 4px 16px rgba(139, 92, 246, 0.3);
-        }
-        .header-btn:active {
-            transform: scale(0.95);
-        }
-        .header-btn svg {
-            width: 18px;
-            height: 18px;
-            flex-shrink: 0;
-        }
-        .mode-badge {
+        .m3-icon-btn {
             display: inline-flex;
             align-items: center;
-            gap: 5px;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.72rem;
-            font-weight: 700;
-            letter-spacing: 0.04em;
-            text-transform: uppercase;
-            background: var(--accent-gradient);
-            color: #fff;
-            transition: all 0.5s var(--transition-smooth);
-            user-select: none;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            color: var(--m3-on-surface-variant);
+            transition: background 0.2s var(--m3-transition), color 0.2s var(--m3-transition);
+            position: relative;
+            -webkit-tap-highlight-color: transparent;
         }
-        .mode-badge svg {
-            width: 12px;
-            height: 12px;
+        .m3-icon-btn:hover {
+            background: rgba(103, 80, 164, var(--m3-state-hover-opacity));
+        }
+        .m3-icon-btn:active {
+            background: rgba(103, 80, 164, var(--m3-state-pressed-opacity));
+        }
+        .m3-icon-btn svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+        }
+        .m3-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            background: var(--m3-secondary-container);
+            color: var(--m3-on-secondary-container);
+            user-select: none;
+            transition: background 0.3s var(--m3-transition), color 0.3s var(--m3-transition);
+        }
+        .m3-chip svg {
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
         }
 
-        .tab-nav {
+        .m3-tabs {
             display: flex;
-            gap: 6px;
-            padding: 6px;
+            gap: 4px;
+            padding: 8px 12px;
+            background: var(--m3-surface-container-low);
+            border-radius: var(--m3-radius-md);
             margin-bottom: 16px;
-            border-radius: var(--card-radius-sm);
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border-light);
-            transition: all 0.5s var(--transition-smooth);
+            overflow-x: auto;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
         }
-        body.dark .tab-nav {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: var(--glass-border-dark);
+        .m3-tabs::-webkit-scrollbar {
+            display: none;
         }
-        .tab-btn {
+        .m3-tab {
             flex: 1;
+            min-width: fit-content;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            padding: 12px 8px;
-            border-radius: 12px;
+            padding: 12px 16px;
+            border-radius: var(--m3-radius-md);
             border: none;
             background: transparent;
             cursor: pointer;
-            font-size: 0.88rem;
-            font-weight: 600;
-            color: var(--text-secondary-light);
-            transition: all 0.35s var(--transition-smooth);
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--m3-on-surface-variant);
+            transition: all 0.25s var(--m3-transition);
             user-select: none;
             -webkit-tap-highlight-color: transparent;
             position: relative;
-            will-change: transform, background, color;
         }
-        body.dark .tab-btn {
-            color: var(--text-secondary-dark);
-        }
-        .tab-btn svg {
-            width: 18px;
-            height: 18px;
+        .m3-tab svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
             flex-shrink: 0;
         }
-        .tab-btn:hover {
-            color: var(--text-primary-light);
-            background: rgba(255, 255, 255, 0.25);
+        .m3-tab:hover {
+            background: rgba(103, 80, 164, var(--m3-state-hover-opacity));
+            color: var(--m3-on-surface);
         }
-        body.dark .tab-btn:hover {
-            color: var(--text-primary-dark);
-            background: rgba(255, 255, 255, 0.1);
+        .m3-tab.active {
+            background: var(--m3-primary-container);
+            color: var(--m3-on-primary-container);
+            font-weight: 600;
         }
-        .tab-btn.active {
-            color: #fff;
-            background: var(--accent-gradient);
-            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.35);
-            transform: scale(1.02);
-        }
-        .tab-btn.active:hover {
-            color: #fff;
-            background: var(--accent-gradient);
-        }
-        .tab-btn:active {
-            transform: scale(0.97);
-        }
-        .tab-btn.active:active {
-            transform: scale(0.98);
+        .m3-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 24px;
+            height: 3px;
+            border-radius: 3px;
+            background: var(--m3-primary);
         }
 
-        .tab-panel {
+        .m3-panel {
             display: none;
-            animation: panelFadeIn 0.4s var(--transition-smooth) forwards;
+            animation: panelFade 0.35s var(--m3-transition) forwards;
         }
-        .tab-panel.active {
+        .m3-panel.active {
             display: block;
         }
-        @keyframes panelFadeIn {
-            from { opacity: 0; transform: translateY(12px); }
+        @keyframes panelFade {
+            from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .card-content {
+        .panel-content {
             padding: 24px 20px;
+            background: var(--m3-surface-container);
+            border-radius: var(--m3-radius-lg);
+            box-shadow: var(--m3-elevation-1);
         }
-        @media (min-width: 640px) {
-            .card-content { padding: 32px 28px; }
+        @media (min-width: 600px) {
+            .panel-content { padding: 28px 24px; }
         }
 
         .upload-zone {
-            border: 2px dashed rgba(99, 102, 241, 0.35);
-            border-radius: var(--card-radius-sm);
-            padding: 36px 20px;
+            border: 2px dashed var(--m3-outline-variant);
+            border-radius: var(--m3-radius-md);
+            padding: 32px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            gap: 10px;
             cursor: pointer;
-            transition: all 0.4s var(--transition-smooth);
+            transition: all 0.3s var(--m3-transition);
             position: relative;
             overflow: hidden;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            background: var(--m3-surface-container-low);
             user-select: none;
             -webkit-tap-highlight-color: transparent;
-            will-change: transform, border-color, background;
-        }
-        body.dark .upload-zone {
-            border-color: rgba(139, 92, 246, 0.4);
-            background: rgba(255, 255, 255, 0.04);
+            text-align: center;
         }
         .upload-zone.dragover {
-            border-color: var(--accent-2);
-            background: rgba(139, 92, 246, 0.1);
-            transform: scale(1.02);
-            box-shadow: 0 0 40px rgba(139, 92, 246, 0.2);
+            border-color: var(--m3-primary);
+            background: var(--m3-primary-container);
+            opacity: 0.9;
         }
-        .upload-zone:active {
-            transform: scale(0.98);
-        }
-        .upload-zone svg.upload-icon {
+        .upload-zone:active { transform: scale(0.98); }
+        .upload-zone .upload-icon {
             width: 48px;
             height: 48px;
-            color: var(--accent-2);
-            transition: all 0.3s var(--transition-smooth);
-            animation: bounceIn 0.6s var(--transition-bounce);
+            fill: var(--m3-primary);
+            transition: transform 0.3s var(--m3-transition);
         }
-        .upload-zone:hover svg.upload-icon {
-            transform: translateY(-4px) scale(1.05);
-        }
-        @keyframes bounceIn {
-            0% { transform: scale(0) rotate(-10deg); opacity: 0; }
-            60% { transform: scale(1.1) rotate(2deg); opacity: 1; }
-            100% { transform: scale(1) rotate(0); }
-        }
+        .upload-zone:hover .upload-icon { transform: translateY(-4px); }
         .upload-zone .upload-title {
-            font-weight: 700;
-            font-size: 1.1rem;
-            letter-spacing: -0.01em;
+            font-weight: 500;
+            font-size: 1.05rem;
+            color: var(--m3-on-surface);
         }
         .upload-zone .upload-subtitle {
-            font-size: 0.85rem;
-            color: var(--text-secondary-light);
-            text-align: center;
-            transition: color 0.4s var(--transition-smooth);
-        }
-        body.dark .upload-zone .upload-subtitle {
-            color: var(--text-secondary-dark);
+            font-size: 0.82rem;
+            color: var(--m3-on-surface-variant);
         }
         .upload-zone .upload-formats {
             font-size: 0.75rem;
-            color: var(--text-secondary-light);
-            opacity: 0.8;
-            transition: color 0.4s var(--transition-smooth);
-        }
-        body.dark .upload-zone .upload-formats {
-            color: var(--text-secondary-dark);
+            color: var(--m3-outline);
         }
         .upload-zone input[type="file"] {
             position: absolute;
@@ -433,128 +357,95 @@
         }
 
         .preview-thumb {
-            max-width: 200px;
-            max-height: 160px;
-            border-radius: 12px;
+            max-width: 180px;
+            max-height: 140px;
+            border-radius: var(--m3-radius-sm);
             object-fit: contain;
-            margin-top: 8px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-            transition: all 0.4s var(--transition-smooth);
-            animation: panelFadeIn 0.4s var(--transition-smooth);
+            margin: 12px auto 0;
+            box-shadow: var(--m3-elevation-1);
+            display: block;
+            transition: all 0.3s var(--m3-transition);
         }
-        .preview-thumb.hidden {
-            display: none;
-        }
+        .preview-thumb.hidden { display: none; }
 
         .progress-container {
             margin-top: 16px;
             display: none;
-            animation: panelFadeIn 0.3s var(--transition-smooth);
         }
-        .progress-container.visible {
-            display: block;
-        }
+        .progress-container.visible { display: block; }
         .progress-label {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 8px;
             font-size: 0.82rem;
-            font-weight: 600;
-            color: var(--text-secondary-light);
-            transition: color 0.4s var(--transition-smooth);
-        }
-        body.dark .progress-label {
-            color: var(--text-secondary-dark);
+            font-weight: 500;
+            color: var(--m3-on-surface-variant);
         }
         .progress-percent {
             font-weight: 700;
-            color: var(--accent-2);
+            color: var(--m3-primary);
             font-variant-numeric: tabular-nums;
         }
         .progress-track {
             width: 100%;
             height: 8px;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.25);
+            border-radius: 4px;
+            background: var(--m3-surface-variant);
             overflow: hidden;
-            position: relative;
-            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-        body.dark .progress-track {
-            background: rgba(255, 255, 255, 0.1);
         }
         .progress-fill {
             height: 100%;
-            border-radius: 10px;
-            background: var(--accent-gradient);
-            background-size: 200% 100%;
-            animation: progressShimmer 1.8s ease-in-out infinite;
-            transition: width 0.4s var(--transition-smooth);
+            border-radius: 4px;
+            background: var(--m3-primary);
+            transition: width 0.4s var(--m3-transition);
             width: 0%;
-            will-change: width;
-        }
-        @keyframes progressShimmer {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
         }
 
         .result-section {
             margin-top: 16px;
             display: none;
-            animation: panelFadeIn 0.5s var(--transition-smooth);
         }
-        .result-section.visible {
-            display: block;
-        }
+        .result-section.visible { display: block; }
         .result-box {
             padding: 16px;
-            border-radius: var(--card-radius-sm);
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(99, 102, 241, 0.3);
-            transition: all 0.4s var(--transition-smooth);
-        }
-        body.dark .result-box {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(139, 92, 246, 0.35);
+            border-radius: var(--m3-radius-md);
+            background: var(--m3-surface-container-low);
+            border: 1px solid var(--m3-outline-variant);
         }
         .result-code {
-            font-size: 2rem;
-            font-weight: 800;
-            letter-spacing: 0.1em;
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
             text-align: center;
             padding: 8px 0;
+            color: var(--m3-primary);
             user-select: all;
             font-variant-numeric: tabular-nums;
         }
         .result-info {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
             justify-content: center;
             margin-top: 10px;
-            font-size: 0.82rem;
-            color: var(--text-secondary-light);
+            font-size: 0.8rem;
+            color: var(--m3-on-surface-variant);
         }
-        body.dark .result-info {
-            color: var(--text-secondary-dark);
-        }
-        .result-info span {
+        .result-info .info-pill {
             display: flex;
             align-items: center;
-            gap: 4px;
-            padding: 4px 10px;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.25);
-            transition: background 0.3s var(--transition-smooth);
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 16px;
+            background: var(--m3-secondary-container);
+            color: var(--m3-on-secondary-container);
+            font-weight: 500;
         }
-        body.dark .result-info span {
-            background: rgba(255, 255, 255, 0.08);
+        .result-info .info-pill svg {
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
         }
         .result-actions {
             display: flex;
@@ -563,175 +454,166 @@
             margin-top: 12px;
             flex-wrap: wrap;
         }
-        .btn {
+
+        .m3-btn {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 10px 18px;
-            border-radius: 12px;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: var(--m3-radius-sm);
             border: none;
             cursor: pointer;
             font-size: 0.85rem;
             font-weight: 600;
             font-family: inherit;
-            transition: all 0.3s var(--transition-smooth);
+            letter-spacing: 0.01em;
+            transition: all 0.25s var(--m3-transition);
             user-select: none;
             -webkit-tap-highlight-color: transparent;
-            will-change: transform, box-shadow;
-            letter-spacing: 0.01em;
+            position: relative;
         }
-        .btn svg {
-            width: 16px;
-            height: 16px;
-            flex-shrink: 0;
+        .m3-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
         }
-        .btn-primary {
-            background: var(--accent-gradient);
-            color: #fff;
-            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.35);
+        .m3-btn-filled {
+            background: var(--m3-primary);
+            color: var(--m3-on-primary);
+            box-shadow: var(--m3-elevation-1);
         }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 24px rgba(99, 102, 241, 0.5);
+        .m3-btn-filled:hover { box-shadow: var(--m3-elevation-2); filter: brightness(1.05); }
+        .m3-btn-filled:active { box-shadow: none; filter: brightness(0.95); }
+        .m3-btn-tonal {
+            background: var(--m3-secondary-container);
+            color: var(--m3-on-secondary-container);
         }
-        .btn-primary:active {
-            transform: scale(0.96);
-            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+        .m3-btn-tonal:hover { background: var(--m3-secondary-container); filter: brightness(0.95); box-shadow: var(--m3-elevation-1); }
+        .m3-btn-text {
+            background: transparent;
+            color: var(--m3-primary);
+            padding: 10px 12px;
         }
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.4);
-            color: var(--text-primary-light);
-            border: 1px solid var(--glass-border-light);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+        .m3-btn-text:hover { background: rgba(103, 80, 164, var(--m3-state-hover-opacity)); }
+        .m3-btn-error {
+            background: var(--m3-error-container);
+            color: var(--m3-on-error-container);
         }
-        body.dark .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text-primary-dark);
-            border-color: var(--glass-border-dark);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.55);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-        }
-        body.dark .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.18);
-        }
-        .btn-secondary:active {
-            transform: scale(0.96);
-        }
+        .m3-btn:disabled { opacity: 0.5; pointer-events: none; }
 
-        .input-group {
+        .m3-text-field {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
+            min-width: 140px;
+        }
+        .m3-text-field input {
+            padding: 14px 16px;
+            border-radius: var(--m3-radius-sm);
+            border: 1px solid var(--m3-outline-variant);
+            background: var(--m3-surface-container-lowest);
+            font-size: 0.95rem;
+            font-weight: 500;
+            letter-spacing: 0.06em;
+            color: var(--m3-on-surface);
+            transition: all 0.25s var(--m3-transition);
+            outline: none;
+            font-family: inherit;
+        }
+        .m3-text-field input:focus {
+            border-color: var(--m3-primary);
+            box-shadow: 0 0 0 2px rgba(103, 80, 164, 0.25);
+        }
+        .m3-text-field input::placeholder {
+            color: var(--m3-outline);
+            font-weight: 400;
+            letter-spacing: 0.02em;
+        }
+        .input-row {
             display: flex;
             gap: 8px;
             flex-wrap: wrap;
             align-items: center;
         }
-        .input-code {
-            flex: 1;
-            min-width: 120px;
-            padding: 12px 16px;
-            border-radius: 12px;
-            border: 1px solid var(--glass-border-light);
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            font-size: 1rem;
-            font-weight: 600;
-            letter-spacing: 0.08em;
-            color: var(--text-primary-light);
-            transition: all 0.3s var(--transition-smooth);
-            font-family: inherit;
-            outline: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-        body.dark .input-code {
-            border-color: var(--glass-border-dark);
-            background: rgba(255, 255, 255, 0.08);
-            color: var(--text-primary-dark);
-        }
-        .input-code:focus {
-            border-color: var(--accent-2);
-            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
-        }
-        .input-code::placeholder {
-            color: var(--text-secondary-light);
-            opacity: 0.6;
-            font-weight: 400;
-            letter-spacing: 0.02em;
-        }
-        body.dark .input-code::placeholder {
-            color: var(--text-secondary-dark);
-        }
 
-        .info-card {
-            padding: 20px;
-            border-radius: var(--card-radius-sm);
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid var(--glass-border-light);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            transition: all 0.4s var(--transition-smooth);
-        }
-        body.dark .info-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: var(--glass-border-dark);
-        }
-        .info-card .info-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            font-size: 0.88rem;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-        .info-card .info-label {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            color: var(--text-secondary-light);
-            font-weight: 500;
-            transition: color 0.4s var(--transition-smooth);
-        }
-        body.dark .info-card .info-label {
-            color: var(--text-secondary-dark);
-        }
-        .info-card .info-label svg {
-            width: 16px;
-            height: 16px;
-            flex-shrink: 0;
-        }
-        .info-card .info-value {
-            font-weight: 700;
-            font-size: 0.92rem;
-        }
-
-        .mode-explanation {
+        .metadata-section {
             margin-top: 16px;
-            padding: 16px;
-            border-radius: var(--card-radius-sm);
-            background: rgba(255, 255, 255, 0.12);
-            border: 1px solid var(--glass-border-light);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            font-size: 0.82rem;
-            line-height: 1.7;
-            color: var(--text-secondary-light);
-            transition: all 0.4s var(--transition-smooth);
+            border-radius: var(--m3-radius-md);
+            border: 1px solid var(--m3-outline-variant);
+            background: var(--m3-surface-container-low);
+            overflow: hidden;
         }
-        body.dark .mode-explanation {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: var(--glass-border-dark);
-            color: var(--text-secondary-dark);
+        .metadata-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.2s var(--m3-transition);
+            background: var(--m3-surface-container);
         }
-        .mode-explanation strong {
-            color: var(--accent-2);
-            font-weight: 700;
+        .metadata-header:hover { background: var(--m3-surface-container-high); }
+        .metadata-header .m3-chip { margin-left: 8px; }
+        .metadata-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: var(--m3-on-surface);
         }
-        .mode-explanation .pros { color: var(--success-color); }
-        .mode-explanation .cons { color: var(--error-color); }
+        .metadata-toggle svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--m3-primary);
+            transition: transform 0.3s var(--m3-transition);
+        }
+        .metadata-toggle svg.collapsed { transform: rotate(-90deg); }
+        .metadata-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s var(--m3-transition);
+        }
+        .metadata-body.expanded {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        .metadata-content {
+            padding: 12px 16px 16px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 8px;
+        }
+        .metadata-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            padding: 8px 12px;
+            border-radius: var(--m3-radius-xs);
+            background: var(--m3-surface-container);
+            border: 1px solid var(--m3-outline-variant);
+        }
+        .metadata-item .meta-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: var(--m3-on-surface-variant);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .metadata-item .meta-value {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--m3-on-surface);
+            word-break: break-all;
+        }
+        .metadata-empty {
+            text-align: center;
+            padding: 24px;
+            color: var(--m3-outline);
+            font-size: 0.85rem;
+        }
 
         .toast-container {
             position: fixed;
@@ -744,47 +626,32 @@
             gap: 8px;
             pointer-events: none;
             width: calc(100% - 32px);
-            max-width: 400px;
+            max-width: 420px;
         }
         .toast {
             padding: 14px 18px;
-            border-radius: 14px;
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid var(--glass-border-light);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            border-radius: var(--m3-radius-sm);
+            background: var(--m3-surface-container-high);
+            border: 1px solid var(--m3-outline-variant);
+            box-shadow: var(--m3-elevation-3);
             font-size: 0.85rem;
-            font-weight: 600;
+            font-weight: 500;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             pointer-events: auto;
-            animation: toastIn 0.4s var(--transition-bounce);
-            transition: opacity 0.4s var(--transition-smooth), transform 0.4s var(--transition-smooth);
-            color: var(--text-primary-light);
+            animation: toastIn 0.35s var(--m3-transition);
+            transition: opacity 0.3s var(--m3-transition), transform 0.3s var(--m3-transition);
+            color: var(--m3-on-surface);
         }
-        body.dark .toast {
-            background: rgba(20, 20, 40, 0.85);
-            border-color: var(--glass-border-dark);
-            color: var(--text-primary-dark);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-        }
-        .toast.removing {
-            opacity: 0;
-            transform: translateY(16px) scale(0.95);
-        }
-        .toast svg {
-            width: 18px;
-            height: 18px;
-            flex-shrink: 0;
-        }
-        .toast.success svg { color: var(--success-color); }
-        .toast.error svg { color: var(--error-color); }
-        .toast.warning svg { color: var(--warning-color); }
-        .toast.info svg { color: var(--info-color); }
+        .toast.removing { opacity: 0; transform: translateY(16px) scale(0.95); }
+        .toast svg { width: 20px; height: 20px; fill: currentColor; flex-shrink: 0; }
+        .toast.success svg { color: #2e7d32; }
+        .toast.error svg { color: var(--m3-error); }
+        .toast.warning svg { color: #ed6c02; }
+        .toast.info svg { color: var(--m3-primary); }
         @keyframes toastIn {
-            from { opacity: 0; transform: translateY(20px) scale(0.9); }
+            from { opacity: 0; transform: translateY(20px) scale(0.92); }
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
@@ -793,224 +660,190 @@
             top: 12px;
             right: 12px;
             z-index: 100;
-            font-size: 0.7rem;
-            padding: 4px 8px;
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: var(--text-secondary-light);
+            font-size: 0.68rem;
+            padding: 6px 10px;
+            border-radius: 12px;
+            background: var(--m3-surface-container-high);
+            border: 1px solid var(--m3-outline-variant);
+            color: var(--m3-on-surface-variant);
             opacity: 0;
-            transition: opacity 0.5s var(--transition-smooth);
+            transition: opacity 0.4s var(--m3-transition);
             pointer-events: none;
             user-select: none;
             font-weight: 600;
         }
-        body.dark .perf-badge {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.1);
-            color: var(--text-secondary-dark);
-        }
         .perf-badge.visible { opacity: 1; }
 
+        .mode-explanation {
+            margin-top: 16px;
+            padding: 16px;
+            border-radius: var(--m3-radius-md);
+            background: var(--m3-surface-container-low);
+            border: 1px solid var(--m3-outline-variant);
+            font-size: 0.8rem;
+            line-height: 1.7;
+            color: var(--m3-on-surface-variant);
+        }
+        .mode-explanation strong { color: var(--m3-primary); font-weight: 600; }
+        .mode-explanation .pros { color: #2e7d32; }
+        .mode-explanation .cons { color: var(--m3-error); }
+
         @media (max-width: 480px) {
-            .app-header { padding: 12px 14px; gap: 6px; }
-            .app-logo { font-size: 1rem; }
+            body { padding: 8px; }
+            .app-header { padding: 12px 14px; }
             .logo-text { font-size: 1.1rem; }
-            .header-btn { padding: 6px 10px; font-size: 0.75rem; gap: 4px; }
-            .header-btn svg { width: 14px; height: 14px; }
-            .mode-badge { font-size: 0.65rem; padding: 3px 8px; }
-            .card-content { padding: 16px 14px; }
-            .tab-btn { font-size: 0.75rem; padding: 10px 4px; gap: 4px; }
-            .tab-btn svg { width: 14px; height: 14px; }
-            .upload-zone { padding: 24px 14px; }
-            .upload-zone svg.upload-icon { width: 36px; height: 36px; }
-            .upload-zone .upload-title { font-size: 0.95rem; }
-            .result-code { font-size: 1.5rem; }
-            .btn { padding: 8px 14px; font-size: 0.78rem; }
-            .input-code { padding: 10px 12px; font-size: 0.9rem; }
-            .app-container { padding: 8px; }
-            .glass-card { border-radius: 18px; }
+            .m3-tab { padding: 10px 8px; font-size: 0.72rem; gap: 4px; }
+            .m3-tab svg { width: 16px; height: 16px; }
+            .panel-content { padding: 16px 12px; }
+            .upload-zone { padding: 20px 12px; }
+            .result-code { font-size: 1.4rem; }
+            .m3-btn { padding: 8px 14px; font-size: 0.78rem; }
+            .metadata-content { grid-template-columns: 1fr; }
+            .app-container { padding: 4px; }
         }
 
-        @media (min-width: 641px) and (max-width: 1024px) {
-            .app-container { max-width: 640px; padding: 20px; }
-        }
-
-        @media (min-width: 1025px) {
-            .app-container { max-width: 760px; padding: 24px; }
+        @media (min-width: 601px) {
+            .app-container { max-width: 860px; }
         }
 
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after {
                 animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
                 transition-duration: 0.01ms !important;
             }
-            .bg-orb { animation: none !important; }
         }
-
-        .spinner {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid rgba(255, 255, 255, 0.35);
-            border-top-color: #fff;
-            border-radius: 50%;
-            animation: spin 0.7s linear infinite;
-            flex-shrink: 0;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .spinner-sm { width: 12px; height: 12px; border-width: 1.5px; }
-        .spinner-dark { border-color: rgba(0, 0, 0, 0.2); border-top-color: var(--accent-2); }
     </style>
 </head>
 <body>
 
-    <!-- Background Orbs -->
-    <div class="bg-orbs" aria-hidden="true">
-        <div class="bg-orb"></div>
-        <div class="bg-orb"></div>
-        <div class="bg-orb"></div>
-        <div class="bg-orb"></div>
-    </div>
-
-    <!-- Performance Badge -->
     <div class="perf-badge" id="perfBadge" aria-hidden="true"></div>
 
-    <!-- Main App -->
     <div class="app-container">
-        <!-- Header -->
-        <header class="glass-card app-header" role="banner">
+        <header class="app-header">
             <div class="app-logo">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="3" width="18" height="18" rx="4" ry="4"/>
-                    <circle cx="9" cy="9" r="2"/>
-                    <path d="M21 15l-4.35-4.35a1.5 1.5 0 00-2.12 0L9 16"/>
-                    <path d="M3 21l4.35-4.35a1.5 1.5 0 012.12 0L15 22"/>
-                </svg>
+                <svg viewBox="0 0 24 24"><path d="M8.5 13.5 11 16l4-4.5 1.5 1.5L11 19l-5-5.5L8.5 13.5zM22 8v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V8c0-1.1.9-2 2-2h4l2-3h8l2 3h4c1.1 0 2 .9 2 2zm-2 0H4v12h16V8z"/></svg>
                 <span class="logo-text">元数据清除器</span>
             </div>
             <div class="header-actions">
-                <span class="mode-badge" id="modeBadge" title="当前处理模式">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><circle cx="7" cy="6" r="1" fill="currentColor"/><circle cx="7" cy="18" r="1" fill="currentColor"/></svg>
+                <span class="m3-chip" id="modeBadge">
+                    <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z"/></svg>
                     <span id="modeBadgeText">后端处理</span>
                 </span>
-                <button class="header-btn" id="modeToggleBtn" title="切换处理模式" aria-label="切换处理模式">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 100 20 10 10 0 000-20z"/><path d="M12 6v6l4 2"/></svg>
-                    <span id="modeToggleText">切换前端</span>
+                <button class="m3-icon-btn" id="modeToggleBtn" title="切换处理模式" aria-label="切换处理模式">
+                    <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 14H6v-2h6v2zm4-4H6v-2h10v2zm4-4H6V8h14v2z"/></svg>
                 </button>
-                <button class="header-btn" id="themeToggleBtn" title="切换主题" aria-label="切换主题">
-                    <svg id="themeIconSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-                    <svg id="themeIconMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+                <button class="m3-icon-btn" id="themeToggleBtn" title="切换主题" aria-label="切换主题">
+                    <svg id="themeIconLight" viewBox="0 0 24 24"><path d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.36 6.36-1.42-1.42M6.06 6.06 4.64 4.64m12.72 1.42 1.42-1.42M6.06 17.94l-1.42 1.42M12 7a5 5 0 100 10 5 5 0 000-10z"/></svg>
+                    <svg id="themeIconDark" viewBox="0 0 24 24" style="display:none;"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.25 1.2-1.2 2.16-2.45 2.36-1.65.27-3.27-.45-4.04-1.77-.77-1.32-.54-3.04.54-4.22A7.02 7.02 0 0012 3z"/></svg>
                 </button>
             </div>
         </header>
 
-        <!-- Tab Navigation -->
-        <nav class="tab-nav" role="tablist" aria-label="功能导航">
-            <button class="tab-btn active" id="tabUploadBtn" role="tab" aria-selected="true" aria-controls="panel-upload" data-tab="upload">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 16l-4-4-4 4M12 12v9"/><path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3"/><path d="M16 16l-4-4-4 4"/></svg>
+        <nav class="m3-tabs" role="tablist" aria-label="功能导航">
+            <button class="m3-tab active" role="tab" aria-selected="true" aria-controls="panel-upload" data-tab="upload">
+                <svg viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/></svg>
                 上传处理
             </button>
-            <button class="tab-btn" id="tabQueryBtn" role="tab" aria-selected="false" aria-controls="panel-query" data-tab="query">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <button class="m3-tab" role="tab" aria-selected="false" aria-controls="panel-query" data-tab="query">
+                <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 10-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1114 9.5 4.5 4.5 0 019.5 14z"/></svg>
                 查询信息
             </button>
-            <button class="tab-btn" id="tabDownloadBtn" role="tab" aria-selected="false" aria-controls="panel-download" data-tab="download">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
+            <button class="m3-tab" role="tab" aria-selected="false" aria-controls="panel-download" data-tab="download">
+                <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
                 取件下载
             </button>
         </nav>
 
-        <!-- Upload Panel -->
-        <section class="tab-panel active" id="panel-upload" role="tabpanel" aria-labelledby="tabUploadBtn">
-            <div class="glass-card">
-                <div class="card-content">
-                    <div class="upload-zone" id="uploadZone" role="button" tabindex="0" aria-label="上传图片文件">
-                        <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 19V5M5 12l7-7 7 7"/>
-                            <path d="M4 19h16"/>
-                        </svg>
-                        <div class="upload-title">拖拽图片到此处 或 点击上传</div>
-                        <div class="upload-subtitle">选择图片后自动清除所有 EXIF / GPS / 设备信息</div>
-                        <div class="upload-formats">支持 JPG · PNG · WEBP · TIFF</div>
-                        <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp,image/tiff,image/*" aria-label="选择图片文件">
+        <section class="m3-panel active" id="panel-upload" role="tabpanel" aria-labelledby="tabUploadBtn">
+            <div class="panel-content">
+                <div class="upload-zone" id="uploadZone" role="button" tabindex="0" aria-label="上传图片文件">
+                    <svg class="upload-icon" viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/></svg>
+                    <div class="upload-title">拖拽图片到此处 或 点击上传</div>
+                    <div class="upload-subtitle">选择后自动清除所有 EXIF / GPS / 设备信息</div>
+                    <div class="upload-formats">支持 JPG · PNG · WEBP · TIFF</div>
+                    <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp,image/tiff,image/*" aria-label="选择图片文件">
+                </div>
+
+                <img id="previewThumb" class="preview-thumb hidden" alt="图片预览" />
+
+                <div class="progress-container" id="progressContainer">
+                    <div class="progress-label">
+                        <span id="progressLabel">处理中...</span>
+                        <span class="progress-percent" id="progressPercent">0%</span>
                     </div>
-
-                    <img id="previewThumb" class="preview-thumb hidden" alt="图片预览" />
-
-                    <div class="progress-container" id="progressContainer">
-                        <div class="progress-label">
-                            <span id="progressLabel">处理中...</span>
-                            <span class="progress-percent" id="progressPercent">0%</span>
-                        </div>
-                        <div class="progress-track">
-                            <div class="progress-fill" id="progressFill"></div>
-                        </div>
+                    <div class="progress-track">
+                        <div class="progress-fill" id="progressFill"></div>
                     </div>
+                </div>
 
-                    <div class="result-section" id="resultSection">
-                        <div class="result-box">
-                            <div class="result-code" id="resultCode">------</div>
-                            <div class="result-info" id="resultInfo"></div>
-                            <div class="result-actions" id="resultActions"></div>
+                <div class="result-section" id="resultSection">
+                    <div class="result-box">
+                        <div class="result-code" id="resultCode">------</div>
+                        <div class="result-info" id="resultInfo"></div>
+                        <div class="result-actions" id="resultActions"></div>
+                    </div>
+                </div>
+
+                <div class="metadata-section" id="metadataSection" style="display:none;">
+                    <div class="metadata-header" id="metadataHeader">
+                        <span class="metadata-toggle">
+                            <svg viewBox="0 0 24 24" id="metadataChevron"><path d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z"/></svg>
+                            图片元数据 (EXIF/GPS/设备信息)
+                        </span>
+                        <span class="m3-chip" id="metadataCount">0 项</span>
+                    </div>
+                    <div class="metadata-body" id="metadataBody">
+                        <div class="metadata-content" id="metadataContent">
+                            <div class="metadata-empty">暂无元数据信息</div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Query Panel -->
-        <section class="tab-panel" id="panel-query" role="tabpanel" aria-labelledby="tabQueryBtn">
-            <div class="glass-card">
-                <div class="card-content">
-                    <div class="input-group">
-                        <input type="text" class="input-code" id="queryCodeInput" placeholder="输入 6 位物件码" maxlength="6" inputmode="numeric" pattern="[0-9]{6}" autocomplete="off" aria-label="物件码输入">
-                        <button class="btn btn-primary" id="queryBtn">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-                            查询
-                        </button>
+        <section class="m3-panel" id="panel-query" role="tabpanel" aria-labelledby="tabQueryBtn">
+            <div class="panel-content">
+                <div class="input-row">
+                    <div class="m3-text-field">
+                        <input type="text" id="queryCodeInput" placeholder="输入 6 位物件码" maxlength="6" inputmode="numeric" pattern="[0-9]{6}" autocomplete="off" aria-label="物件码输入">
                     </div>
-                    <div id="queryResult" style="margin-top:16px;display:none;"></div>
-                    <div id="queryError" style="margin-top:16px;display:none;"></div>
+                    <button class="m3-btn m3-btn-filled" id="queryBtn">
+                        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 10-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1114 9.5 4.5 4.5 0 019.5 14z"/></svg>
+                        查询
+                    </button>
                 </div>
+                <div id="queryResult" style="margin-top:16px;display:none;"></div>
+                <div id="queryError" style="margin-top:16px;display:none;"></div>
             </div>
         </section>
 
-        <!-- Download Panel -->
-        <section class="tab-panel" id="panel-download" role="tabpanel" aria-labelledby="tabDownloadBtn">
-            <div class="glass-card">
-                <div class="card-content">
-                    <div class="input-group">
-                        <input type="text" class="input-code" id="downloadCodeInput" placeholder="输入 6 位物件码" maxlength="6" inputmode="numeric" pattern="[0-9]{6}" autocomplete="off" aria-label="物件码输入">
-                        <button class="btn btn-primary" id="previewBtn">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                            预览
-                        </button>
-                        <button class="btn btn-secondary" id="downloadBtn">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
-                            下载
-                        </button>
+        <section class="m3-panel" id="panel-download" role="tabpanel" aria-labelledby="tabDownloadBtn">
+            <div class="panel-content">
+                <div class="input-row">
+                    <div class="m3-text-field">
+                        <input type="text" id="downloadCodeInput" placeholder="输入 6 位物件码" maxlength="6" inputmode="numeric" pattern="[0-9]{6}" autocomplete="off" aria-label="物件码输入">
                     </div>
-                    <div id="downloadPreview" style="margin-top:16px;display:none;"></div>
-                    <div id="downloadError" style="margin-top:16px;display:none;"></div>
+                    <button class="m3-btn m3-btn-filled" id="previewBtn">
+                        <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                        预览
+                    </button>
+                    <button class="m3-btn m3-btn-tonal" id="downloadBtn">
+                        <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                        下载
+                    </button>
                 </div>
+                <div id="downloadPreview" style="margin-top:16px;display:none;"></div>
+                <div id="downloadError" style="margin-top:16px;display:none;"></div>
             </div>
         </section>
 
-        <!-- Mode Explanation -->
-        <div class="glass-card" style="margin-top:16px;">
-            <div class="mode-explanation" id="modeExplanation">
-                <strong>后端处理模式</strong>：图片会上传到服务器，服务器清除元数据后返回 6 位物件码，2 小时内可取件下载。
-                <span class="pros">优点：不占本地资源、支持 TIFF 等更多格式。</span>
-                <span class="cons">缺点：需联网、图片经过服务器。</span>
-            </div>
+        <div class="mode-explanation" id="modeExplanation">
+            <strong>后端处理模式</strong>：图片会上传到服务器，服务器清除元数据后返回 6 位物件码，2 小时内可取件下载。
+            <span class="pros">优点：不占本地资源、支持 TIFF 等更多格式。</span>
+            <span class="cons">缺点：需联网、图片经过服务器。</span>
         </div>
     </div>
 
-    <!-- Toast Container -->
     <div class="toast-container" id="toastContainer" aria-live="polite"></div>
 
     <script>
@@ -1026,7 +859,6 @@
             const EXPIRE_SECONDS = 7200;
             const MAX_CANVAS_DIMENSION = 4096;
             const PERF_CHECK_INTERVAL = 3000;
-            const FRAME_SAMPLE_SIZE = 60;
             const IDB_DB_NAME = 'meta-cleaner-db';
             const IDB_STORE_NAME = 'blobs';
 
@@ -1035,31 +867,29 @@
             let currentTheme = localStorage.getItem('metaCleanerTheme') || 'light';
             let activeTab = 'upload';
             let uploadedFileName = '';
-            let uploadedFileSize = 0;
-            let currentObjectUrl = null; // For immediate preview only, not persistent
-            let currentPreviewUrl = null; // For preview thumbnail
+            let currentObjectUrl = null;
+            let currentPreviewUrl = null;
             let expireTimer = null;
             let perfFrameCount = 0;
             let perfLastTime = performance.now();
             let perfFPS = 60;
             let perfLowFrames = 0;
             let perfMonitorRunning = false;
-            let orbCount = 4;
             let isOffline = !navigator.onLine;
             let currentController = null;
+            let currentMetadata = [];
 
             // ===== DOM Elements =====
             const body = document.body;
             const themeToggleBtn = document.getElementById('themeToggleBtn');
-            const themeIconSun = document.getElementById('themeIconSun');
-            const themeIconMoon = document.getElementById('themeIconMoon');
+            const themeIconLight = document.getElementById('themeIconLight');
+            const themeIconDark = document.getElementById('themeIconDark');
             const modeToggleBtn = document.getElementById('modeToggleBtn');
-            const modeToggleText = document.getElementById('modeToggleText');
             const modeBadge = document.getElementById('modeBadge');
             const modeBadgeText = document.getElementById('modeBadgeText');
             const modeExplanation = document.getElementById('modeExplanation');
-            const tabButtons = document.querySelectorAll('.tab-btn');
-            const tabPanels = document.querySelectorAll('.tab-panel');
+            const tabButtons = document.querySelectorAll('.m3-tab');
+            const tabPanels = document.querySelectorAll('.m3-panel');
             const uploadZone = document.getElementById('uploadZone');
             const fileInput = document.getElementById('fileInput');
             const previewThumb = document.getElementById('previewThumb');
@@ -1071,6 +901,12 @@
             const resultCode = document.getElementById('resultCode');
             const resultInfo = document.getElementById('resultInfo');
             const resultActions = document.getElementById('resultActions');
+            const metadataSection = document.getElementById('metadataSection');
+            const metadataHeader = document.getElementById('metadataHeader');
+            const metadataBody = document.getElementById('metadataBody');
+            const metadataContent = document.getElementById('metadataContent');
+            const metadataCount = document.getElementById('metadataCount');
+            const metadataChevron = document.getElementById('metadataChevron');
             const queryCodeInput = document.getElementById('queryCodeInput');
             const queryBtn = document.getElementById('queryBtn');
             const queryResult = document.getElementById('queryResult');
@@ -1083,34 +919,36 @@
             const toastContainer = document.getElementById('toastContainer');
             const perfBadge = document.getElementById('perfBadge');
 
-            // ===== Icons (SVG strings) =====
+            // ===== Icons =====
             const ICONS = {
-                success: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
-                error: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',
-                warning: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
-                info: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>',
-                copy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>',
-                clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
-                file: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>',
-                image: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3" ry="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>',
-                server: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><circle cx="7" cy="6" r="1" fill="currentColor"/><circle cx="7" cy="18" r="1" fill="currentColor"/></svg>',
-                browser: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>',
+                success: '<svg viewBox="0 0 24 24"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>',
+                error: '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>',
+                warning: '<svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>',
+                info: '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>',
+                copy: '<svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>',
+                clock: '<svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>',
+                file: '<svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>',
+                image: '<svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>',
+                server: '<svg viewBox="0 0 24 24"><path d="M4 1h16c1.1 0 2 .9 2 2v4c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V3c0-1.1.9-2 2-2zm0 14h16c1.1 0 2 .9 2 2v4c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2v-4c0-1.1.9-2 2-2zm0-7h16c1.1 0 2 .9 2 2v4c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2v-4c0-1.1.9-2 2-2z"/></svg>',
+                browser: '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>',
             };
 
             // ===== Theme Management =====
             function applyTheme(theme, persist = true) {
                 currentTheme = theme;
                 if (theme === 'dark') {
-                    body.classList.add('dark');
-                    themeIconSun.style.display = 'none';
-                    themeIconMoon.style.display = 'block';
+                    body.setAttribute('data-theme', 'dark');
+                    themeIconLight.style.display = 'none';
+                    themeIconDark.style.display = 'block';
+                    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#1c1b1f');
                 } else {
-                    body.classList.remove('dark');
-                    themeIconSun.style.display = 'block';
-                    themeIconMoon.style.display = 'none';
+                    body.removeAttribute('data-theme');
+                    themeIconLight.style.display = 'block';
+                    themeIconDark.style.display = 'none';
+                    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#fdfcff');
                 }
                 if (persist) {
-                    try { localStorage.setItem('metaCleanerTheme', theme); } catch (e) { /* ignore */ }
+                    try { localStorage.setItem('metaCleanerTheme', theme); } catch (e) {}
                 }
             }
 
@@ -1123,7 +961,6 @@
                 currentMode = mode;
                 if (mode === 'frontend') {
                     modeBadgeText.textContent = '前端处理';
-                    modeToggleText.textContent = '切换后端';
                     modeExplanation.innerHTML =
                         '<strong>前端处理模式</strong>：图片在浏览器本地用 Canvas 重新绘制，元数据自动剥离，不上传任何数据到服务器。' +
                         '<span class="pros">优点：完全离线可用、隐私安全、速度极快。</span>' +
@@ -1131,7 +968,6 @@
                     modeBadge.querySelector('svg').outerHTML = ICONS.browser;
                 } else {
                     modeBadgeText.textContent = '后端处理';
-                    modeToggleText.textContent = '切换前端';
                     modeExplanation.innerHTML =
                         '<strong>后端处理模式</strong>：图片上传到服务器，服务器清除元数据后返回 6 位物件码，2 小时内可取件下载。' +
                         '<span class="pros">优点：不占本地资源、支持 TIFF 等更多格式。</span>' +
@@ -1139,7 +975,7 @@
                     modeBadge.querySelector('svg').outerHTML = ICONS.server;
                 }
                 if (persist) {
-                    try { localStorage.setItem('metaCleanerMode', mode); } catch (e) { /* ignore */ }
+                    try { localStorage.setItem('metaCleanerMode', mode); } catch (e) {}
                 }
             }
 
@@ -1167,24 +1003,18 @@
             }
 
             tabButtons.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    switchTab(btn.dataset.tab);
-                });
+                btn.addEventListener('click', () => switchTab(btn.dataset.tab));
             });
 
-            // ===== Toast System =====
+            // ===== Toast =====
             function showToast(message, type = 'info', duration = 3500) {
                 const toast = document.createElement('div');
                 toast.className = `toast ${type}`;
                 toast.innerHTML = (ICONS[type] || ICONS.info) + `<span>${escapeHtml(message)}</span>`;
                 toastContainer.appendChild(toast);
                 const removeToast = () => {
-                    if (toast.isConnected) {
-                        toast.classList.add('removing');
-                        setTimeout(() => {
-                            if (toast.isConnected) toast.remove();
-                        }, 400);
-                    }
+                    toast.classList.add('removing');
+                    setTimeout(() => toast.remove(), 300);
                 };
                 toast._removeTimer = setTimeout(removeToast, duration);
                 toast.addEventListener('click', () => {
@@ -1199,7 +1029,7 @@
                 return div.innerHTML;
             }
 
-            // ===== Progress Bar =====
+            // ===== Progress =====
             function showProgress(label) {
                 progressContainer.classList.add('visible');
                 progressLabel.textContent = label;
@@ -1217,179 +1047,282 @@
                 setProgress(0);
             }
 
-            // ===== Upload Result =====
+            // ===== Reset =====
             function resetUploadResult() {
                 resultSection.classList.remove('visible');
                 previewThumb.classList.add('hidden');
                 previewThumb.src = '';
-                if (currentPreviewUrl) {
-                    URL.revokeObjectURL(currentPreviewUrl);
-                    currentPreviewUrl = null;
-                }
-                if (currentObjectUrl) {
-                    URL.revokeObjectURL(currentObjectUrl);
-                    currentObjectUrl = null;
-                }
-                if (expireTimer) {
-                    clearInterval(expireTimer);
-                    expireTimer = null;
-                }
+                if (currentPreviewUrl) { URL.revokeObjectURL(currentPreviewUrl); currentPreviewUrl = null; }
+                if (currentObjectUrl) { URL.revokeObjectURL(currentObjectUrl); currentObjectUrl = null; }
+                if (expireTimer) { clearInterval(expireTimer); expireTimer = null; }
+                metadataSection.style.display = 'none';
+                currentMetadata = [];
             }
 
-            function showUploadResult(code, filename, expiresInSeconds, extraActions) {
-                resultSection.classList.add('visible');
-                resultCode.textContent = code;
-                resultInfo.innerHTML = '';
-
-                const fileNameSpan = document.createElement('span');
-                fileNameSpan.innerHTML = ICONS.file + ` <span>${escapeHtml(filename)}</span>`;
-                resultInfo.appendChild(fileNameSpan);
-
-                if (expiresInSeconds !== undefined && expiresInSeconds !== null) {
-                    const expirySpan = document.createElement('span');
-                    expirySpan.id = 'expiryCountdown';
-                    expirySpan.innerHTML = ICONS.clock + ` <span>剩余 ${formatTime(expiresInSeconds)}</span>`;
-                    resultInfo.appendChild(expirySpan);
-                    startExpiryCountdown(expiresInSeconds, expirySpan);
+            // ===== Metadata Display =====
+            function displayMetadata(metadata) {
+                if (!metadata || metadata.length === 0) {
+                    metadataSection.style.display = 'none';
+                    return;
                 }
-
-                resultActions.innerHTML = '';
-                if (extraActions) {
-                    extraActions.forEach(action => {
-                        const btn = document.createElement('button');
-                        btn.className = `btn ${action.className || 'btn-secondary'}`;
-                        btn.innerHTML = (action.icon || '') + (action.label || '');
-                        btn.addEventListener('click', action.onClick);
-                        resultActions.appendChild(btn);
-                    });
-                }
+                currentMetadata = metadata;
+                metadataSection.style.display = 'block';
+                metadataCount.textContent = `${metadata.length} 项`;
+                metadataContent.innerHTML = '';
+                metadata.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = 'metadata-item';
+                    div.innerHTML = `<span class="meta-label">${escapeHtml(item.label)}</span><span class="meta-value">${escapeHtml(item.value)}</span>`;
+                    metadataContent.appendChild(div);
+                });
+                metadataBody.classList.remove('expanded');
+                metadataChevron.classList.add('collapsed');
             }
 
-            function startExpiryCountdown(seconds, element) {
-                if (expireTimer) clearInterval(expireTimer);
-                let remaining = seconds;
-                expireTimer = setInterval(() => {
-                    remaining--;
-                    if (remaining <= 0) {
-                        clearInterval(expireTimer);
-                        expireTimer = null;
-                        element.innerHTML = ICONS.clock + ' <span>已过期</span>';
+            metadataHeader.addEventListener('click', () => {
+                const expanded = metadataBody.classList.toggle('expanded');
+                metadataChevron.classList.toggle('collapsed', !expanded);
+            });
+
+            // ===== EXIF / Metadata Parser =====
+            async function extractImageMetadata(file) {
+                try {
+                    if (file.type === 'image/jpeg') {
+                        return await parseJPEGEXIF(file);
+                    } else if (file.type === 'image/png') {
+                        return await parsePNGMetadata(file);
+                    } else if (file.type === 'image/webp') {
+                        return await parseWebPMetadata(file);
                     } else {
-                        element.innerHTML = ICONS.clock + ` <span>剩余 ${formatTime(remaining)}</span>`;
+                        return [];
                     }
-                }, 1000);
-            }
-
-            function formatTime(seconds) {
-                const h = Math.floor(seconds / 3600);
-                const m = Math.floor((seconds % 3600) / 60);
-                const s = Math.floor(seconds % 60);
-                if (h > 0) return `${h}时${m}分${s}秒`;
-                if (m > 0) return `${m}分${s}秒`;
-                return `${s}秒`;
-            }
-
-            // ===== IndexedDB Helper (for frontend blob persistence) =====
-            let dbPromise = null;
-
-            function openIDB() {
-                if (!dbPromise) {
-                    dbPromise = new Promise((resolve, reject) => {
-                        if (!('indexedDB' in window)) {
-                            reject(new Error('当前浏览器不支持 IndexedDB，前端物件码将无法持久化'));
-                            return;
-                        }
-                        const request = indexedDB.open(IDB_DB_NAME, 1);
-                        request.onupgradeneeded = (e) => {
-                            const db = e.target.result;
-                            if (!db.objectStoreNames.contains(IDB_STORE_NAME)) {
-                                db.createObjectStore(IDB_STORE_NAME, { keyPath: 'code' });
-                            }
-                        };
-                        request.onsuccess = (e) => resolve(e.target.result);
-                        request.onerror = (e) => reject(e.target.error);
-                    });
-                }
-                return dbPromise;
-            }
-
-            async function storeBlobInIDB(code, blob) {
-                try {
-                    const db = await openIDB();
-                    return new Promise((resolve, reject) => {
-                        const tx = db.transaction(IDB_STORE_NAME, 'readwrite');
-                        const store = tx.objectStore(IDB_STORE_NAME);
-                        store.put({ code, blob, timestamp: Date.now() });
-                        tx.oncomplete = () => resolve();
-                        tx.onerror = (e) => reject(e.target.error);
-                    });
-                } catch (err) {
-                    console.warn('IndexedDB 存储失败:', err);
-                    throw err;
-                }
-            }
-
-            async function getBlobFromIDB(code) {
-                try {
-                    const db = await openIDB();
-                    return new Promise((resolve, reject) => {
-                        const tx = db.transaction(IDB_STORE_NAME, 'readonly');
-                        const store = tx.objectStore(IDB_STORE_NAME);
-                        const request = store.get(code);
-                        request.onsuccess = () => {
-                            const result = request.result;
-                            if (result && result.blob) {
-                                resolve(result.blob);
-                            } else {
-                                resolve(null);
-                            }
-                        };
-                        request.onerror = (e) => reject(e.target.error);
-                    });
-                } catch (err) {
-                    console.warn('IndexedDB 读取失败:', err);
-                    return null;
-                }
-            }
-
-            async function deleteBlobFromIDB(code) {
-                try {
-                    const db = await openIDB();
-                    return new Promise((resolve, reject) => {
-                        const tx = db.transaction(IDB_STORE_NAME, 'readwrite');
-                        const store = tx.objectStore(IDB_STORE_NAME);
-                        store.delete(code);
-                        tx.oncomplete = () => resolve();
-                        tx.onerror = (e) => reject(e.target.error);
-                    });
-                } catch (err) {
-                    console.warn('IndexedDB 删除失败:', err);
-                }
-            }
-
-            async function cleanupExpiredIDB() {
-                try {
-                    const db = await openIDB();
-                    const tx = db.transaction(IDB_STORE_NAME, 'readwrite');
-                    const store = tx.objectStore(IDB_STORE_NAME);
-                    const request = store.openCursor();
-                    request.onsuccess = (event) => {
-                        const cursor = event.target.result;
-                        if (cursor) {
-                            const record = cursor.value;
-                            const code = record.code;
-                            const localData = getLocalCodeData(code);
-                            if (!localData || Date.now() > localData.expiresAt) {
-                                store.delete(code);
-                                // Also remove from localStorage if not already
-                                removeLocalCode(code);
-                            }
-                            cursor.continue();
-                        }
-                    };
                 } catch (e) {
-                    console.warn('IndexedDB 清理失败:', e);
+                    console.warn('元数据解析失败:', e);
+                    return [];
                 }
+            }
+
+            async function parseJPEGEXIF(file) {
+                const arrayBuffer = await file.arrayBuffer();
+                const dataView = new DataView(arrayBuffer);
+                if (dataView.getUint16(0) !== 0xFFD8) return [];
+                let offset = 2;
+                const metadata = [];
+                const EXIF_IFD_TAGS = {
+                    0x010E: '图像描述', 0x010F: '设备制造商', 0x0110: '设备型号',
+                    0x0112: '方向', 0x0131: '软件', 0x0132: '修改时间',
+                    0x013B: '作者', 0x8298: '版权', 0x8769: 'Exif偏移',
+                    0x8825: 'GPS偏移', 0xA002: '图片宽度', 0xA003: '图片高度',
+                    // 0x9003 已从 IFD0 中移除，标准中通常位于 SubIFD
+                };
+                const EXIF_SUB_TAGS = {
+                    0x9003: '原始拍摄时间', 0x9201: '快门速度', 0x9202: '光圈值',
+                    0x9209: '闪光灯', 0x920A: '焦距', 0xA405: '35mm焦距',
+                    0xA406: '场景类型', 0xA408: '对比度', 0xA409: '饱和度', 0xA40A: '锐度'
+                };
+                const GPS_TAGS = {
+                    0x0001: '纬度参考', 0x0002: '纬度', 0x0003: '经度参考', 0x0004: '经度',
+                    0x0005: 'GPS状态', 0x001D: 'GPS日期'
+                };
+                // 存储 GPS 参考标记
+                let latRef = '';
+                let lonRef = '';
+
+                while (offset < arrayBuffer.byteLength) {
+                    if (dataView.getUint16(offset) !== 0xFFE1) {
+                        offset += 2;
+                        if (offset + 4 > arrayBuffer.byteLength) break;
+                        const segLen = dataView.getUint16(offset + 2);
+                        offset += 2 + segLen;
+                        continue;
+                    }
+                    const exifStart = offset + 4;
+                    if (dataView.getUint32(exifStart) !== 0x45786966) break;
+                    const tiffOffset = exifStart + 6;
+                    const byteOrder = dataView.getUint16(tiffOffset);
+                    const isLE = byteOrder === 0x4949;
+                    const readUint16 = (o) => dataView.getUint16(o, isLE);
+                    const readUint32 = (o) => dataView.getUint32(o, isLE);
+                    const ifd0Offset = tiffOffset + 2 + readUint32(tiffOffset + 4);
+                    const numEntries = readUint16(ifd0Offset);
+                    for (let i = 0; i < numEntries; i++) {
+                        const entryOffset = ifd0Offset + 2 + i * 12;
+                        const tag = readUint16(entryOffset);
+                        const type = readUint16(entryOffset + 2);
+                        const count = readUint32(entryOffset + 4);
+                        const valueOffset = entryOffset + 8;
+                        if (tag in EXIF_IFD_TAGS) {
+                            let value = '';
+                            const typeSizes = { 1: 1, 2: 1, 3: 2, 4: 4, 5: 8, 7: 1, 9: 4, 10: 8 };
+                            const typeSize = typeSizes[type] || 1;
+                            const totalBytes = typeSize * count;
+                            const valuePtr = totalBytes > 4 ? tiffOffset + readUint32(valueOffset) : valueOffset;
+                            try {
+                                if (type === 2) {
+                                    let str = '';
+                                    for (let b = 0; b < count; b++) {
+                                        str += String.fromCharCode(dataView.getUint8(valuePtr + b));
+                                    }
+                                    value = str.replace(/\0+$/, '').trim();
+                                } else {
+                                    value = readUint16(valuePtr).toString();
+                                }
+                            } catch (e) { value = '未知'; }
+                            if (value && value !== '未知') {
+                                metadata.push({ label: EXIF_IFD_TAGS[tag], value });
+                            }
+                        }
+                        if (tag === 0x8769) {
+                            const subIFDOffset = tiffOffset + readUint32(valueOffset);
+                            const subNumEntries = readUint16(subIFDOffset);
+                            for (let j = 0; j < subNumEntries; j++) {
+                                const subEntry = subIFDOffset + 2 + j * 12;
+                                const subTag = readUint16(subEntry);
+                                if (subTag in EXIF_SUB_TAGS) {
+                                    const subType = readUint16(subEntry + 2);
+                                    const subCount = readUint32(subEntry + 4);
+                                    const subValueOffset = subEntry + 8;
+                                    const subTypeSize = { 1: 1, 2: 1, 3: 2, 4: 4, 5: 8, 7: 1, 9: 4, 10: 8 } [subType] ||
+                                        1;
+                                    const subTotal = subTypeSize * subCount;
+                                    const subPtr = subTotal > 4 ? tiffOffset + readUint32(subValueOffset) : subValueOffset;
+                                    try {
+                                        if (subType === 2) {
+                                            let str = '';
+                                            for (let b = 0; b < subCount; b++) str += String.fromCharCode(dataView
+                                                .getUint8(subPtr + b));
+                                            metadata.push({ label: EXIF_SUB_TAGS[subTag], value: str.replace(
+                                                    /\0+$/, '').trim() });
+                                        } else {
+                                            metadata.push({ label: EXIF_SUB_TAGS[subTag], value: readUint16(
+                                                subPtr).toString() });
+                                        }
+                                    } catch (e) {}
+                                }
+                            }
+                        }
+                        if (tag === 0x8825) {
+                            const gpsOffset = tiffOffset + readUint32(valueOffset);
+                            const gpsNumEntries = readUint16(gpsOffset);
+                            for (let g = 0; g < gpsNumEntries; g++) {
+                                const gpsEntry = gpsOffset + 2 + g * 12;
+                                const gpsTag = readUint16(gpsEntry);
+                                const gpsType = readUint16(gpsEntry + 2);
+                                const gpsCount = readUint32(gpsEntry + 4);
+                                const gpsValueOffset = gpsEntry + 8;
+                                // 捕获参考标记
+                                if (gpsTag === 0x0001) {
+                                    // 纬度参考 N/S
+                                    if (gpsType === 2) {
+                                        let str = '';
+                                        for (let b = 0; b < gpsCount; b++) str += String.fromCharCode(dataView.getUint8(
+                                            gpsValueOffset + b));
+                                        latRef = str.replace(/\0+$/, '').trim();
+                                    }
+                                    continue; // 不直接加入 metadata
+                                }
+                                if (gpsTag === 0x0003) {
+                                    // 经度参考 E/W
+                                    if (gpsType === 2) {
+                                        let str = '';
+                                        for (let b = 0; b < gpsCount; b++) str += String.fromCharCode(dataView.getUint8(
+                                            gpsValueOffset + b));
+                                        lonRef = str.replace(/\0+$/, '').trim();
+                                    }
+                                    continue;
+                                }
+                                // 解析数值标签
+                                if (gpsTag in GPS_TAGS) {
+                                    let gpsValue = '';
+                                    try {
+                                        if (gpsType === 2) {
+                                            let str = '';
+                                            for (let b = 0; b < gpsCount; b++) str += String.fromCharCode(dataView
+                                                .getUint8(gpsValueOffset + b));
+                                            gpsValue = str.replace(/\0+$/, '').trim();
+                                        } else if (gpsType === 5 && gpsCount === 3) {
+                                            const deg = readUint32(gpsValueOffset) / 1;
+                                            const min = readUint32(gpsValueOffset + 4) / 1;
+                                            const sec = readUint32(gpsValueOffset + 8) / 1000000;
+                                            gpsValue = `${deg}°${min}'${sec.toFixed(2)}"`;
+                                            // 根据参考标记添加符号
+                                            if (gpsTag === 0x0002 && latRef === 'S') gpsValue = '-' + gpsValue;
+                                            if (gpsTag === 0x0004 && lonRef === 'W') gpsValue = '-' + gpsValue;
+                                        } else {
+                                            gpsValue = readUint16(gpsValueOffset).toString();
+                                        }
+                                        metadata.push({ label: GPS_TAGS[gpsTag], value: gpsValue });
+                                    } catch (e) {}
+                                }
+                            }
+                        }
+                    }
+                    break;
+                }
+                return metadata;
+            }
+
+            async function parsePNGMetadata(file) {
+                const arrayBuffer = await file.arrayBuffer();
+                const dataView = new DataView(arrayBuffer);
+                if (dataView.getUint32(0) !== 0x89504E47) return [];
+                let offset = 8;
+                const metadata = [];
+                while (offset < arrayBuffer.byteLength) {
+                    const length = dataView.getUint32(offset);
+                    const chunkType = String.fromCharCode(
+                        dataView.getUint8(offset + 4),
+                        dataView.getUint8(offset + 5),
+                        dataView.getUint8(offset + 6),
+                        dataView.getUint8(offset + 7)
+                    );
+                    const chunkDataStart = offset + 8;
+                    if (chunkType === 'tEXt') {
+                        const data = new Uint8Array(arrayBuffer.slice(chunkDataStart, chunkDataStart + length));
+                        const nullIndex = data.indexOf(0);
+                        if (nullIndex > 0) {
+                            const keyword = new TextDecoder().decode(data.slice(0, nullIndex));
+                            const value = new TextDecoder().decode(data.slice(nullIndex + 1));
+                            metadata.push({ label: keyword, value });
+                        }
+                    } else if (chunkType === 'eXIf') {
+                        const exifData = new Blob([arrayBuffer.slice(chunkDataStart, chunkDataStart + length)], { type: 'image/jpeg' });
+                        const exifMetadata = await parseJPEGEXIF(exifData);
+                        metadata.push(...exifMetadata);
+                    }
+                    offset += 12 + length;
+                }
+                return metadata;
+            }
+
+            async function parseWebPMetadata(file) {
+                const arrayBuffer = await file.arrayBuffer();
+                const dataView = new DataView(arrayBuffer);
+                if (dataView.getUint32(0) !== 0x52494646 || dataView.getUint32(8) !== 0x57454250) return [];
+                let offset = 12;
+                const metadata = [];
+                while (offset < arrayBuffer.byteLength) {
+                    const chunkId = String.fromCharCode(
+                        dataView.getUint8(offset),
+                        dataView.getUint8(offset + 1),
+                        dataView.getUint8(offset + 2),
+                        dataView.getUint8(offset + 3)
+                    );
+                    const chunkSize = dataView.getUint32(offset + 4, true);
+                    const chunkDataStart = offset + 8;
+                    if (chunkId === 'EXIF') {
+                        const exifData = new Blob([arrayBuffer.slice(chunkDataStart, chunkDataStart + chunkSize)], { type: 'image/jpeg' });
+                        const exifMetadata = await parseJPEGEXIF(exifData);
+                        metadata.push(...exifMetadata);
+                    } else if (chunkId === 'XMP ') {
+                        const xmpData = new TextDecoder().decode(new Uint8Array(arrayBuffer.slice(chunkDataStart,
+                            chunkDataStart + chunkSize)));
+                        metadata.push({ label: 'XMP数据', value: xmpData.slice(0, 200) });
+                    }
+                    offset += 8 + chunkSize;
+                    if (chunkSize % 2 === 1) offset += 1;
+                }
+                return metadata;
             }
 
             // ===== Backend Processing =====
@@ -1411,17 +1344,14 @@
 
                         xhr.upload.addEventListener('progress', (e) => {
                             if (e.lengthComputable) {
-                                const percent = (e.loaded / e.total) * 100;
-                                setProgress(percent * 0.85);
+                                setProgress(e.loaded / e.total * 85);
                                 progressLabel.textContent = '上传中...';
                             }
                         });
-
                         xhr.upload.addEventListener('load', () => {
                             setProgress(88);
                             progressLabel.textContent = '服务器处理中...';
                         });
-
                         xhr.addEventListener('load', () => {
                             if (xhr.status >= 200 && xhr.status < 300) {
                                 setProgress(100);
@@ -1429,63 +1359,32 @@
                                 resolve(xhr.response);
                             } else {
                                 let errorMsg = `上传失败 (${xhr.status})`;
-                                try {
-                                    const data = xhr.response;
-                                    if (data && data.detail) errorMsg = data.detail;
-                                } catch (e) { /* ignore */ }
+                                try { if (xhr.response?.detail) errorMsg = xhr.response.detail; } catch (e) {}
                                 reject(new Error(errorMsg));
                             }
                         });
-
-                        xhr.addEventListener('error', () => reject(new Error('网络错误，请检查连接')));
-                        xhr.addEventListener('timeout', () => reject(new Error('上传超时，请重试')));
+                        xhr.addEventListener('error', () => reject(new Error('网络错误')));
+                        xhr.addEventListener('timeout', () => reject(new Error('上传超时')));
                         xhr.addEventListener('abort', () => reject(new Error('上传已取消')));
-
                         xhr.send(formData);
                         currentController._xhr = xhr;
-                        currentController.signal.addEventListener('abort', () => {
-                            try { xhr.abort(); } catch (e) { /* ignore */ }
-                        });
+                        currentController.signal.addEventListener('abort', () => { try { xhr.abort(); } catch (e) {} });
                     });
 
-                    if (result && result.success && result.code) {
+                    if (result?.success && result.code) {
                         uploadedFileName = result.filename || file.name;
-                        const expiresIn = result.expires_in_seconds || EXPIRE_SECONDS;
-                        showUploadResult(result.code, uploadedFileName, expiresIn, [
-                            {
-                                label: '复制物件码',
-                                icon: ICONS.copy,
-                                className: 'btn-secondary',
-                                onClick: () => copyText(result.code)
-                            },
-                            {
-                                label: '预览图片',
-                                icon: ICONS.image,
-                                className: 'btn-primary',
-                                onClick: () => openDownloadPreview(result.code)
-                            },
-                            {
-                                label: '下载图片',
-                                icon: ICONS.success,
-                                className: 'btn-primary',
-                                onClick: () => triggerDownload(result.code)
-                            }
+                        showUploadResult(result.code, uploadedFileName, result.expires_in_seconds || EXPIRE_SECONDS, [
+                            { label: '复制物件码', icon: ICONS.copy, className: 'm3-btn-tonal', onClick: () => copyText(result.code) },
+                            { label: '预览图片', icon: ICONS.image, className: 'm3-btn-filled', onClick: () => openDownloadPreview(result.code) },
+                            { label: '下载图片', icon: ICONS.success, className: 'm3-btn-filled', onClick: () => triggerDownload(result.code) }
                         ]);
                         showToast('上传成功，物件码 ' + result.code, 'success');
-                    } else {
-                        throw new Error('服务器返回异常');
-                    }
+                    } else throw new Error('服务器返回异常');
                 } catch (err) {
-                    if (err.name === 'AbortError' || err.message === '上传已取消') {
-                        showToast('上传已取消', 'warning');
-                    } else {
-                        showToast(err.message || '上传失败', 'error');
-                        showUploadError(err.message || '上传失败');
-                    }
+                    showToast(err.message || '上传失败', 'error');
+                    showUploadError(err.message || '上传失败');
                 } finally {
-                    setTimeout(() => {
-                        if (progressFill.style.width === '100%') hideProgress();
-                    }, 800);
+                    setTimeout(() => { if (progressFill.style.width === '100%') hideProgress(); }, 800);
                     currentController = null;
                 }
             }
@@ -1495,79 +1394,57 @@
                 resultCode.textContent = 'ERROR';
                 resultInfo.innerHTML = '';
                 const errSpan = document.createElement('span');
+                errSpan.className = 'info-pill';
                 errSpan.innerHTML = ICONS.error + ` <span>${escapeHtml(message)}</span>`;
                 resultInfo.appendChild(errSpan);
                 resultActions.innerHTML = '';
             }
 
-            // ===== Frontend Processing (with transparency preservation and IDB storage) =====
+            // ===== Frontend Processing =====
             async function processFrontend(file) {
                 showProgress('正在读取图片...');
                 setProgress(5);
 
                 try {
                     const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
-                    if (!validTypes.includes(file.type)) {
-                        throw new Error('前端处理仅支持 JPG、PNG、WEBP。TIFF 请切换后端模式。');
-                    }
-                    if (file.size > MAX_FILE_SIZE) {
-                        throw new Error('文件超过 50MB 限制');
-                    }
+                    if (!validTypes.includes(file.type)) throw new Error('前端仅支持 JPG、PNG、WEBP。TIFF 请切换后端。');
+                    if (file.size > MAX_FILE_SIZE) throw new Error('文件超过 50MB 限制');
 
                     const arrayBuffer = await file.arrayBuffer();
                     setProgress(20);
                     progressLabel.textContent = '解码图片...';
 
                     let bitmap;
-                    try {
-                        bitmap = await createImageBitmap(new Blob([arrayBuffer], { type: file.type }));
-                    } catch (e) {
-                        bitmap = await loadImageFallback(URL.createObjectURL(new Blob([arrayBuffer], { type: file
-                            .type })));
-                    }
+                    try { bitmap = await createImageBitmap(new Blob([arrayBuffer], { type: file.type })); } catch (e) {
+                        bitmap = await loadImageFallback(URL.createObjectURL(new Blob([arrayBuffer], { type: file.type }))); }
+
                     setProgress(45);
                     progressLabel.textContent = '清除元数据中...';
 
                     let width = bitmap.width;
                     let height = bitmap.height;
-                    const originalWidth = width;
-                    const originalHeight = height;
-
                     if (width > MAX_CANVAS_DIMENSION || height > MAX_CANVAS_DIMENSION) {
                         const scale = Math.min(MAX_CANVAS_DIMENSION / width, MAX_CANVAS_DIMENSION / height);
                         width = Math.round(width * scale);
                         height = Math.round(height * scale);
                     }
 
-                    // Determine if we need to preserve transparency
                     const isJPEG = file.type === 'image/jpeg';
                     const canvas = document.createElement('canvas');
                     canvas.width = width;
                     canvas.height = height;
-                    const ctx = canvas.getContext('2d', { alpha: !isJPEG }); // For JPEG use opaque, for PNG/WEBP keep alpha
-                    
-                    // For JPEG, fill white background to avoid black corners
-                    if (isJPEG) {
-                        ctx.fillStyle = '#ffffff';
-                        ctx.fillRect(0, 0, width, height);
-                    } else {
-                        // For PNG/WEBP, don't fill, preserve transparency
-                    }
-
+                    const ctx = canvas.getContext('2d', { alpha: !isJPEG });
+                    if (isJPEG) { ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, width, height); }
                     ctx.imageSmoothingEnabled = true;
                     ctx.imageSmoothingQuality = 'high';
                     ctx.drawImage(bitmap, 0, 0, width, height);
 
                     setProgress(65);
                     progressLabel.textContent = '生成无元数据图片...';
-
                     if (bitmap.close) bitmap.close();
 
                     const blob = await new Promise((resolve, reject) => {
-                        canvas.toBlob((blob) => {
-                            if (blob) resolve(blob);
-                            else reject(new Error('图片导出失败'));
-                        }, file.type || 'image/png', 0.92);
+                        canvas.toBlob(b => b ? resolve(b) : reject(new Error('导出失败')), file.type || 'image/png', 0.92);
                     });
 
                     setProgress(85);
@@ -1578,51 +1455,24 @@
                     if (currentObjectUrl) URL.revokeObjectURL(currentObjectUrl);
                     currentObjectUrl = blobUrl;
 
-                    // Store blob in IndexedDB for persistence
+                    try { await storeBlobInIDB(localCode, blob); } catch (e) { console.warn('IDB存储失败', e); }
                     try {
-                        await storeBlobInIDB(localCode, blob);
-                    } catch (e) {
-                        console.warn('IndexedDB 存储失败，物件码将仅在本页面有效', e);
-                    }
-
-                    // Store metadata in localStorage
-                    try {
-                        const storeKey = `metaCleanerLocal_${localCode}`;
-                        localStorage.setItem(storeKey, JSON.stringify({
+                        localStorage.setItem(`metaCleanerLocal_${localCode}`, JSON.stringify({
                             code: localCode,
                             filename: file.name,
-                            size: blob.size,
                             createdAt: Date.now(),
-                            expiresAt: Date.now() + EXPIRE_SECONDS * 1000,
-                            blobSize: blob.size
+                            expiresAt: Date.now() + EXPIRE_SECONDS * 1000
                         }));
-                    } catch (e) { /* localStorage may be full */ }
+                    } catch (e) {}
 
                     setProgress(100);
                     progressLabel.textContent = '完成！';
-
                     uploadedFileName = file.name;
-                    const expiresIn = EXPIRE_SECONDS;
 
-                    showUploadResult(localCode, file.name, expiresIn, [
-                        {
-                            label: '复制物件码',
-                            icon: ICONS.copy,
-                            className: 'btn-secondary',
-                            onClick: () => copyText(localCode)
-                        },
-                        {
-                            label: '下载图片',
-                            icon: ICONS.success,
-                            className: 'btn-primary',
-                            onClick: () => downloadFrontendBlob(localCode, file.name)
-                        },
-                        {
-                            label: '预览图片',
-                            icon: ICONS.image,
-                            className: 'btn-secondary',
-                            onClick: () => previewFrontendBlob(localCode)
-                        }
+                    showUploadResult(localCode, file.name, EXPIRE_SECONDS, [
+                        { label: '复制物件码', icon: ICONS.copy, className: 'm3-btn-tonal', onClick: () => copyText(localCode) },
+                        { label: '下载图片', icon: ICONS.success, className: 'm3-btn-filled', onClick: () => downloadFrontendBlob(localCode, file.name) },
+                        { label: '预览图片', icon: ICONS.image, className: 'm3-btn-tonal', onClick: () => previewFrontendBlob(localCode) }
                     ]);
 
                     if (currentPreviewUrl) URL.revokeObjectURL(currentPreviewUrl);
@@ -1631,31 +1481,21 @@
                     previewThumb.classList.remove('hidden');
 
                     showToast('前端处理完成，图片未离开浏览器', 'success');
-
-                    canvas.width = 0;
-                    canvas.height = 0;
+                    canvas.width = 0; canvas.height = 0;
 
                 } catch (err) {
                     showToast(err.message || '前端处理失败', 'error');
                     showUploadError(err.message || '前端处理失败');
                 } finally {
-                    setTimeout(() => {
-                        if (progressFill.style.width === '100%') hideProgress();
-                    }, 800);
+                    setTimeout(() => { if (progressFill.style.width === '100%') hideProgress(); }, 800);
                 }
             }
 
             function loadImageFallback(url) {
                 return new Promise((resolve, reject) => {
                     const img = new Image();
-                    img.onload = () => {
-                        URL.revokeObjectURL(url); // Revoke after load
-                        resolve(img);
-                    };
-                    img.onerror = () => {
-                        URL.revokeObjectURL(url);
-                        reject(new Error('图片解码失败'));
-                    };
+                    img.onload = () => { URL.revokeObjectURL(url); resolve(img); };
+                    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('图片解码失败')); };
                     img.src = url;
                 });
             }
@@ -1664,168 +1504,124 @@
                 const stored = [];
                 try {
                     for (let i = 0; i < localStorage.length; i++) {
-                        const key = localStorage.key(i);
-                        if (key && key.startsWith('metaCleanerLocal_')) {
-                            stored.push(key.replace('metaCleanerLocal_', ''));
-                        }
+                        const k = localStorage.key(i);
+                        if (k?.startsWith('metaCleanerLocal_')) stored.push(k.replace('metaCleanerLocal_', ''));
                     }
-                } catch (e) { /* ignore */ }
+                } catch (e) {}
                 let code;
-                do {
-                    code = String(Math.floor(100000 + Math.random() * 900000));
-                } while (stored.includes(code));
+                do { code = String(Math.floor(100000 + Math.random() * 900000)); } while (stored.includes(code));
                 return code;
             }
 
-            async function downloadFrontendBlob(code, filename) {
-                try {
-                    // First try in-memory URL if available and not expired
-                    const localData = getLocalCodeData(code);
-                    if (!localData) {
-                        showToast('物件码不存在或已过期', 'error');
-                        return;
-                    }
-                    const remaining = EXPIRE_SECONDS - Math.floor((Date.now() - localData.createdAt) / 1000);
-                    if (remaining <= 0) {
-                        removeLocalCode(code);
-                        await deleteBlobFromIDB(code);
-                        showToast('物件码已过期', 'error');
-                        return;
-                    }
+            // ===== IndexedDB Helpers =====
+            let dbPromise = null;
 
-                    // Get blob from IndexedDB
-                    const blob = await getBlobFromIDB(code);
-                    if (!blob) {
-                        showToast('图片数据已失效，请重新上传', 'error');
-                        return;
-                    }
-
-                    const a = document.createElement('a');
-                    const ext = filename.split('.').pop() || 'jpg';
-                    const cleanName = filename.replace(/\.[^.]+$/, '') + '_cleaned.' + ext;
-                    const url = URL.createObjectURL(blob);
-                    a.href = url;
-                    a.download = cleanName;
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    setTimeout(() => URL.revokeObjectURL(url), 5000);
-                    showToast('下载已开始', 'success');
-                } catch (err) {
-                    console.error('下载失败:', err);
-                    showToast('下载失败，请重试', 'error');
+            function openIDB() {
+                if (!dbPromise) {
+                    dbPromise = new Promise((resolve, reject) => {
+                        if (!('indexedDB' in window)) { reject(new Error('不支持IDB')); return; }
+                        const req = indexedDB.open(IDB_DB_NAME, 1);
+                        req.onupgradeneeded = (e) => {
+                            const db = e.target.result;
+                            if (!db.objectStoreNames.contains(IDB_STORE_NAME)) db.createObjectStore(IDB_STORE_NAME, { keyPath: 'code' });
+                        };
+                        req.onsuccess = (e) => resolve(e.target.result);
+                        req.onerror = (e) => reject(e.target.error);
+                    });
                 }
+                return dbPromise;
             }
 
-            async function previewFrontendBlob(code) {
+            async function storeBlobInIDB(code, blob) {
+                const db = await openIDB();
+                return new Promise((resolve, reject) => {
+                    const tx = db.transaction(IDB_STORE_NAME, 'readwrite');
+                    const store = tx.objectStore(IDB_STORE_NAME);
+                    store.put({ code, blob, timestamp: Date.now() });
+                    tx.oncomplete = () => resolve();
+                    tx.onerror = (e) => reject(e.target.error);
+                });
+            }
+
+            async function getBlobFromIDB(code) {
                 try {
-                    const localData = getLocalCodeData(code);
-                    if (!localData) {
-                        showToast('物件码不存在或已过期', 'error');
-                        return;
-                    }
-                    const remaining = EXPIRE_SECONDS - Math.floor((Date.now() - localData.createdAt) / 1000);
-                    if (remaining <= 0) {
-                        removeLocalCode(code);
-                        await deleteBlobFromIDB(code);
-                        showToast('物件码已过期', 'error');
-                        return;
-                    }
+                    const db = await openIDB();
+                    return new Promise((resolve) => {
+                        const tx = db.transaction(IDB_STORE_NAME, 'readonly');
+                        const req = tx.objectStore(IDB_STORE_NAME).get(code);
+                        req.onsuccess = () => resolve(req.result?.blob || null);
+                        req.onerror = () => resolve(null);
+                    });
+                } catch (e) { return null; }
+            }
 
-                    const blob = await getBlobFromIDB(code);
-                    if (!blob) {
-                        showToast('图片数据已失效，请重新上传', 'error');
-                        return;
-                    }
+            async function deleteBlobFromIDB(code) {
+                try {
+                    const db = await openIDB();
+                    return new Promise((resolve) => {
+                        const tx = db.transaction(IDB_STORE_NAME, 'readwrite');
+                        tx.objectStore(IDB_STORE_NAME).delete(code);
+                        tx.oncomplete = () => resolve();
+                        tx.onerror = () => resolve();
+                    });
+                } catch (e) {}
+            }
 
-                    const url = URL.createObjectURL(blob);
-                    const win = window.open();
-                    if (win) {
-                        win.document.write(
-                            `<title>预览 - ${escapeHtml(localData.filename || '图片')}</title><body style="margin:0;display:flex;align-items:center;justify-content:center;background:#0a0a1a;min-height:100vh;"><img src="${url}" alt="预览" style="max-width:100%;max-height:100vh;object-fit:contain;"></body>`
-                        );
-                    } else {
-                        window.location.href = url;
-                    }
-                    setTimeout(() => URL.revokeObjectURL(url), 60000);
-                } catch (err) {
-                    console.error('预览失败:', err);
-                    showToast('预览失败，请重试', 'error');
-                }
+            async function cleanupExpiredIDB() {
+                try {
+                    const db = await openIDB();
+                    const tx = db.transaction(IDB_STORE_NAME, 'readwrite');
+                    const store = tx.objectStore(IDB_STORE_NAME);
+                    const req = store.openCursor();
+                    req.onsuccess = (e) => {
+                        const cursor = e.target.result;
+                        if (cursor) {
+                            const data = getLocalCodeData(cursor.value.code);
+                            if (!data || Date.now() > data.expiresAt) store.delete(cursor.value.code);
+                            cursor.continue();
+                        }
+                    };
+                } catch (e) {}
             }
 
             // ===== Upload Zone Events =====
-            uploadZone.addEventListener('click', (e) => {
-                if (e.target !== fileInput) fileInput.click();
-            });
-            uploadZone.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    fileInput.click();
-                }
-            });
+            uploadZone.addEventListener('click', (e) => { if (e.target !== fileInput) fileInput.click(); });
+            uploadZone.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault();
+                    fileInput.click(); } });
+            fileInput.addEventListener('change', () => { if (fileInput.files[0]) handleFile(fileInput.files[0]); });
 
-            fileInput.addEventListener('change', () => {
-                if (fileInput.files && fileInput.files.length > 0) {
-                    handleFile(fileInput.files[0]);
-                }
-            });
-
-            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-                uploadZone.addEventListener(eventName, preventDefaults, false);
-            });
-
-            function preventDefaults(e) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
-
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(ev => uploadZone.addEventListener(ev, e => { e
+                    .preventDefault(); e.stopPropagation(); }));
             uploadZone.addEventListener('dragenter', () => uploadZone.classList.add('dragover'));
             uploadZone.addEventListener('dragover', () => uploadZone.classList.add('dragover'));
-            uploadZone.addEventListener('dragleave', (e) => {
-                if (!uploadZone.contains(e.relatedTarget)) uploadZone.classList.remove('dragover');
-            });
+            uploadZone.addEventListener('dragleave', (e) => { if (!uploadZone.contains(e.relatedTarget)) uploadZone
+                    .classList.remove('dragover'); });
             uploadZone.addEventListener('drop', (e) => {
                 uploadZone.classList.remove('dragover');
-                const files = e.dataTransfer.files;
-                if (files.length > 0) handleFile(files[0]);
+                if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
             });
 
             document.addEventListener('paste', (e) => {
                 if (activeTab !== 'upload') return;
-                const items = e.clipboardData && e.clipboardData.items;
+                const items = e.clipboardData?.items;
                 if (items) {
                     for (const item of items) {
                         if (item.type.startsWith('image/')) {
-                            const file = item.getAsFile();
-                            if (file) {
-                                handleFile(file);
-                                e.preventDefault();
-                                break;
-                            }
+                            const f = item.getAsFile();
+                            if (f) { handleFile(f); e.preventDefault(); break; }
                         }
                     }
                 }
             });
 
+            // ===== File Handler =====
             async function handleFile(file) {
                 resetUploadResult();
                 uploadedFileName = file.name;
-                uploadedFileSize = file.size;
 
-                const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/tiff', 'image/gif', 'image/bmp'];
-                if (!file.type.startsWith('image/') && !validTypes.includes(file.type)) {
-                    showToast('不支持的图片格式', 'error');
-                    return;
-                }
-                if (file.size > MAX_FILE_SIZE) {
-                    showToast('文件超过 50MB 限制', 'error');
-                    return;
-                }
-                if (file.size === 0) {
-                    showToast('文件为空', 'error');
-                    return;
-                }
+                if (!file.type.startsWith('image/')) { showToast('不支持的格式', 'error'); return; }
+                if (file.size > MAX_FILE_SIZE) { showToast('文件超过50MB', 'error'); return; }
+                if (file.size === 0) { showToast('文件为空', 'error'); return; }
 
                 if (file.type !== 'image/tiff') {
                     const previewUrl = URL.createObjectURL(file);
@@ -1837,120 +1633,70 @@
                     previewThumb.classList.add('hidden');
                 }
 
-                if (currentMode === 'frontend') {
-                    await processFrontend(file);
-                } else {
-                    await processBackend(file);
-                }
+                const metadata = await extractImageMetadata(file);
+                displayMetadata(metadata);
+
+                if (currentMode === 'frontend') await processFrontend(file);
+                else await processBackend(file);
             }
 
-            // ===== Query Functions =====
+            // ===== Query =====
             queryBtn.addEventListener('click', async () => {
                 const code = queryCodeInput.value.trim();
                 if (!/^\d{6}$/.test(code)) {
-                    showToast('请输入 6 位纯数字物件码', 'warning');
+                    showToast('请输入6位数字物件码', 'warning');
                     queryError.style.display = 'block';
-                    queryError.innerHTML =
-                        `<div class="info-card" style="border-color:rgba(239,68,68,0.4);">${ICONS.error} <span>请输入 6 位纯数字物件码</span></div>`;
+                    queryError.innerHTML = `<div class="m3-card-outlined" style="padding:16px;">${ICONS.error} <span>请输入6位数字物件码</span></div>`;
                     queryResult.style.display = 'none';
                     return;
                 }
                 await performQuery(code);
             });
-
-            queryCodeInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') queryBtn.click();
-            });
+            queryCodeInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') queryBtn.click(); });
             queryCodeInput.addEventListener('input', () => {
                 queryCodeInput.value = queryCodeInput.value.replace(/\D/g, '').slice(0, 6);
-                queryError.style.display = 'none';
-                queryResult.style.display = 'none';
+                queryError.style.display = 'none'; queryResult.style.display = 'none';
             });
 
             async function performQuery(code) {
-                queryResult.style.display = 'none';
-                queryError.style.display = 'none';
+                queryResult.style.display = 'none'; queryError.style.display = 'none';
                 queryBtn.disabled = true;
-                queryBtn.innerHTML = '<span class="spinner spinner-sm"></span> 查询中...';
+                queryBtn.innerHTML = '<span class="spinner" style="width:16px;height:16px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:spin 0.7s linear infinite;"></span> 查询中...';
 
                 try {
                     const localData = getLocalCodeData(code);
                     if (localData) {
-                        const elapsed = Date.now() - localData.createdAt;
-                        const remaining = Math.max(0, EXPIRE_SECONDS - Math.floor(elapsed / 1000));
-                        if (remaining <= 0) {
-                            removeLocalCode(code);
-                            await deleteBlobFromIDB(code);
-                            throw new Error('物件码已过期');
-                        }
+                        const remaining = Math.max(0, EXPIRE_SECONDS - Math.floor((Date.now() - localData.createdAt) / 1000));
+                        if (remaining <= 0) { removeLocalCode(code); await deleteBlobFromIDB(code); throw new Error('物件码已过期'); }
                         queryResult.style.display = 'block';
                         queryResult.innerHTML = `
-                            <div class="info-card">
-                                <div class="info-row">
-                                    <span class="info-label">${ICONS.file} 文件名</span>
-                                    <span class="info-value">${escapeHtml(localData.filename)}</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">${ICONS.clock} 剩余时间</span>
-                                    <span class="info-value">${formatTime(remaining)}</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">${ICONS.server} 处理方式</span>
-                                    <span class="info-value">前端本地处理</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">${ICONS.info} 物件码</span>
-                                    <span class="info-value">${code}</span>
-                                </div>
+                            <div class="m3-card-outlined" style="padding:16px;">
+                                <div style="display:flex;justify-content:space-between;padding:8px 0;"><span style="color:var(--m3-on-surface-variant);">${ICONS.file} 文件名</span><strong>${escapeHtml(localData.filename)}</strong></div>
+                                <div style="display:flex;justify-content:space-between;padding:8px 0;"><span style="color:var(--m3-on-surface-variant);">${ICONS.clock} 剩余时间</span><strong>${formatTime(remaining)}</strong></div>
+                                <div style="display:flex;justify-content:space-between;padding:8px 0;"><span style="color:var(--m3-on-surface-variant);">${ICONS.server} 处理方式</span><strong>前端本地</strong></div>
                             </div>`;
                         showToast('查询成功', 'success');
                         return;
                     }
-
-                    // Backend query
-                    const response = await fetch(`${API_INFO}/${code}`, {
-                        method: 'GET',
-                        headers: { 'Accept': 'application/json' },
-                        signal: AbortSignal.timeout(10000)
-                    });
-
+                    const response = await fetch(`${API_INFO}/${code}`, { signal: AbortSignal.timeout(10000) });
                     if (response.ok) {
                         const data = await response.json();
                         if (data.success) {
                             queryResult.style.display = 'block';
                             queryResult.innerHTML = `
-                                <div class="info-card">
-                                    <div class="info-row">
-                                        <span class="info-label">${ICONS.file} 文件名</span>
-                                        <span class="info-value">${escapeHtml(data.filename || '未知')}</span>
-                                    </div>
-                                    <div class="info-row">
-                                        <span class="info-label">${ICONS.clock} 剩余时间</span>
-                                        <span class="info-value">${formatTime(data.remaining_seconds || 0)}</span>
-                                    </div>
-                                    <div class="info-row">
-                                        <span class="info-label">${ICONS.server} 处理方式</span>
-                                        <span class="info-value">后端服务器处理</span>
-                                    </div>
-                                    <div class="info-row">
-                                        <span class="info-label">${ICONS.info} 物件码</span>
-                                        <span class="info-value">${code}</span>
-                                    </div>
+                                <div class="m3-card-outlined" style="padding:16px;">
+                                    <div style="display:flex;justify-content:space-between;padding:8px 0;"><span style="color:var(--m3-on-surface-variant);">${ICONS.file} 文件名</span><strong>${escapeHtml(data.filename || '未知')}</strong></div>
+                                    <div style="display:flex;justify-content:space-between;padding:8px 0;"><span style="color:var(--m3-on-surface-variant);">${ICONS.clock} 剩余时间</span><strong>${formatTime(data.remaining_seconds || 0)}</strong></div>
+                                    <div style="display:flex;justify-content:space-between;padding:8px 0;"><span style="color:var(--m3-on-surface-variant);">${ICONS.server} 处理方式</span><strong>后端服务器</strong></div>
                                 </div>`;
                             showToast('查询成功', 'success');
-                        } else {
-                            throw new Error('查询失败');
-                        }
-                    } else if (response.status === 404) {
-                        throw new Error('物件码不存在或已过期');
-                    } else {
-                        throw new Error(`查询失败 (${response.status})`);
-                    }
+                        } else throw new Error('查询失败');
+                    } else if (response.status === 404) throw new Error('物件码不存在或已过期');
+                    else throw new Error(`查询失败 (${response.status})`);
                 } catch (err) {
                     queryError.style.display = 'block';
-                    queryError.innerHTML =
-                        `<div class="info-card" style="border-color:rgba(239,68,68,0.4);">${ICONS.error} <span>${escapeHtml(err.message || '查询失败')}</span></div>`;
-                    showToast(err.message || '查询失败', 'error');
+                    queryError.innerHTML = `<div class="m3-card-outlined" style="padding:16px;border-color:var(--m3-error);">${ICONS.error} <span>${escapeHtml(err.message)}</span></div>`;
+                    showToast(err.message, 'error');
                 } finally {
                     queryBtn.disabled = false;
                     queryBtn.innerHTML = `${ICONS.info} 查询`;
@@ -1958,139 +1704,123 @@
             }
 
             function getLocalCodeData(code) {
-                try {
-                    const data = localStorage.getItem(`metaCleanerLocal_${code}`);
-                    return data ? JSON.parse(data) : null;
-                } catch (e) { return null; }
+                try { const d = localStorage.getItem(`metaCleanerLocal_${code}`); return d ? JSON.parse(d) : null; } catch (
+                    e) { return null; }
             }
 
             function removeLocalCode(code) {
-                try {
-                    localStorage.removeItem(`metaCleanerLocal_${code}`);
-                } catch (e) { /* ignore */ }
+                try { localStorage.removeItem(`metaCleanerLocal_${code}`); } catch (e) {}
             }
 
-            // ===== Download Functions =====
+            // ===== Download =====
             downloadBtn.addEventListener('click', () => {
                 const code = downloadCodeInput.value.trim();
                 if (!/^\d{6}$/.test(code)) {
-                    showToast('请输入 6 位纯数字物件码', 'warning');
+                    showToast('请输入6位数字物件码', 'warning');
                     downloadError.style.display = 'block';
-                    downloadError.innerHTML =
-                        `<div class="info-card" style="border-color:rgba(239,68,68,0.4);">${ICONS.error} <span>请输入 6 位纯数字物件码</span></div>`;
+                    downloadError.innerHTML = `<div class="m3-card-outlined" style="padding:16px;">${ICONS.error} <span>请输入6位数字物件码</span></div>`;
                     downloadPreview.style.display = 'none';
                     return;
                 }
                 triggerDownload(code);
             });
-
             previewBtn.addEventListener('click', () => {
                 const code = downloadCodeInput.value.trim();
                 if (!/^\d{6}$/.test(code)) {
-                    showToast('请输入 6 位纯数字物件码', 'warning');
+                    showToast('请输入6位数字物件码', 'warning');
                     downloadError.style.display = 'block';
-                    downloadError.innerHTML =
-                        `<div class="info-card" style="border-color:rgba(239,68,68,0.4);">${ICONS.error} <span>请输入 6 位纯数字物件码</span></div>`;
+                    downloadError.innerHTML = `<div class="m3-card-outlined" style="padding:16px;">${ICONS.error} <span>请输入6位数字物件码</span></div>`;
                     downloadPreview.style.display = 'none';
                     return;
                 }
                 openDownloadPreview(code);
             });
-
-            downloadCodeInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') triggerDownload(downloadCodeInput.value.trim());
-            });
+            downloadCodeInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') triggerDownload(downloadCodeInput
+                    .value.trim()); });
             downloadCodeInput.addEventListener('input', () => {
                 downloadCodeInput.value = downloadCodeInput.value.replace(/\D/g, '').slice(0, 6);
-                downloadError.style.display = 'none';
-                downloadPreview.style.display = 'none';
+                downloadError.style.display = 'none'; downloadPreview.style.display = 'none';
             });
 
             async function triggerDownload(code) {
                 const localData = getLocalCodeData(code);
                 if (localData) {
                     const remaining = EXPIRE_SECONDS - Math.floor((Date.now() - localData.createdAt) / 1000);
-                    if (remaining <= 0) {
-                        removeLocalCode(code);
-                        await deleteBlobFromIDB(code);
-                        showToast('本地物件码已过期', 'error');
-                        return;
-                    }
+                    if (remaining <= 0) { removeLocalCode(code); await deleteBlobFromIDB(code); showToast('物件码已过期',
+                            'error'); return; }
                     await downloadFrontendBlob(code, localData.filename);
                     return;
                 }
-                // Backend download
                 window.location.href = `${API_DOWNLOAD}/${code}`;
-                showToast('下载已触发，请查看浏览器下载', 'success');
+                showToast('下载已触发', 'success');
             }
 
             async function openDownloadPreview(code) {
                 const localData = getLocalCodeData(code);
                 if (localData) {
                     const remaining = EXPIRE_SECONDS - Math.floor((Date.now() - localData.createdAt) / 1000);
-                    if (remaining <= 0) {
-                        removeLocalCode(code);
-                        await deleteBlobFromIDB(code);
-                        showToast('本地物件码已过期', 'error');
-                        return;
-                    }
-                    downloadPreview.style.display = 'block';
-                    downloadPreview.innerHTML = `<div class="info-card" style="text-align:center;">${ICONS.image} <span>本地图片预览：</span><br><img src="${currentObjectUrl || ''}" alt="本地预览" style="max-width:100%;max-height:300px;border-radius:12px;margin-top:8px;"></div>`;
-                    downloadError.style.display = 'none';
-                    // If currentObjectUrl is not available (page reload), try loading from IDB
-                    if (!currentObjectUrl) {
-                        const blob = await getBlobFromIDB(code);
-                        if (blob) {
-                            const url = URL.createObjectURL(blob);
-                            downloadPreview.innerHTML = `<div class="info-card" style="text-align:center;">${ICONS.image} <span>本地图片预览：</span><br><img src="${url}" alt="本地预览" style="max-width:100%;max-height:300px;border-radius:12px;margin-top:8px;"></div>`;
-                            setTimeout(() => URL.revokeObjectURL(url), 30000);
-                        } else {
-                            downloadPreview.innerHTML = `<div class="info-card" style="border-color:rgba(239,68,68,0.4);">${ICONS.error} <span>图片数据丢失，请重新上传</span></div>`;
-                        }
+                    if (remaining <= 0) { removeLocalCode(code); await deleteBlobFromIDB(code); showToast('物件码已过期',
+                            'error'); return; }
+                    const blob = await getBlobFromIDB(code);
+                    if (blob) {
+                        const url = URL.createObjectURL(blob);
+                        downloadPreview.style.display = 'block';
+                        downloadPreview.innerHTML = `<div class="m3-card-outlined" style="padding:16px;text-align:center;">${ICONS.image} <span>本地图片预览：</span><br><img src="${url}" style="max-width:100%;max-height:280px;border-radius:12px;margin-top:8px;"></div>`;
+                        downloadError.style.display = 'none';
+                        setTimeout(() => URL.revokeObjectURL(url), 30000);
+                    } else {
+                        downloadPreview.style.display = 'none';
+                        downloadError.style.display = 'block';
+                        downloadError.innerHTML = `<div class="m3-card-outlined" style="padding:16px;">${ICONS.error} <span>图片数据已失效</span></div>`;
                     }
                     return;
                 }
-                // Backend preview
                 downloadPreview.style.display = 'block';
-                downloadPreview.innerHTML = `<div class="info-card" style="text-align:center;"><span class="spinner spinner-dark"></span> 加载预览中...</div>`;
+                downloadPreview.innerHTML = `<div class="m3-card-outlined" style="padding:16px;text-align:center;"><span style="color:var(--m3-primary);">加载预览中...</span></div>`;
                 downloadError.style.display = 'none';
-
                 const img = new Image();
                 img.onload = () => {
-                    downloadPreview.innerHTML = `<div class="info-card" style="text-align:center;">${ICONS.image} <span>图片预览：</span><br><img src="${API_DOWNLOAD}/${code}" alt="预览" style="max-width:100%;max-height:300px;border-radius:12px;margin-top:8px;"></div>`;
+                    downloadPreview.innerHTML = `<div class="m3-card-outlined" style="padding:16px;text-align:center;">${ICONS.image} <span>图片预览：</span><br><img src="${API_DOWNLOAD}/${code}" style="max-width:100%;max-height:280px;border-radius:12px;margin-top:8px;"></div>`;
                 };
                 img.onerror = () => {
                     downloadPreview.style.display = 'none';
                     downloadError.style.display = 'block';
-                    downloadError.innerHTML = `<div class="info-card" style="border-color:rgba(239,68,68,0.4);">${ICONS.error} <span>预览失败，物件码可能已过期</span></div>`;
-                    showToast('预览失败，物件码可能已过期', 'error');
+                    downloadError.innerHTML = `<div class="m3-card-outlined" style="padding:16px;border-color:var(--m3-error);">${ICONS.error} <span>预览失败，物件码可能已过期</span></div>`;
                 };
                 img.src = `${API_DOWNLOAD}/${code}?t=${Date.now()}`;
             }
 
-            // ===== Copy Text =====
+            async function downloadFrontendBlob(code, filename) {
+                const blob = await getBlobFromIDB(code);
+                if (!blob) { showToast('图片数据已失效', 'error'); return; }
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                const ext = filename.split('.').pop() || 'jpg';
+                a.href = url;
+                a.download = filename.replace(/\.[^.]+$/, '') + '_cleaned.' + ext;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                setTimeout(() => URL.revokeObjectURL(url), 5000);
+                showToast('下载已开始', 'success');
+            }
+
+            // ===== Copy =====
             async function copyText(text) {
-                try {
-                    await navigator.clipboard.writeText(text);
-                    showToast('已复制到剪贴板', 'success');
-                } catch (e) {
-                    const textarea = document.createElement('textarea');
-                    textarea.value = text;
-                    textarea.style.position = 'fixed';
-                    textarea.style.opacity = '0';
-                    document.body.appendChild(textarea);
-                    textarea.select();
-                    try {
-                        document.execCommand('copy');
-                        showToast('已复制到剪贴板', 'success');
-                    } catch (err) {
-                        showToast('复制失败，请手动复制', 'warning');
-                    }
-                    document.body.removeChild(textarea);
+                try { await navigator.clipboard.writeText(text); showToast('已复制', 'success'); } catch (e) {
+                    const ta = document.createElement('textarea');
+                    ta.value = text;
+                    ta.style.position = 'fixed';
+                    ta.style.opacity = '0';
+                    document.body.appendChild(ta);
+                    ta.select();
+                    try { document.execCommand('copy'); showToast('已复制', 'success'); } catch (err) { showToast('复制失败',
+                            'warning'); }
+                    document.body.removeChild(ta);
                 }
             }
 
-            // ===== Performance Monitor (Frame Generation) =====
+            // ===== Performance Monitor =====
             function startPerfMonitor() {
                 if (perfMonitorRunning) return;
                 perfMonitorRunning = true;
@@ -2106,27 +1836,15 @@
                         perfFPS = (perfFrameCount * 1000) / delta;
                         perfFrameCount = 0;
                         perfLastTime = now;
-
                         if (perfFPS < 30) {
                             perfLowFrames++;
-                            if (perfLowFrames >= 3 && orbCount > 2) {
-                                orbCount--;
-                                applyOrbCount(orbCount);
-                                perfLowFrames = 0;
-                                if (perfBadge) {
-                                    perfBadge.textContent = `性能优化: ${orbCount} 光斑 · ${Math.round(perfFPS)} FPS`;
-                                    perfBadge.classList.add('visible');
-                                    setTimeout(() => {
-                                        if (perfFPS > 40) perfBadge.classList.remove('visible');
-                                    }, 3000);
-                                }
+                            if (perfLowFrames >= 2 && perfBadge) {
+                                perfBadge.textContent = `低帧率: ${Math.round(perfFPS)} FPS`;
+                                perfBadge.classList.add('visible');
+                                setTimeout(() => { if (perfFPS > 40) perfBadge.classList.remove('visible'); }, 3000);
                             }
-                        } else if (perfFPS > 50) {
+                        } else {
                             perfLowFrames = 0;
-                            if (orbCount < 4) {
-                                orbCount++;
-                                applyOrbCount(orbCount);
-                            }
                         }
                     }
                     perfFrameCount++;
@@ -2135,56 +1853,11 @@
                 requestAnimationFrame(checkPerf);
             }
 
-            function applyOrbCount(count) {
-                const orbs = document.querySelectorAll('.bg-orb');
-                orbs.forEach((orb, index) => {
-                    orb.style.display = index < count ? 'block' : 'none';
-                });
-            }
+            // ===== Network =====
+            window.addEventListener('online', () => { isOffline = false; showToast('网络已恢复', 'success'); });
+            window.addEventListener('offline', () => { isOffline = true; showToast('网络断开，前端模式仍可用', 'warning'); });
 
-            // ===== Network Status =====
-            function updateNetworkStatus() {
-                isOffline = !navigator.onLine;
-                if (isOffline) {
-                    showToast('网络已断开，前端处理模式仍可用', 'warning');
-                }
-            }
-            window.addEventListener('online', () => {
-                isOffline = false;
-                showToast('网络已恢复', 'success');
-            });
-            window.addEventListener('offline', () => {
-                isOffline = true;
-                showToast('网络已断开，前端处理模式仍可用', 'warning');
-            });
-
-            // ===== Cleanup Local Expired Codes =====
-            function cleanupExpiredLocalCodes() {
-                try {
-                    const keys = [];
-                    for (let i = 0; i < localStorage.length; i++) {
-                        const key = localStorage.key(i);
-                        if (key && key.startsWith('metaCleanerLocal_')) {
-                            keys.push(key);
-                        }
-                    }
-                    keys.forEach(key => {
-                        try {
-                            const data = JSON.parse(localStorage.getItem(key));
-                            if (data && data.expiresAt && Date.now() > data.expiresAt) {
-                                localStorage.removeItem(key);
-                                const code = key.replace('metaCleanerLocal_', '');
-                                deleteBlobFromIDB(code);
-                            }
-                        } catch (e) {
-                            localStorage.removeItem(key);
-                        }
-                    });
-                } catch (e) { /* ignore */ }
-                cleanupExpiredIDB();
-            }
-
-            // ===== Memory Management =====
+            // ===== Cleanup =====
             function cleanupMemory() {
                 if (currentPreviewUrl && !previewThumb.src.includes(currentPreviewUrl)) {
                     URL.revokeObjectURL(currentPreviewUrl);
@@ -2193,43 +1866,48 @@
                 cleanupExpiredLocalCodes();
             }
 
+            function cleanupExpiredLocalCodes() {
+                try {
+                    const keys = [];
+                    for (let i = 0; i < localStorage.length; i++) {
+                        const k = localStorage.key(i);
+                        if (k?.startsWith('metaCleanerLocal_')) keys.push(k);
+                    }
+                    keys.forEach(k => {
+                        try {
+                            const d = JSON.parse(localStorage.getItem(k));
+                            if (d?.expiresAt && Date.now() > d.expiresAt) {
+                                const code = k.replace('metaCleanerLocal_', '');
+                                localStorage.removeItem(k);
+                                deleteBlobFromIDB(code);
+                            }
+                        } catch (e) { localStorage.removeItem(k); }
+                    });
+                } catch (e) {}
+                cleanupExpiredIDB();
+            }
+
             const memoryCleanupInterval = setInterval(cleanupMemory, 60000);
 
-            // ===== Initialization =====
+            // ===== Init =====
             function init() {
                 applyTheme(currentTheme, false);
                 applyMode(currentMode, false);
-                applyOrbCount(orbCount);
                 startPerfMonitor();
-                updateNetworkStatus();
                 cleanupExpiredLocalCodes();
 
-                document.addEventListener('visibilitychange', () => {
-                    if (document.hidden) {
-                        cleanupMemory();
-                    }
-                });
-
+                document.addEventListener('visibilitychange', () => { if (document.hidden) cleanupMemory(); });
                 window.addEventListener('beforeunload', () => {
                     if (currentPreviewUrl) URL.revokeObjectURL(currentPreviewUrl);
                     if (currentObjectUrl) URL.revokeObjectURL(currentObjectUrl);
                     if (expireTimer) clearInterval(expireTimer);
                     clearInterval(memoryCleanupInterval);
-                    if (currentController) {
-                        try { currentController.abort(); } catch (e) { /* ignore */ }
-                    }
+                    if (currentController) { try { currentController.abort(); } catch (e) {} }
                 });
-
-                console.log('[Init] 元数据清除器已加载');
-                console.log(`[Init] 模式: ${currentMode} | 主题: ${currentTheme}`);
-                console.log('[Init] Service Worker 已移除，离线支持由前端模式提供');
             }
 
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', init);
-            } else {
-                init();
-            }
+            if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+            else init();
         })();
     </script>
 </body>
