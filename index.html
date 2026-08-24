@@ -760,8 +760,8 @@
                     <svg class="upload-icon" viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/></svg>
                     <div class="upload-title">拖拽图片到此处 或 点击上传</div>
                     <div class="upload-subtitle">选择后自动清除所有 EXIF / GPS / 设备信息</div>
-                    <div class="upload-formats">支持 JPG · PNG · WEBP · TIFF</div>
-                    <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp,image/tiff,image/*" aria-label="选择图片文件">
+                    <div class="upload-formats">支持 JPG · PNG · WEBP · GIF</div>
+                    <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp,image/gif" aria-label="选择图片文件">
                 </div>
 
                 <img id="previewThumb" class="preview-thumb hidden" alt="图片预览" />
@@ -831,6 +831,10 @@
                         <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
                         下载
                     </button>
+                    <button class="m3-btn m3-btn-error" id="deleteBtn" style="display:none;">
+                        <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                        销毁
+                    </button>
                 </div>
                 <div id="downloadPreview" style="margin-top:16px;display:none;"></div>
                 <div id="downloadError" style="margin-top:16px;display:none;"></div>
@@ -839,7 +843,7 @@
 
         <div class="mode-explanation" id="modeExplanation">
             <strong>后端处理模式</strong>：图片会上传到服务器，服务器清除元数据后返回 6 位物件码，2 小时内可取件下载。
-            <span class="pros">优点：不占本地资源、支持 TIFF 等更多格式。</span>
+            <span class="pros">优点：不占本地资源、支持 GIF 等更多格式。</span>
             <span class="cons">缺点：需联网、图片经过服务器。</span>
         </div>
     </div>
@@ -854,8 +858,8 @@
             const API_BASE = 'https://156.246.95.165.nip.io';
             const API_UPLOAD = `${API_BASE}/api/upload`;
             const API_INFO = `${API_BASE}/api/info`;
-            const API_DOWNLOAD = `${API_BASE}/api/download`;
-            const MAX_FILE_SIZE = 50 * 1024 * 1024;
+            const API_FILE = `${API_BASE}/api/file`;
+            const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20 MB
             const EXPIRE_SECONDS = 7200;
             const MAX_CANVAS_DIMENSION = 4096;
             const PERF_CHECK_INTERVAL = 3000;
@@ -878,6 +882,7 @@
             let isOffline = !navigator.onLine;
             let currentController = null;
             let currentMetadata = [];
+            let currentDeleteCode = null; // 用于删除按钮
 
             // ===== DOM Elements =====
             const body = document.body;
@@ -914,6 +919,7 @@
             const downloadCodeInput = document.getElementById('downloadCodeInput');
             const previewBtn = document.getElementById('previewBtn');
             const downloadBtn = document.getElementById('downloadBtn');
+            const deleteBtn = document.getElementById('deleteBtn');
             const downloadPreview = document.getElementById('downloadPreview');
             const downloadError = document.getElementById('downloadError');
             const toastContainer = document.getElementById('toastContainer');
@@ -931,6 +937,7 @@
                 image: '<svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>',
                 server: '<svg viewBox="0 0 24 24"><path d="M4 1h16c1.1 0 2 .9 2 2v4c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V3c0-1.1.9-2 2-2zm0 14h16c1.1 0 2 .9 2 2v4c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2v-4c0-1.1.9-2 2-2zm0-7h16c1.1 0 2 .9 2 2v4c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2v-4c0-1.1.9-2 2-2z"/></svg>',
                 browser: '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>',
+                trash: '<svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>',
             };
 
             // ===== Helper Functions =====
@@ -981,13 +988,13 @@
                     modeExplanation.innerHTML =
                         '<strong>前端处理模式</strong>：图片在浏览器本地用 Canvas 重新绘制，元数据自动剥离，不上传任何数据到服务器。' +
                         '<span class="pros">优点：完全离线可用、隐私安全、速度极快。</span>' +
-                        '<span class="cons">缺点：不支持 TIFF、大图可能卡顿、依赖浏览器能力。</span>';
+                        '<span class="cons">缺点：不支持 GIF 动图、大图可能卡顿、依赖浏览器能力。</span>';
                     modeBadge.querySelector('svg').outerHTML = ICONS.browser;
                 } else {
                     modeBadgeText.textContent = '后端处理';
                     modeExplanation.innerHTML =
                         '<strong>后端处理模式</strong>：图片上传到服务器，服务器清除元数据后返回 6 位物件码，2 小时内可取件下载。' +
-                        '<span class="pros">优点：不占本地资源、支持 TIFF 等更多格式。</span>' +
+                        '<span class="pros">优点：不占本地资源、支持 GIF 动图等更多格式。</span>' +
                         '<span class="cons">缺点：需联网、图片经过服务器。</span>';
                     modeBadge.querySelector('svg').outerHTML = ICONS.server;
                 }
@@ -1004,6 +1011,7 @@
                     'info'
                 );
                 resetUploadResult();
+                resetDownloadPanel();
             });
 
             // ===== Tab Management =====
@@ -1017,6 +1025,7 @@
                 tabPanels.forEach(panel => {
                     panel.classList.toggle('active', panel.id === `panel-${tabId}`);
                 });
+                if (tabId === 'download') resetDownloadPanel();
             }
 
             tabButtons.forEach(btn => {
@@ -1068,10 +1077,19 @@
                 if (expireTimer) { clearInterval(expireTimer); expireTimer = null; }
                 metadataSection.style.display = 'none';
                 currentMetadata = [];
+                currentDeleteCode = null;
             }
 
-            // ===== Show Upload Result (补全函数) =====
-            function showUploadResult(code, filename, expireSeconds, actions = []) {
+            function resetDownloadPanel() {
+                downloadPreview.style.display = 'none';
+                downloadError.style.display = 'none';
+                downloadCodeInput.value = '';
+                deleteBtn.style.display = 'none';
+                currentDeleteCode = null;
+            }
+
+            // ===== Show Upload Result =====
+            function showUploadResult(code, filename, expireSeconds, actions = [], canDelete = false) {
                 resultSection.classList.add('visible');
                 resultCode.textContent = code;
                 resultInfo.innerHTML = `
@@ -1086,6 +1104,13 @@
                     btn.onclick = act.onClick;
                     resultActions.appendChild(btn);
                 });
+                if (canDelete) {
+                    const delBtn = document.createElement('button');
+                    delBtn.className = 'm3-btn m3-btn-error';
+                    delBtn.innerHTML = ICONS.trash + ' <span>销毁</span>';
+                    delBtn.onclick = () => deleteFile(code);
+                    resultActions.appendChild(delBtn);
+                }
                 if (expireTimer) clearInterval(expireTimer);
                 let remaining = expireSeconds;
                 expireTimer = setInterval(() => {
@@ -1099,7 +1124,6 @@
                 }, 1000);
             }
 
-            // ===== Show Upload Error =====
             function showUploadError(message) {
                 resultSection.classList.add('visible');
                 resultCode.textContent = 'ERROR';
@@ -1399,12 +1423,20 @@
                         });
                         xhr.addEventListener('load', () => {
                             if (xhr.status >= 200 && xhr.status < 300) {
-                                setProgress(100);
-                                progressLabel.textContent = '完成！';
-                                resolve(xhr.response);
+                                const data = xhr.response;
+                                if (data && data.ok === true && data.code) {
+                                    setProgress(100);
+                                    progressLabel.textContent = '完成！';
+                                    resolve(data);
+                                } else {
+                                    reject(new Error(data?.error || '上传失败'));
+                                }
                             } else {
                                 let errorMsg = `上传失败 (${xhr.status})`;
-                                try { if (xhr.response?.detail) errorMsg = xhr.response.detail; } catch (e) {}
+                                try {
+                                    const data = xhr.response;
+                                    if (data && data.error) errorMsg = data.error;
+                                } catch (e) {}
                                 reject(new Error(errorMsg));
                             }
                         });
@@ -1416,22 +1448,41 @@
                         currentController.signal.addEventListener('abort', () => { try { xhr.abort(); } catch (e) {} });
                     });
 
-                    if (result?.success && result.code) {
-                        uploadedFileName = result.filename || file.name;
-                        showUploadResult(result.code, uploadedFileName, result.expires_in_seconds || EXPIRE_SECONDS, [
-                            { label: '复制物件码', icon: ICONS.copy, className: 'm3-btn-tonal', onClick: () => copyText(result.code) },
-                            { label: '预览图片', icon: ICONS.image, className: 'm3-btn-filled', onClick: () => openDownloadPreview(result.code) },
-                            { label: '下载图片', icon: ICONS.success, className: 'm3-btn-filled', onClick: () => triggerDownload(result.code) }
-                        ]);
-                        showToast('上传成功，物件码 ' + result.code, 'success');
-                    } else throw new Error('服务器返回异常');
+                    const code = result.code;
+                    const expiresIn = result.expires_in || EXPIRE_SECONDS;
+                    const filename = file.name;
+                    uploadedFileName = filename;
+
+                    showUploadResult(code, filename, expiresIn, [
+                        { label: '复制物件码', icon: ICONS.copy, className: 'm3-btn-tonal', onClick: () => copyText(code) },
+                        { label: '预览图片', icon: ICONS.image, className: 'm3-btn-filled', onClick: () => openDownloadPreview(code) },
+                        { label: '下载图片', icon: ICONS.success, className: 'm3-btn-filled', onClick: () => triggerDownload(code) }
+                    ], true);
+
+                    showToast('上传成功，物件码 ' + code, 'success');
                 } catch (err) {
-                    showToast(err.message || '上传失败', 'error');
-                    showUploadError(err.message || '上传失败');
+                    const errMsg = mapError(err.message);
+                    showToast(errMsg, 'error');
+                    showUploadError(errMsg);
                 } finally {
                     setTimeout(() => { if (progressFill.style.width === '100%') hideProgress(); }, 800);
                     currentController = null;
                 }
+            }
+
+            function mapError(errorStr) {
+                const map = {
+                    'empty': '文件为空或字段名不对',
+                    'unsupported': '不支持的图片格式',
+                    'invalid_image': '图片文件损坏',
+                    'too_large': '文件超过 20MB 限制',
+                    'busy': '服务器繁忙，请稍后再试',
+                    'codes_exhausted': '取件码已用尽',
+                    'bad_code': '无效的物件码',
+                    'not_found': '物件码不存在',
+                    'expired': '物件码已过期',
+                };
+                return map[errorStr] || errorStr || '操作失败';
             }
 
             // ===== Frontend Processing =====
@@ -1441,8 +1492,11 @@
 
                 try {
                     const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
-                    if (!validTypes.includes(file.type)) throw new Error('前端仅支持 JPG、PNG、WEBP。TIFF 请切换后端。');
-                    if (file.size > MAX_FILE_SIZE) throw new Error('文件超过 50MB 限制');
+                    if (!validTypes.includes(file.type)) {
+                        if (file.type === 'image/gif') throw new Error('前端模式不支持 GIF 动图，请切换后端模式');
+                        throw new Error('前端仅支持 JPG、PNG、WEBP');
+                    }
+                    if (file.size > MAX_FILE_SIZE) throw new Error('文件超过 20MB 限制');
 
                     const arrayBuffer = await file.arrayBuffer();
                     setProgress(20);
@@ -1507,7 +1561,7 @@
                         { label: '复制物件码', icon: ICONS.copy, className: 'm3-btn-tonal', onClick: () => copyText(localCode) },
                         { label: '下载图片', icon: ICONS.success, className: 'm3-btn-filled', onClick: () => downloadFrontendBlob(localCode, file.name) },
                         { label: '预览图片', icon: ICONS.image, className: 'm3-btn-tonal', onClick: () => previewFrontendBlob(localCode) }
-                    ]);
+                    ], false);
 
                     if (currentPreviewUrl) URL.revokeObjectURL(currentPreviewUrl);
                     currentPreviewUrl = blobUrl;
@@ -1518,8 +1572,9 @@
                     canvas.width = 0; canvas.height = 0;
 
                 } catch (err) {
-                    showToast(err.message || '前端处理失败', 'error');
-                    showUploadError(err.message || '前端处理失败');
+                    const errMsg = mapError(err.message) || err.message;
+                    showToast(errMsg, 'error');
+                    showUploadError(errMsg);
                 } finally {
                     setTimeout(() => { if (progressFill.style.width === '100%') hideProgress(); }, 800);
                 }
@@ -1654,10 +1709,10 @@
                 uploadedFileName = file.name;
 
                 if (!file.type.startsWith('image/')) { showToast('不支持的格式', 'error'); return; }
-                if (file.size > MAX_FILE_SIZE) { showToast('文件超过50MB', 'error'); return; }
+                if (file.size > MAX_FILE_SIZE) { showToast('文件超过 20MB', 'error'); return; }
                 if (file.size === 0) { showToast('文件为空', 'error'); return; }
 
-                if (file.type !== 'image/tiff') {
+                if (file.type !== 'image/gif') {
                     const previewUrl = URL.createObjectURL(file);
                     if (currentPreviewUrl) URL.revokeObjectURL(currentPreviewUrl);
                     currentPreviewUrl = previewUrl;
@@ -1701,7 +1756,7 @@
                     const localData = getLocalCodeData(code);
                     if (localData) {
                         const remaining = Math.max(0, EXPIRE_SECONDS - Math.floor((Date.now() - localData.createdAt) / 1000));
-                        if (remaining <= 0) { removeLocalCode(code); await deleteBlobFromIDB(code); throw new Error('物件码已过期'); }
+                        if (remaining <= 0) { removeLocalCode(code); await deleteBlobFromIDB(code); throw new Error('expired'); }
                         queryResult.style.display = 'block';
                         queryResult.innerHTML = `
                             <div class="m3-card-outlined" style="padding:16px;">
@@ -1715,22 +1770,24 @@
                     const response = await fetch(`${API_INFO}/${code}`, { signal: AbortSignal.timeout(10000) });
                     if (response.ok) {
                         const data = await response.json();
-                        if (data.success) {
+                        if (data.ok) {
                             queryResult.style.display = 'block';
                             queryResult.innerHTML = `
                                 <div class="m3-card-outlined" style="padding:16px;">
-                                    <div style="display:flex;justify-content:space-between;padding:8px 0;"><span style="color:var(--m3-on-surface-variant);">${ICONS.file} 文件名</span><strong>${escapeHtml(data.filename || '未知')}</strong></div>
-                                    <div style="display:flex;justify-content:space-between;padding:8px 0;"><span style="color:var(--m3-on-surface-variant);">${ICONS.clock} 剩余时间</span><strong>${formatTime(data.remaining_seconds || 0)}</strong></div>
+                                    <div style="display:flex;justify-content:space-between;padding:8px 0;"><span style="color:var(--m3-on-surface-variant);">${ICONS.file} 剩余时间</span><strong>${formatTime(data.expires_in || 0)}</strong></div>
+                                    <div style="display:flex;justify-content:space-between;padding:8px 0;"><span style="color:var(--m3-on-surface-variant);">${ICONS.clock} 过期时间</span><strong>${new Date((data.expires_at || 0) * 1000).toLocaleString()}</strong></div>
                                     <div style="display:flex;justify-content:space-between;padding:8px 0;"><span style="color:var(--m3-on-surface-variant);">${ICONS.server} 处理方式</span><strong>后端服务器</strong></div>
                                 </div>`;
                             showToast('查询成功', 'success');
-                        } else throw new Error('查询失败');
-                    } else if (response.status === 404) throw new Error('物件码不存在或已过期');
-                    else throw new Error(`查询失败 (${response.status})`);
+                        } else throw new Error(data.error || '查询失败');
+                    } else if (response.status === 404) throw new Error('not_found');
+                    else if (response.status === 410) throw new Error('expired');
+                    else throw new Error('bad_code');
                 } catch (err) {
+                    const errMsg = mapError(err.message) || err.message;
                     queryError.style.display = 'block';
-                    queryError.innerHTML = `<div class="m3-card-outlined" style="padding:16px;border-color:var(--m3-error);">${ICONS.error} <span>${escapeHtml(err.message)}</span></div>`;
-                    showToast(err.message, 'error');
+                    queryError.innerHTML = `<div class="m3-card-outlined" style="padding:16px;border-color:var(--m3-error);">${ICONS.error} <span>${escapeHtml(errMsg)}</span></div>`;
+                    showToast(errMsg, 'error');
                 } finally {
                     queryBtn.disabled = false;
                     queryBtn.innerHTML = `${ICONS.info} 查询`;
@@ -1769,11 +1826,16 @@
                 }
                 openDownloadPreview(code);
             });
+            deleteBtn.addEventListener('click', () => {
+                if (currentDeleteCode) deleteFile(currentDeleteCode);
+            });
             downloadCodeInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') triggerDownload(downloadCodeInput
                     .value.trim()); });
             downloadCodeInput.addEventListener('input', () => {
                 downloadCodeInput.value = downloadCodeInput.value.replace(/\D/g, '').slice(0, 6);
                 downloadError.style.display = 'none'; downloadPreview.style.display = 'none';
+                deleteBtn.style.display = 'none';
+                currentDeleteCode = null;
             });
 
             async function triggerDownload(code) {
@@ -1785,7 +1847,8 @@
                     await downloadFrontendBlob(code, localData.filename);
                     return;
                 }
-                window.location.href = `${API_DOWNLOAD}/${code}`;
+                // 后端下载：直接跳转
+                window.location.href = `${API_FILE}/${code}`;
                 showToast('下载已触发', 'success');
             }
 
@@ -1809,19 +1872,24 @@
                     }
                     return;
                 }
+                // 后端预览
                 downloadPreview.style.display = 'block';
                 downloadPreview.innerHTML = `<div class="m3-card-outlined" style="padding:16px;text-align:center;"><span style="color:var(--m3-primary);">加载预览中...</span></div>`;
                 downloadError.style.display = 'none';
+                deleteBtn.style.display = 'inline-flex';
+                currentDeleteCode = code;
                 const img = new Image();
                 img.onload = () => {
-                    downloadPreview.innerHTML = `<div class="m3-card-outlined" style="padding:16px;text-align:center;">${ICONS.image} <span>图片预览：</span><br><img src="${API_DOWNLOAD}/${code}" style="max-width:100%;max-height:280px;border-radius:12px;margin-top:8px;"></div>`;
+                    downloadPreview.innerHTML = `<div class="m3-card-outlined" style="padding:16px;text-align:center;">${ICONS.image} <span>图片预览：</span><br><img src="${API_FILE}/${code}" style="max-width:100%;max-height:280px;border-radius:12px;margin-top:8px;"></div>`;
                 };
                 img.onerror = () => {
                     downloadPreview.style.display = 'none';
                     downloadError.style.display = 'block';
-                    downloadError.innerHTML = `<div class="m3-card-outlined" style="padding:16px;border-color:var(--m3-error);">${ICONS.error} <span>预览失败，物件码可能已过期</span></div>`;
+                    downloadError.innerHTML = `<div class="m3-card-outlined" style="padding:16px;border-color:var(--m3-error);">${ICONS.error} <span>预览失败，物件码可能不存在或已过期</span></div>`;
+                    deleteBtn.style.display = 'none';
+                    currentDeleteCode = null;
                 };
-                img.src = `${API_DOWNLOAD}/${code}?t=${Date.now()}`;
+                img.src = `${API_FILE}/${code}?t=${Date.now()}`;
             }
 
             async function downloadFrontendBlob(code, filename) {
@@ -1837,6 +1905,34 @@
                 document.body.removeChild(a);
                 setTimeout(() => URL.revokeObjectURL(url), 5000);
                 showToast('下载已开始', 'success');
+            }
+
+            // ===== Delete =====
+            async function deleteFile(code) {
+                if (!confirm(`确定销毁物件码 ${code} 吗？此操作不可撤销。`)) return;
+                try {
+                    const response = await fetch(`${API_FILE}/${code}`, { method: 'DELETE' });
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.ok) {
+                            showToast(`物件码 ${code} 已销毁`, 'success');
+                            // 清理相关显示
+                            if (downloadCodeInput.value === code) resetDownloadPanel();
+                            if (resultCode.textContent === code) resetUploadResult();
+                        } else {
+                            throw new Error(data.error || '删除失败');
+                        }
+                    } else {
+                        let errMsg = `删除失败 (${response.status})`;
+                        try {
+                            const data = await response.json();
+                            if (data.error) errMsg = data.error;
+                        } catch (e) {}
+                        throw new Error(errMsg);
+                    }
+                } catch (err) {
+                    showToast(mapError(err.message) || err.message, 'error');
+                }
             }
 
             // ===== Copy =====
