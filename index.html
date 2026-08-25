@@ -5,12 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TG 云图库 · 无盘图床</title>
 
+    <!-- Vue 3 -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js">
     </script>
+    <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 
     <style>
-        /* ===== CSS 变量 / 主题系统 (与之前相同，未改动) ===== */
+        /* ===== CSS 变量 / 主题系统 ===== */
         :root {
             --bg: #f1f5f9;
             --surface: rgba(255, 255, 255, 0.70);
@@ -127,6 +129,7 @@
             border-color: rgba(124, 58, 237, 0.20);
         }
 
+        /* ===== 按钮 ===== */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -555,6 +558,18 @@
             display: block;
         }
 
+        /* 无限滚动加载指示器 */
+        .load-more-trigger {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 16px 0 8px;
+            color: var(--text-tertiary);
+            font-size: 0.85rem;
+        }
+        .load-more-trigger i {
+            margin-right: 6px;
+        }
+
         .modal-mask {
             position: fixed;
             inset: 0;
@@ -762,6 +777,10 @@
                 right: 10px;
                 max-width: calc(100% - 20px);
             }
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 8px;
+            }
         }
         @media (min-width: 1400px) {
             .app-wrapper {
@@ -896,7 +915,6 @@
                         <input type="file" id="fileInputRef" accept="image/*" @change="onFilePicked" ref="fileInputRef" :disabled="uploading" />
                     </div>
 
-                    <!-- 上传进度 -->
                     <div class="progress-wrap" v-if="uploading">
                         <div class="progress-bar-outer">
                             <div class="progress-bar-inner" :style="{ width: uploadProgress + '%' }"></div>
@@ -939,7 +957,7 @@
                     </div>
                 </div>
 
-                <!-- ===== 图库网格 ===== -->
+                <!-- ===== 图库网格 + 无限滚动 ===== -->
                 <div class="glass-card" style="padding:clamp(14px,2vw,20px);">
                     <div v-if="galleryLoading" class="text-center" style="padding:30px 0;">
                         <i class="fas fa-spinner fa-spin" style="font-size:2rem;color:#7c3aed;"></i>
@@ -950,29 +968,35 @@
                         <p>{{ searchQuery ? '没有匹配的图片' : '图库为空，上传第一张图片吧' }}</p>
                     </div>
                     <div v-else class="gallery-grid">
-                        <div v-for="img in filteredImages" :key="img.id" class="gallery-item" @click="openPreview(img)">
+                        <!-- 渲染当前批次图片 (按需加载) -->
+                        <div v-for="img in displayedImages" :key="img.id" class="gallery-item" @click="openPreview(img)">
                             <img :src="img.url" :alt="img.file_name" loading="lazy" @error="handleImageError($event, img)" />
                             <div class="item-overlay">
                                 <span class="name">{{ img.file_name }}</span>
                                 <span class="size">{{ formatFileSize(img.file_size) }}</span>
                             </div>
                         </div>
-                    </div>
-                    <div v-if="!galleryLoading && images.length > 0" style="margin-top:12px;text-align:center;font-size:0.80rem;color:var(--text-tertiary);">
-                        共 {{ images.length }} 张图片
+
+                        <!-- 无限滚动触发哨兵 & 加载更多指示器 -->
+                        <div v-if="hasMore" class="load-more-trigger" id="sentinel">
+                            <i class="fas fa-spinner fa-pulse" v-if="loadingMore"></i>
+                            <span v-else>滚动加载更多...</span>
+                        </div>
+                        <div v-else-if="filteredImages.length > 0" class="load-more-trigger" style="color:var(--text-tertiary);opacity:0.6;">
+                            <i class="fas fa-check-circle"></i> 已加载全部 {{ filteredImages.length }} 张
+                        </div>
                     </div>
                 </div>
 
             </template>
 
-            <!-- ===== Footer ===== -->
             <footer style="text-align:center;padding:12px 0 4px;font-size:0.75rem;color:var(--text-tertiary);">
                 <i class="fas fa-shield-alt"></i> 无盘存储 · 数据仅存于 Telegram
                 <span style="margin:0 8px;">|</span>
                 <i class="fas fa-lock"></i> 端到端加密传输
             </footer>
 
-        </div><!-- /app-wrapper -->
+        </div>
 
         <!-- ===== 图片预览模态框 ===== -->
         <teleport to="body">
@@ -1008,7 +1032,7 @@
     </div>
 
     <script>
-        const { createApp, ref, reactive, computed, watch, onMounted } = Vue;
+        const { createApp, ref, reactive, computed, watch, onMounted, onBeforeUnmount, nextTick, toRaw } = Vue;
 
         const API_BASE = 'https://node-0crq9b.156.246.95.165.nip.io';
 
@@ -1040,6 +1064,13 @@
                 const searchQuery = ref('');
                 const sortBy = ref('newest');
 
+                // ---- 无限滚动分页相关 ----
+                const PAGE_SIZE = 24;
+                const displayCount = ref(PAGE_SIZE);
+                const loadingMore = ref(false);
+                let observer = null;
+                const sentinelRef = ref(null);
+
                 const previewVisible = ref(false);
                 const previewImage = ref(null);
 
@@ -1069,12 +1100,22 @@
                     return list;
                 });
 
+                // 当前实际展示的图片（按需切片）
+                const displayedImages = computed(() => {
+                    return filteredImages.value.slice(0, displayCount.value);
+                });
+
+                // 是否还有更多数据
+                const hasMore = computed(() => {
+                    return displayCount.value < filteredImages.value.length;
+                });
+
                 const totalSize = computed(() => {
                     const total = images.value.reduce((sum, img) => sum + (img.file_size || 0), 0);
                     return formatFileSize(total);
                 });
 
-                // ---- Toast ----
+                // ---- 方法 ----
                 function addToast(message, type = 'info') {
                     toasts.push({ message, type });
                     if (toasts.length > 8) toasts.shift();
@@ -1088,14 +1129,12 @@
                     toasts.splice(idx, 1);
                 }
 
-                // ---- 主题 ----
                 function toggleTheme() {
                     theme.value = theme.value === 'dark' ? 'light' : 'dark';
                     localStorage.setItem('tg_gallery_theme', theme.value);
                     document.documentElement.setAttribute('data-theme', theme.value);
                 }
 
-                // ---- 账号 ----
                 function copyAccount() {
                     if (!accountId.value) return;
                     navigator.clipboard?.writeText(accountId.value).then(() => {
@@ -1118,6 +1157,7 @@
                     accountId.value = '';
                     localStorage.removeItem('tg_gallery_account');
                     images.value = [];
+                    displayCount.value = PAGE_SIZE;
                     previewVisible.value = false;
                     addToast('已登出', 'info');
                 }
@@ -1161,10 +1201,11 @@
                     await loadGallery();
                 }
 
-                // ---- 图库 ----
+                // ---- 图库加载 ----
                 async function loadGallery() {
                     if (!accountId.value) return;
                     galleryLoading.value = true;
+                    displayCount.value = PAGE_SIZE; // 重置分页
                     try {
                         const res = await fetch(`${API_BASE}/api/images`, {
                             headers: { 'Authorization': `Bearer ${accountId.value}` }
@@ -1188,6 +1229,8 @@
                         images.value = [];
                     } finally {
                         galleryLoading.value = false;
+                        // 重置观察者，重新绑定哨兵
+                        nextTick(() => setupObserver());
                     }
                 }
 
@@ -1195,77 +1238,53 @@
                     loadGallery();
                 }
 
-                // ---- 上传（核心修复） ----
-                async function startUpload(file) {
-                    if (uploading.value) return;
-                    if (file.size > 20 * 1024 * 1024) {
-                        addToast('图片大小超过 20 MB 限制', 'error');
-                        return;
-                    }
-
-                    uploading.value = true;
-                    uploadProgress.value = 20;
-                    uploadStatus.value = '正在流式传输至 Telegram...';
-
-                    const formData = new FormData();
-                    formData.append('file', file);
-
-                    // 模拟平滑进度（前端友好）
-                    const progressTimer = setInterval(() => {
-                        if (uploadProgress.value < 90) {
-                            uploadProgress.value += 15;
-                        }
-                    }, 400);
-
-                    try {
-                        const controller = new AbortController();
-                        const timeoutId = setTimeout(() => controller.abort(), 90000); // 90秒超时
-
-                        const res = await fetch(`${API_BASE}/api/upload`, {
-                            method: 'POST',
-                            headers: {
-                                'Authorization': `Bearer ${accountId.value}`
-                            },
-                            body: formData,
-                            signal: controller.signal
-                        });
-
-                        clearTimeout(timeoutId);
-                        clearInterval(progressTimer);
-
-                        if (!res.ok) {
-                            const errData = await res.json().catch(() => ({}));
-                            throw new Error(errData.detail || `HTTP ${res.status}`);
-                        }
-
-                        const data = await res.json();
-                        if (data.status === 'success') {
-                            uploadProgress.value = 100;
-                            uploadStatus.value = '上传完成 ✅';
-                            addToast(`上传成功: ${data.file_name}`, 'success');
-                            await loadGallery();
-                        } else {
-                            throw new Error(data.detail || '上传未返回成功标记');
-                        }
-                    } catch (e) {
-                        clearInterval(progressTimer);
-                        console.error("Upload error:", e);
-                        if (e.name === 'AbortError') {
-                            addToast('上传超时，请检查网络后重试', 'error');
-                        } else {
-                            addToast('上传失败: ' + (e.message || '网络连接异常'), 'error');
-                        }
-                        uploadStatus.value = '上传失败';
-                    } finally {
-                        setTimeout(() => {
-                            uploading.value = false;
-                            uploadProgress.value = 0;
-                            uploadStatus.value = '';
-                        }, 800);
-                    }
+                // ---- 加载更多 (无限滚动) ----
+                function loadMore() {
+                    if (loadingMore.value || !hasMore.value) return;
+                    loadingMore.value = true;
+                    // 模拟异步加载，直接增加数量（因为数据已全部在内存中，只是分批渲染）
+                    setTimeout(() => {
+                        displayCount.value += PAGE_SIZE;
+                        loadingMore.value = false;
+                        // 加载完成后重新绑定哨兵
+                        nextTick(() => setupObserver());
+                    }, 200);
                 }
 
-                // ---- 上传触发 ----
+                // ---- IntersectionObserver 设置 ----
+                function setupObserver() {
+                    // 断开旧观察者
+                    if (observer) {
+                        observer.disconnect();
+                        observer = null;
+                    }
+                    const sentinel = document.getElementById('sentinel');
+                    if (!sentinel) return;
+                    observer = new IntersectionObserver((entries) => {
+                        if (entries[0].isIntersecting && hasMore.value && !loadingMore.value) {
+                            loadMore();
+                        }
+                    }, {
+                        rootMargin: '0px 0px 100px 0px', // 提前100px触发
+                        threshold: 0.1
+                    });
+                    observer.observe(sentinel);
+                }
+
+                // 当搜索或排序变化时，重置显示数量并重新绑定观察者
+                watch([searchQuery, sortBy], () => {
+                    displayCount.value = PAGE_SIZE;
+                    nextTick(() => setupObserver());
+                });
+
+                // 监听图片总数变化，重新设置观察者
+                watch(() => filteredImages.value.length, () => {
+                    if (!galleryLoading.value) {
+                        nextTick(() => setupObserver());
+                    }
+                });
+
+                // ---- 上传 ----
                 function triggerFileInput() {
                     if (uploading.value) return;
                     if (fileInputRef.value) fileInputRef.value.click();
@@ -1284,6 +1303,69 @@
                         startUpload(file);
                     } else {
                         addToast('请拖拽图片文件', 'warning');
+                    }
+                }
+
+                async function startUpload(file) {
+                    if (uploading.value) return;
+                    if (file.size > 20 * 1024 * 1024) {
+                        addToast('图片大小超过 20 MB 限制', 'error');
+                        return;
+                    }
+
+                    uploading.value = true;
+                    uploadProgress.value = 0;
+                    uploadStatus.value = '准备上传...';
+
+                    const formData = new FormData();
+                    formData.append('file', file);
+
+                    try {
+                        const xhr = new XMLHttpRequest();
+                        const promise = new Promise((resolve, reject) => {
+                            xhr.open('POST', `${API_BASE}/api/upload`);
+                            xhr.setRequestHeader('Authorization', `Bearer ${accountId.value}`);
+                            xhr.upload.onprogress = (e) => {
+                                if (e.total > 0) {
+                                    uploadProgress.value = (e.loaded / e.total) * 100;
+                                    uploadStatus.value = `上传中 ${Math.round(uploadProgress.value)}%`;
+                                }
+                            };
+                            xhr.onload = () => {
+                                if (xhr.status >= 200 && xhr.status < 300) {
+                                    try {
+                                        const data = JSON.parse(xhr.responseText);
+                                        resolve(data);
+                                    } catch (_) { reject(new Error('解析响应失败')); }
+                                } else {
+                                    try {
+                                        const err = JSON.parse(xhr.responseText);
+                                        reject(new Error(err.detail || `HTTP ${xhr.status}`));
+                                    } catch (_) { reject(new Error(`HTTP ${xhr.status}`)); }
+                                }
+                            };
+                            xhr.onerror = () => reject(new Error('网络错误'));
+                            xhr.send(formData);
+                        });
+
+                        const data = await promise;
+                        if (data.status === 'success') {
+                            uploadProgress.value = 100;
+                            uploadStatus.value = '上传完成 ✅';
+                            addToast(`上传成功: ${data.file_name}`, 'success');
+                            await loadGallery();
+                        } else {
+                            throw new Error(data.detail || '上传失败');
+                        }
+                    } catch (e) {
+                        addToast('上传失败: ' + e.message, 'error');
+                        uploadStatus.value = '上传失败';
+                    } finally {
+                        setTimeout(() => {
+                            uploading.value = false;
+                            uploadProgress.value = 0;
+                            uploadStatus.value = '';
+                        }, 600);
                     }
                 }
 
@@ -1314,7 +1396,8 @@
                         document.body.appendChild(ta);
                         ta.select();
                         try { document.execCommand('copy');
-                            addToast('压缩直链已复制', 'success'); } catch (_) { addToast('复制失败，请手动复制', 'error'); }
+                            addToast('压缩直链已复制', 'success'); } catch (_) { addToast('复制失败，请手动复制',
+                            'error'); }
                         document.body.removeChild(ta);
                     });
                 }
@@ -1333,7 +1416,8 @@
                         document.body.appendChild(ta);
                         ta.select();
                         try { document.execCommand('copy');
-                            addToast('原图直链已复制', 'success'); } catch (_) { addToast('复制失败，请手动复制', 'error'); }
+                            addToast('原图直链已复制', 'success'); } catch (_) { addToast('复制失败，请手动复制',
+                            'error'); }
                         document.body.removeChild(ta);
                     });
                 }
@@ -1379,10 +1463,22 @@
                     });
                 });
 
+                onBeforeUnmount(() => {
+                    if (observer) {
+                        observer.disconnect();
+                        observer = null;
+                    }
+                });
+
                 watch(accountId, (val) => {
                     if (!val) {
                         images.value = [];
+                        displayCount.value = PAGE_SIZE;
                         previewVisible.value = false;
+                        if (observer) {
+                            observer.disconnect();
+                            observer = null;
+                        }
                     }
                 });
 
@@ -1400,7 +1496,10 @@
                     galleryLoading,
                     searchQuery,
                     sortBy,
+                    displayedImages,
                     filteredImages,
+                    hasMore,
+                    loadingMore,
                     totalSize,
                     previewVisible,
                     previewImage,
@@ -1412,6 +1511,7 @@
                     doLogin,
                     loadGallery,
                     refreshGallery,
+                    loadMore,
                     triggerFileInput,
                     onFilePicked,
                     handleDrop,
