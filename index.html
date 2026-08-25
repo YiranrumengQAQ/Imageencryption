@@ -5,14 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TG 云图库 · 无盘图床</title>
 
-    <!-- Vue 3 -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js">
     </script>
-    <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 
     <style>
-        /* ===== CSS 变量 / 主题系统 ===== */
+        /* ===== CSS 变量 / 主题系统 (与之前相同，未改动) ===== */
         :root {
             --bg: #f1f5f9;
             --surface: rgba(255, 255, 255, 0.70);
@@ -843,7 +841,6 @@
                     <span>TG 云图库</span>
                 </div>
                 <div class="header-actions">
-                    <!-- 已登录时显示账号 -->
                     <template v-if="accountId">
                         <span class="account-badge" @click="copyAccount" title="点击复制账号">
                             <i class="fas fa-user-circle"></i>
@@ -854,7 +851,6 @@
                             <i class="fas fa-sign-out-alt"></i>
                         </button>
                     </template>
-                    <!-- 主题切换 -->
                     <button class="icon-btn" @click="toggleTheme" :title="theme === 'dark' ? '切换亮色' : '切换暗色'">
                         <i v-if="theme === 'dark'" class="fas fa-sun"></i>
                         <i v-else class="fas fa-moon"></i>
@@ -865,7 +861,6 @@
             <!-- ===== 未登录：登录/注册 ===== -->
             <div v-if="!accountId" class="glass-card">
                 <div class="auth-grid">
-                    <!-- 登录 -->
                     <div class="auth-card">
                         <h3><i class="fas fa-sign-in-alt"></i> 登录</h3>
                         <p class="text-muted" style="margin-bottom:10px;">输入 16 位账号登录</p>
@@ -876,7 +871,6 @@
                             </button>
                         </div>
                     </div>
-                    <!-- 注册 -->
                     <div class="auth-card">
                         <h3><i class="fas fa-user-plus"></i> 注册</h3>
                         <p class="text-muted" style="margin-bottom:10px;">生成新账号，自动登录</p>
@@ -1014,7 +1008,7 @@
     </div>
 
     <script>
-        const { createApp, ref, reactive, computed, watch, onMounted, nextTick, toRaw } = Vue;
+        const { createApp, ref, reactive, computed, watch, onMounted } = Vue;
 
         const API_BASE = 'https://node-0crq9b.156.246.95.165.nip.io';
 
@@ -1035,24 +1029,20 @@
                 const loginInput = ref('');
                 const registering = ref(false);
 
-                // 上传
                 const fileInputRef = ref(null);
                 const isDragging = ref(false);
                 const uploading = ref(false);
                 const uploadProgress = ref(0);
                 const uploadStatus = ref('');
 
-                // 图库
                 const images = ref([]);
                 const galleryLoading = ref(false);
                 const searchQuery = ref('');
                 const sortBy = ref('newest');
 
-                // 预览
                 const previewVisible = ref(false);
                 const previewImage = ref(null);
 
-                // Toast
                 const toasts = reactive([]);
 
                 // ---- 计算属性 ----
@@ -1084,7 +1074,7 @@
                     return formatFileSize(total);
                 });
 
-                // ---- 方法 ----
+                // ---- Toast ----
                 function addToast(message, type = 'info') {
                     toasts.push({ message, type });
                     if (toasts.length > 8) toasts.shift();
@@ -1098,12 +1088,14 @@
                     toasts.splice(idx, 1);
                 }
 
+                // ---- 主题 ----
                 function toggleTheme() {
                     theme.value = theme.value === 'dark' ? 'light' : 'dark';
                     localStorage.setItem('tg_gallery_theme', theme.value);
                     document.documentElement.setAttribute('data-theme', theme.value);
                 }
 
+                // ---- 账号 ----
                 function copyAccount() {
                     if (!accountId.value) return;
                     navigator.clipboard?.writeText(accountId.value).then(() => {
@@ -1143,10 +1135,8 @@
                         const data = await res.json();
                         if (data.status === 'success' && data.account_id) {
                             addToast('账号创建成功，自动登录中', 'success');
-                            // 自动登录
                             accountId.value = data.account_id;
                             localStorage.setItem('tg_gallery_account', data.account_id);
-                            // 加载图库
                             await loadGallery();
                         } else {
                             throw new Error('注册响应异常');
@@ -1205,7 +1195,77 @@
                     loadGallery();
                 }
 
-                // ---- 上传 ----
+                // ---- 上传（核心修复） ----
+                async function startUpload(file) {
+                    if (uploading.value) return;
+                    if (file.size > 20 * 1024 * 1024) {
+                        addToast('图片大小超过 20 MB 限制', 'error');
+                        return;
+                    }
+
+                    uploading.value = true;
+                    uploadProgress.value = 20;
+                    uploadStatus.value = '正在流式传输至 Telegram...';
+
+                    const formData = new FormData();
+                    formData.append('file', file);
+
+                    // 模拟平滑进度（前端友好）
+                    const progressTimer = setInterval(() => {
+                        if (uploadProgress.value < 90) {
+                            uploadProgress.value += 15;
+                        }
+                    }, 400);
+
+                    try {
+                        const controller = new AbortController();
+                        const timeoutId = setTimeout(() => controller.abort(), 90000); // 90秒超时
+
+                        const res = await fetch(`${API_BASE}/api/upload`, {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': `Bearer ${accountId.value}`
+                            },
+                            body: formData,
+                            signal: controller.signal
+                        });
+
+                        clearTimeout(timeoutId);
+                        clearInterval(progressTimer);
+
+                        if (!res.ok) {
+                            const errData = await res.json().catch(() => ({}));
+                            throw new Error(errData.detail || `HTTP ${res.status}`);
+                        }
+
+                        const data = await res.json();
+                        if (data.status === 'success') {
+                            uploadProgress.value = 100;
+                            uploadStatus.value = '上传完成 ✅';
+                            addToast(`上传成功: ${data.file_name}`, 'success');
+                            await loadGallery();
+                        } else {
+                            throw new Error(data.detail || '上传未返回成功标记');
+                        }
+                    } catch (e) {
+                        clearInterval(progressTimer);
+                        console.error("Upload error:", e);
+                        if (e.name === 'AbortError') {
+                            addToast('上传超时，请检查网络后重试', 'error');
+                        } else {
+                            addToast('上传失败: ' + (e.message || '网络连接异常'), 'error');
+                        }
+                        uploadStatus.value = '上传失败';
+                    } finally {
+                        setTimeout(() => {
+                            uploading.value = false;
+                            uploadProgress.value = 0;
+                            uploadStatus.value = '';
+                        }, 800);
+                    }
+                }
+
+                // ---- 上传触发 ----
                 function triggerFileInput() {
                     if (uploading.value) return;
                     if (fileInputRef.value) fileInputRef.value.click();
@@ -1224,69 +1284,6 @@
                         startUpload(file);
                     } else {
                         addToast('请拖拽图片文件', 'warning');
-                    }
-                }
-
-                async function startUpload(file) {
-                    if (uploading.value) return;
-                    if (file.size > 20 * 1024 * 1024) {
-                        addToast('图片大小超过 20 MB 限制', 'error');
-                        return;
-                    }
-
-                    uploading.value = true;
-                    uploadProgress.value = 0;
-                    uploadStatus.value = '准备上传...';
-
-                    const formData = new FormData();
-                    formData.append('file', file);
-
-                    try {
-                        const xhr = new XMLHttpRequest();
-                        const promise = new Promise((resolve, reject) => {
-                            xhr.open('POST', `${API_BASE}/api/upload`);
-                            xhr.setRequestHeader('Authorization', `Bearer ${accountId.value}`);
-                            xhr.upload.onprogress = (e) => {
-                                if (e.total > 0) {
-                                    uploadProgress.value = (e.loaded / e.total) * 100;
-                                    uploadStatus.value = `上传中 ${Math.round(uploadProgress.value)}%`;
-                                }
-                            };
-                            xhr.onload = () => {
-                                if (xhr.status >= 200 && xhr.status < 300) {
-                                    try {
-                                        const data = JSON.parse(xhr.responseText);
-                                        resolve(data);
-                                    } catch (_) { reject(new Error('解析响应失败')); }
-                                } else {
-                                    try {
-                                        const err = JSON.parse(xhr.responseText);
-                                        reject(new Error(err.detail || `HTTP ${xhr.status}`));
-                                    } catch (_) { reject(new Error(`HTTP ${xhr.status}`)); }
-                                }
-                            };
-                            xhr.onerror = () => reject(new Error('网络错误'));
-                            xhr.send(formData);
-                        });
-
-                        const data = await promise;
-                        if (data.status === 'success') {
-                            uploadProgress.value = 100;
-                            uploadStatus.value = '上传完成 ✅';
-                            addToast(`上传成功: ${data.file_name}`, 'success');
-                            await loadGallery();
-                        } else {
-                            throw new Error(data.detail || '上传失败');
-                        }
-                    } catch (e) {
-                        addToast('上传失败: ' + e.message, 'error');
-                        uploadStatus.value = '上传失败';
-                    } finally {
-                        setTimeout(() => {
-                            uploading.value = false;
-                            uploadProgress.value = 0;
-                            uploadStatus.value = '';
-                        }, 600);
                     }
                 }
 
