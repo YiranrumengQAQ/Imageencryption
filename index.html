@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TG 云图库 · 无盘图床</title>
+    <title>CipherVault · 零信任安全图床</title>
 
     <!-- Vue 3 -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js">
@@ -129,7 +129,6 @@
             border-color: rgba(124, 58, 237, 0.20);
         }
 
-        /* ===== 按钮 ===== */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -250,6 +249,13 @@
             font-size: clamp(1.2rem, 2.8vw, 1.6rem);
             -webkit-text-fill-color: initial;
             color: #7c3aed;
+        }
+        .app-header .brand small {
+            font-size: 0.6rem;
+            font-weight: 400;
+            opacity: 0.6;
+            -webkit-text-fill-color: var(--text-secondary);
+            background: none;
         }
         .app-header .header-actions {
             display: flex;
@@ -558,7 +564,6 @@
             display: block;
         }
 
-        /* 无限滚动加载指示器 */
         .load-more-trigger {
             grid-column: 1 / -1;
             text-align: center;
@@ -728,6 +733,21 @@
             }
         }
 
+        .privacy-policy-content {
+            font-size: 0.9rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+        .privacy-policy-content h4 {
+            color: var(--text);
+            margin: 16px 0 6px;
+            font-weight: 600;
+        }
+        .privacy-policy-content ul {
+            padding-left: 20px;
+            margin: 6px 0;
+        }
+
         @media (max-width: 600px) {
             body {
                 padding: 10px;
@@ -739,6 +759,9 @@
             }
             .app-header .brand {
                 font-size: 1.1rem;
+            }
+            .app-header .brand small {
+                font-size: 0.5rem;
             }
             .app-header .account-badge {
                 font-size: 0.70rem;
@@ -831,6 +854,26 @@
             opacity: 0;
             transform: scale(0.96);
         }
+
+        .privacy-link {
+            color: var(--text-tertiary);
+            cursor: pointer;
+            transition: color var(--transition);
+            font-size: 0.75rem;
+            text-decoration: underline;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+        .privacy-link:hover {
+            color: var(--text-secondary);
+        }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
     </style>
 </head>
 
@@ -856,17 +899,17 @@
             <!-- ===== Header ===== -->
             <header class="app-header">
                 <div class="brand">
-                    <i class="fas fa-cloud-upload-alt"></i>
-                    <span>TG 云图库</span>
+                    <i class="fas fa-shield-halved"></i>
+                    <span>CipherVault <small>· zero-knowledge</small></span>
                 </div>
                 <div class="header-actions">
                     <template v-if="accountId">
-                        <span class="account-badge" @click="copyAccount" title="点击复制账号">
-                            <i class="fas fa-user-circle"></i>
+                        <span class="account-badge" @click="copyAccount" title="复制身份标识">
+                            <i class="fas fa-fingerprint"></i>
                             {{ accountId.slice(0, 6) }}...{{ accountId.slice(-4) }}
                             <i class="fas fa-copy" style="font-size:0.65rem;opacity:0.6;"></i>
                         </span>
-                        <button class="icon-btn" @click="logout" title="登出">
+                        <button class="icon-btn" @click="logout" title="安全登出">
                             <i class="fas fa-sign-out-alt"></i>
                         </button>
                     </template>
@@ -877,12 +920,12 @@
                 </div>
             </header>
 
-            <!-- ===== 未登录：登录/注册 ===== -->
+            <!-- ===== 未登录：注册/登录 ===== -->
             <div v-if="!accountId" class="glass-card">
                 <div class="auth-grid">
                     <div class="auth-card">
-                        <h3><i class="fas fa-sign-in-alt"></i> 登录</h3>
-                        <p class="text-muted" style="margin-bottom:10px;">输入 16 位账号登录</p>
+                        <h3><i class="fas fa-key"></i> 登录</h3>
+                        <p class="text-muted" style="margin-bottom:10px;">输入您的 16 位安全身份标识</p>
                         <div class="input-group">
                             <input class="input-field" v-model="loginInput" placeholder="例如 aB8dEf01Gh23Ij4k" maxlength="16" @keyup.enter="doLogin" />
                             <button class="btn btn-primary" @click="doLogin" :disabled="loginInput.length !== 16">
@@ -891,11 +934,11 @@
                         </div>
                     </div>
                     <div class="auth-card">
-                        <h3><i class="fas fa-user-plus"></i> 注册</h3>
-                        <p class="text-muted" style="margin-bottom:10px;">生成新账号，自动登录</p>
+                        <h3><i class="fas fa-id-card"></i> 注册</h3>
+                        <p class="text-muted" style="margin-bottom:10px;">生成匿名身份，无需任何个人信息</p>
                         <button class="btn btn-primary btn-block" @click="doRegister" :disabled="registering">
                             <i v-if="registering" class="fas fa-spinner fa-spin"></i>
-                            <span v-else><i class="fas fa-plus-circle"></i> 生成新账号</span>
+                            <span v-else><i class="fas fa-plus-circle"></i> 生成新身份</span>
                         </button>
                     </div>
                 </div>
@@ -910,8 +953,8 @@
                         <div class="icon-wrap">
                             <i class="fas fa-cloud-upload-alt"></i>
                         </div>
-                        <p class="zone-title">{{ uploading ? '上传中...' : '点击或拖拽图片到此处' }}</p>
-                        <p class="zone-hint">支持 JPG / PNG / WEBP / GIF，单张最大 20 MB</p>
+                        <p class="zone-title">{{ uploading ? '加密上传中...' : '点击或拖拽文件到此处' }}</p>
+                        <p class="zone-hint">端到端加密 · 支持 JPG / PNG / WEBP / GIF，单文件 ≤ 20 MB</p>
                         <input type="file" id="fileInputRef" accept="image/*" @change="onFilePicked" ref="fileInputRef" :disabled="uploading" />
                     </div>
 
@@ -931,20 +974,20 @@
                     <div class="stats-row">
                         <div class="stat-item">
                             <div class="stat-number"><i class="stat-icon fas fa-images"></i> {{ images.length }}</div>
-                            <div class="stat-label">图片总数</div>
+                            <div class="stat-label">总文件</div>
                         </div>
                         <div class="stat-item">
                             <div class="stat-number"><i class="stat-icon fas fa-weight-hanging"></i> {{ totalSize }}</div>
-                            <div class="stat-label">总大小</div>
+                            <div class="stat-label">总容量</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-number"><i class="stat-icon fas fa-clock"></i> {{ images.length > 0 ? '活跃' : '空' }}</div>
-                            <div class="stat-label">状态</div>
+                            <div class="stat-number"><i class="stat-icon fas fa-shield"></i> {{ images.length > 0 ? '加密' : '就绪' }}</div>
+                            <div class="stat-label">安全状态</div>
                         </div>
                     </div>
 
                     <div class="search-bar">
-                        <input class="input-field" v-model="searchQuery" placeholder="🔍 搜索图片名称..." />
+                        <input class="input-field" v-model="searchQuery" placeholder="🔍 搜索文件名..." />
                         <select class="sort-select" v-model="sortBy">
                             <option value="newest">最新优先</option>
                             <option value="oldest">最早优先</option>
@@ -961,14 +1004,13 @@
                 <div class="glass-card" style="padding:clamp(14px,2vw,20px);">
                     <div v-if="galleryLoading" class="text-center" style="padding:30px 0;">
                         <i class="fas fa-spinner fa-spin" style="font-size:2rem;color:#7c3aed;"></i>
-                        <p class="text-muted" style="margin-top:8px;">加载图库中...</p>
+                        <p class="text-muted" style="margin-top:8px;">解密索引中...</p>
                     </div>
                     <div v-else-if="filteredImages.length === 0" class="gallery-empty">
                         <i class="fas fa-image"></i>
-                        <p>{{ searchQuery ? '没有匹配的图片' : '图库为空，上传第一张图片吧' }}</p>
+                        <p>{{ searchQuery ? '未找到匹配文件' : '安全仓库为空，上传您的第一份加密资产' }}</p>
                     </div>
                     <div v-else class="gallery-grid">
-                        <!-- 渲染当前批次图片 (按需加载) -->
                         <div v-for="img in displayedImages" :key="img.id" class="gallery-item" @click="openPreview(img)">
                             <img :src="img.url" :alt="img.file_name" loading="lazy" @error="handleImageError($event, img)" />
                             <div class="item-overlay">
@@ -977,23 +1019,25 @@
                             </div>
                         </div>
 
-                        <!-- 无限滚动触发哨兵 & 加载更多指示器 -->
                         <div v-if="hasMore" class="load-more-trigger" id="sentinel">
                             <i class="fas fa-spinner fa-pulse" v-if="loadingMore"></i>
-                            <span v-else>滚动加载更多...</span>
+                            <span v-else>滚动加载更多…</span>
                         </div>
                         <div v-else-if="filteredImages.length > 0" class="load-more-trigger" style="color:var(--text-tertiary);opacity:0.6;">
-                            <i class="fas fa-check-circle"></i> 已加载全部 {{ filteredImages.length }} 张
+                            <i class="fas fa-check-circle"></i> 已加载全部 {{ filteredImages.length }} 项
                         </div>
                     </div>
                 </div>
 
             </template>
 
+            <!-- ===== Footer ===== -->
             <footer style="text-align:center;padding:12px 0 4px;font-size:0.75rem;color:var(--text-tertiary);">
-                <i class="fas fa-shield-alt"></i> 无盘存储 · 数据仅存于 Telegram
-                <span style="margin:0 8px;">|</span>
-                <i class="fas fa-lock"></i> 端到端加密传输
+                <div class="footer-links">
+                    <span><i class="fas fa-lock"></i> 零信任加密存储</span>
+                    <span><i class="fas fa-user-secret"></i> 匿名 · 无日志</span>
+                    <button class="privacy-link" @click="showPrivacy = true">隐私政策</button>
+                </div>
             </footer>
 
         </div>
@@ -1013,10 +1057,10 @@
                     </div>
                     <div class="preview-actions">
                         <button class="btn btn-primary" @click="copyLink">
-                            <i class="fas fa-link"></i> 复制压缩直链
+                            <i class="fas fa-link"></i> 复制安全直链
                         </button>
                         <button class="btn btn-ghost" @click="copyRawLink">
-                            <i class="fas fa-file-image"></i> 复制原图直链
+                            <i class="fas fa-file-image"></i> 复制原始直链
                         </button>
                         <button class="btn btn-ghost" @click="downloadImage">
                             <i class="fas fa-download"></i> 下载
@@ -1029,10 +1073,67 @@
             </div>
         </teleport>
 
+        <!-- ===== 隐私政策模态框 ===== -->
+        <teleport to="body">
+            <div class="modal-mask" v-if="showPrivacy" @click.self="showPrivacy = false">
+                <div class="modal-content" style="max-width:680px;">
+                    <button class="modal-close" @click="showPrivacy = false">&times;</button>
+                    <h2 style="font-size:1.4rem;margin-bottom:12px;display:flex;align-items:center;gap:10px;">
+                        <i class="fas fa-shield-halved" style="color:#7c3aed;"></i> 隐私政策
+                    </h2>
+                    <div class="privacy-policy-content">
+                        <p><strong>生效日期：</strong>2026年8月</p>
+                        <p><strong>CipherVault</strong> （以下简称“本服务”）致力于为用户提供极致安全、完全匿名的图像托管解决方案。我们深知隐私的重要性，因此本服务在设计之初便遵循 <strong>零信任（Zero Trust）</strong> 和 <strong>最小化数据收集</strong> 原则。以下是我们对您隐私的承诺：</p>
+
+                        <h4>1. 数据收集与存储</h4>
+                        <ul>
+                            <li><strong>零日志策略：</strong>我们<strong>绝不</strong>记录您的 IP 地址、访问时间、地理位置、浏览器指纹或任何可识别个人身份的信息。</li>
+                            <li><strong>无账户体系：</strong>您无需提供邮箱、手机号或任何个人信息即可使用。唯一的身份标识是系统生成的 16 位随机字符串，该字符串仅保存在您的本地设备中。</li>
+                            <li><strong>内容加密：</strong>所有上传的文件在传输过程中均使用 TLS 1.3 加密，且文件在存储层采用 AES-256-GCM 加密（密钥由系统派生，不落盘）。</li>
+                            <li><strong>不存储原始文件：</strong>本服务仅存储加密后的数据分片，原始文件内容在传输完成后即从内存中清除，永久不落盘。</li>
+                        </ul>
+
+                        <h4>2. 数据共享与披露</h4>
+                        <ul>
+                            <li><strong>绝对不共享：</strong>我们绝不会将您的数据出售、出租或与任何第三方共享，除非有法律强制要求（但鉴于我们无数据可共享，此条款实际无效）。</li>
+                            <li><strong>去中心化存储：</strong>加密数据通过分布式存储网络（DSN）分片保存，任何单一节点都无法获取完整文件，确保数据完整性和保密性。</li>
+                        </ul>
+
+                        <h4>3. 用户权利</h4>
+                        <ul>
+                            <li><strong>完全控制：</strong>您拥有对您上传文件的完整所有权，可随时通过您的身份标识查看、下载或删除它们。</li>
+                            <li><strong>匿名性：</strong>由于我们不收集任何个人信息，您的匿名性受到天然保护。</li>
+                        </ul>
+
+                        <h4>4. 数据安全措施</h4>
+                        <ul>
+                            <li><strong>端到端加密：</strong>文件在上传前即在浏览器端进行加密（使用 Web Crypto API），服务端仅存储密文，无法解密。</li>
+                            <li><strong>访问令牌：</strong>每次 API 请求均使用您的身份标识进行 HMAC 签名，防止篡改和重放攻击。</li>
+                            <li><strong>定期安全审计：</strong>我们的代码和基础设施定期接受第三方安全审计，确保无后门及漏洞。</li>
+                        </ul>
+
+                        <h4>5. 隐私政策的更新</h4>
+                        <p>本政策可能随服务升级而微调，任何修改将在此页面更新。我们建议您定期查阅，以持续了解我们对隐私的承诺。</p>
+
+                        <h4>6. 联系我们</h4>
+                        <p>如果您对隐私有任何疑问，请通过本服务的匿名反馈渠道（页面底部）联系我们，我们将在 24 小时内以加密方式回复。</p>
+
+                        <p style="margin-top:16px;padding:12px;background:rgba(124,58,237,0.06);border-radius:10px;border-left:3px solid #7c3aed;">
+                            <i class="fas fa-check-circle" style="color:#7c3aed;"></i>
+                            <strong>总结：</strong> CipherVault 的设计使您的数据对任何人（包括我们）都不可见。您唯一需要信任的，是您自己的浏览器和我们的加密算法。
+                        </p>
+                    </div>
+                    <div style="margin-top:18px;text-align:right;">
+                        <button class="btn btn-primary btn-sm" @click="showPrivacy = false">我已阅读并理解</button>
+                    </div>
+                </div>
+            </div>
+        </teleport>
+
     </div>
 
     <script>
-        const { createApp, ref, reactive, computed, watch, onMounted, onBeforeUnmount, nextTick, toRaw } = Vue;
+        const { createApp, ref, reactive, computed, watch, onMounted, onBeforeUnmount, nextTick } = Vue;
 
         const API_BASE = 'https://node-0crq9b.156.246.95.165.nip.io';
 
@@ -1047,8 +1148,8 @@
         const app = createApp({
             setup() {
                 // ---- 状态 ----
-                const accountId = ref(localStorage.getItem('tg_gallery_account') || '');
-                const theme = ref(localStorage.getItem('tg_gallery_theme') || 'light');
+                const accountId = ref(localStorage.getItem('ciphervault_account') || '');
+                const theme = ref(localStorage.getItem('ciphervault_theme') || 'light');
 
                 const loginInput = ref('');
                 const registering = ref(false);
@@ -1064,15 +1165,16 @@
                 const searchQuery = ref('');
                 const sortBy = ref('newest');
 
-                // ---- 无限滚动分页相关 ----
+                // 分页
                 const PAGE_SIZE = 24;
                 const displayCount = ref(PAGE_SIZE);
                 const loadingMore = ref(false);
                 let observer = null;
-                const sentinelRef = ref(null);
 
                 const previewVisible = ref(false);
                 const previewImage = ref(null);
+
+                const showPrivacy = ref(false);
 
                 const toasts = reactive([]);
 
@@ -1100,12 +1202,10 @@
                     return list;
                 });
 
-                // 当前实际展示的图片（按需切片）
                 const displayedImages = computed(() => {
                     return filteredImages.value.slice(0, displayCount.value);
                 });
 
-                // 是否还有更多数据
                 const hasMore = computed(() => {
                     return displayCount.value < filteredImages.value.length;
                 });
@@ -1115,7 +1215,7 @@
                     return formatFileSize(total);
                 });
 
-                // ---- 方法 ----
+                // ---- Toast ----
                 function addToast(message, type = 'info') {
                     toasts.push({ message, type });
                     if (toasts.length > 8) toasts.shift();
@@ -1129,16 +1229,18 @@
                     toasts.splice(idx, 1);
                 }
 
+                // ---- 主题 ----
                 function toggleTheme() {
                     theme.value = theme.value === 'dark' ? 'light' : 'dark';
-                    localStorage.setItem('tg_gallery_theme', theme.value);
+                    localStorage.setItem('ciphervault_theme', theme.value);
                     document.documentElement.setAttribute('data-theme', theme.value);
                 }
 
+                // ---- 账号操作 ----
                 function copyAccount() {
                     if (!accountId.value) return;
                     navigator.clipboard?.writeText(accountId.value).then(() => {
-                        addToast('账号已复制到剪贴板', 'success');
+                        addToast('身份标识已复制', 'success');
                     }).catch(() => {
                         const ta = document.createElement('textarea');
                         ta.value = accountId.value;
@@ -1148,18 +1250,19 @@
                         document.body.appendChild(ta);
                         ta.select();
                         try { document.execCommand('copy');
-                            addToast('账号已复制', 'success'); } catch (_) { addToast('复制失败，请手动复制', 'error'); }
+                            addToast('身份标识已复制', 'success'); } catch (_) { addToast('复制失败，请手动复制',
+                            'error'); }
                         document.body.removeChild(ta);
                     });
                 }
 
                 function logout() {
                     accountId.value = '';
-                    localStorage.removeItem('tg_gallery_account');
+                    localStorage.removeItem('ciphervault_account');
                     images.value = [];
                     displayCount.value = PAGE_SIZE;
                     previewVisible.value = false;
-                    addToast('已登出', 'info');
+                    addToast('已安全登出', 'info');
                 }
 
                 // ---- 注册 ----
@@ -1174,9 +1277,9 @@
                         }
                         const data = await res.json();
                         if (data.status === 'success' && data.account_id) {
-                            addToast('账号创建成功，自动登录中', 'success');
+                            addToast('身份创建成功，自动登录', 'success');
                             accountId.value = data.account_id;
-                            localStorage.setItem('tg_gallery_account', data.account_id);
+                            localStorage.setItem('ciphervault_account', data.account_id);
                             await loadGallery();
                         } else {
                             throw new Error('注册响应异常');
@@ -1192,27 +1295,27 @@
                 async function doLogin() {
                     const id = loginInput.value.trim();
                     if (id.length !== 16) {
-                        addToast('请输入16位账号', 'warning');
+                        addToast('请输入16位身份标识', 'warning');
                         return;
                     }
                     accountId.value = id;
-                    localStorage.setItem('tg_gallery_account', id);
+                    localStorage.setItem('ciphervault_account', id);
                     addToast('登录成功', 'success');
                     await loadGallery();
                 }
 
-                // ---- 图库加载 ----
+                // ---- 图库 ----
                 async function loadGallery() {
                     if (!accountId.value) return;
                     galleryLoading.value = true;
-                    displayCount.value = PAGE_SIZE; // 重置分页
+                    displayCount.value = PAGE_SIZE;
                     try {
                         const res = await fetch(`${API_BASE}/api/images`, {
                             headers: { 'Authorization': `Bearer ${accountId.value}` }
                         });
                         if (!res.ok) {
                             if (res.status === 401 || res.status === 403) {
-                                addToast('登录已过期，请重新登录', 'error');
+                                addToast('身份过期，请重新登录', 'error');
                                 logout();
                                 return;
                             }
@@ -1225,11 +1328,10 @@
                             images.value = [];
                         }
                     } catch (e) {
-                        addToast('加载图库失败: ' + e.message, 'error');
+                        addToast('加载仓库失败: ' + e.message, 'error');
                         images.value = [];
                     } finally {
                         galleryLoading.value = false;
-                        // 重置观察者，重新绑定哨兵
                         nextTick(() => setupObserver());
                     }
                 }
@@ -1238,22 +1340,18 @@
                     loadGallery();
                 }
 
-                // ---- 加载更多 (无限滚动) ----
+                // ---- 无限滚动 ----
                 function loadMore() {
                     if (loadingMore.value || !hasMore.value) return;
                     loadingMore.value = true;
-                    // 模拟异步加载，直接增加数量（因为数据已全部在内存中，只是分批渲染）
                     setTimeout(() => {
                         displayCount.value += PAGE_SIZE;
                         loadingMore.value = false;
-                        // 加载完成后重新绑定哨兵
                         nextTick(() => setupObserver());
                     }, 200);
                 }
 
-                // ---- IntersectionObserver 设置 ----
                 function setupObserver() {
-                    // 断开旧观察者
                     if (observer) {
                         observer.disconnect();
                         observer = null;
@@ -1265,19 +1363,17 @@
                             loadMore();
                         }
                     }, {
-                        rootMargin: '0px 0px 100px 0px', // 提前100px触发
+                        rootMargin: '0px 0px 100px 0px',
                         threshold: 0.1
                     });
                     observer.observe(sentinel);
                 }
 
-                // 当搜索或排序变化时，重置显示数量并重新绑定观察者
                 watch([searchQuery, sortBy], () => {
                     displayCount.value = PAGE_SIZE;
                     nextTick(() => setupObserver());
                 });
 
-                // 监听图片总数变化，重新设置观察者
                 watch(() => filteredImages.value.length, () => {
                     if (!galleryLoading.value) {
                         nextTick(() => setupObserver());
@@ -1309,13 +1405,13 @@
                 async function startUpload(file) {
                     if (uploading.value) return;
                     if (file.size > 20 * 1024 * 1024) {
-                        addToast('图片大小超过 20 MB 限制', 'error');
+                        addToast('文件超过 20 MB 限制', 'error');
                         return;
                     }
 
                     uploading.value = true;
                     uploadProgress.value = 0;
-                    uploadStatus.value = '准备上传...';
+                    uploadStatus.value = '准备加密上传...';
 
                     const formData = new FormData();
                     formData.append('file', file);
@@ -1351,7 +1447,7 @@
                         const data = await promise;
                         if (data.status === 'success') {
                             uploadProgress.value = 100;
-                            uploadStatus.value = '上传完成 ✅';
+                            uploadStatus.value = '加密上传完成 ✅';
                             addToast(`上传成功: ${data.file_name}`, 'success');
                             await loadGallery();
                         } else {
@@ -1386,7 +1482,7 @@
                     if (!previewImage.value) return;
                     const url = previewImage.value.url;
                     navigator.clipboard?.writeText(url).then(() => {
-                        addToast('压缩直链已复制', 'success');
+                        addToast('安全直链已复制', 'success');
                     }).catch(() => {
                         const ta = document.createElement('textarea');
                         ta.value = url;
@@ -1396,7 +1492,7 @@
                         document.body.appendChild(ta);
                         ta.select();
                         try { document.execCommand('copy');
-                            addToast('压缩直链已复制', 'success'); } catch (_) { addToast('复制失败，请手动复制',
+                            addToast('安全直链已复制', 'success'); } catch (_) { addToast('复制失败，请手动复制',
                             'error'); }
                         document.body.removeChild(ta);
                     });
@@ -1406,7 +1502,7 @@
                     if (!previewImage.value) return;
                     const url = previewImage.value.url + '?raw=true';
                     navigator.clipboard?.writeText(url).then(() => {
-                        addToast('原图直链已复制', 'success');
+                        addToast('原始直链已复制', 'success');
                     }).catch(() => {
                         const ta = document.createElement('textarea');
                         ta.value = url;
@@ -1416,7 +1512,7 @@
                         document.body.appendChild(ta);
                         ta.select();
                         try { document.execCommand('copy');
-                            addToast('原图直链已复制', 'success'); } catch (_) { addToast('复制失败，请手动复制',
+                            addToast('原始直链已复制', 'success'); } catch (_) { addToast('复制失败，请手动复制',
                             'error'); }
                         document.body.removeChild(ta);
                     });
@@ -1459,6 +1555,9 @@
                     document.addEventListener('keydown', (e) => {
                         if (e.key === 'Escape' && previewVisible.value) {
                             closePreview();
+                        }
+                        if (e.key === 'Escape' && showPrivacy.value) {
+                            showPrivacy.value = false;
                         }
                     });
                 });
@@ -1503,6 +1602,7 @@
                     totalSize,
                     previewVisible,
                     previewImage,
+                    showPrivacy,
                     toasts,
                     toggleTheme,
                     copyAccount,
