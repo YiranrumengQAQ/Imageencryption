@@ -1,2044 +1,1622 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#fdfcff" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#1c1b1f" media="(prefers-color-scheme: dark)">
-    <title>元数据清除器 · Material 3</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TG 云图库 · 无盘图床</title>
+
+    <!-- Vue 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js">
+    </script>
+    <!-- Font Awesome 6 (免费图标库) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
     <style>
+        /* ===== CSS 变量 / 主题系统 ===== */
         :root {
-            --m3-primary: #6750a4;
-            --m3-on-primary: #ffffff;
-            --m3-primary-container: #eaddff;
-            --m3-on-primary-container: #21005e;
-            --m3-secondary: #625b71;
-            --m3-on-secondary: #ffffff;
-            --m3-secondary-container: #e8def8;
-            --m3-on-secondary-container: #1d192b;
-            --m3-tertiary: #7d5260;
-            --m3-on-tertiary: #ffffff;
-            --m3-tertiary-container: #ffd8e4;
-            --m3-on-tertiary-container: #31111d;
-            --m3-error: #ba1a1a;
-            --m3-on-error: #ffffff;
-            --m3-error-container: #ffdad6;
-            --m3-on-error-container: #410002;
-            --m3-surface: #fdfcff;
-            --m3-on-surface: #1c1b1f;
-            --m3-surface-variant: #e7e0ec;
-            --m3-on-surface-variant: #49454f;
-            --m3-surface-container-lowest: #ffffff;
-            --m3-surface-container-low: #f7f2fa;
-            --m3-surface-container: #f3edf7;
-            --m3-surface-container-high: #ece6f0;
-            --m3-surface-container-highest: #e6e0e9;
-            --m3-outline: #79747e;
-            --m3-outline-variant: #cac4d0;
-            --m3-shadow: rgba(0, 0, 0, 0.15);
-            --m3-shadow-strong: rgba(0, 0, 0, 0.25);
-            --m3-radius-xl: 28px;
-            --m3-radius-lg: 20px;
-            --m3-radius-md: 16px;
-            --m3-radius-sm: 12px;
-            --m3-radius-xs: 8px;
-            --m3-transition: cubic-bezier(0.2, 0, 0, 1);
-            --m3-state-hover-opacity: 0.08;
-            --m3-state-focus-opacity: 0.12;
-            --m3-state-pressed-opacity: 0.16;
-            --m3-elevation-1: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 3px 1px rgba(0, 0, 0, 0.15);
-            --m3-elevation-2: 0 1px 2px rgba(0, 0, 0, 0.3), 0 2px 6px 2px rgba(0, 0, 0, 0.15);
-            --m3-elevation-3: 0 4px 8px 3px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.3);
+            --bg: #f1f5f9;
+            --surface: rgba(255, 255, 255, 0.70);
+            --surface-solid: #ffffff;
+            --border: rgba(148, 163, 184, 0.24);
+            --text: #1e293b;
+            --text-secondary: #64748b;
+            --text-tertiary: #94a3b8;
+            --accent-1: #7c3aed;
+            --accent-2: #6366f1;
+            --accent-3: #3b82f6;
+            --gradient-accent: linear-gradient(135deg, #7c3aed 0%, #6366f1 35%, #3b82f6 100%);
+            --gradient-glow: linear-gradient(135deg, rgba(124, 58, 237, 0.12) 0%, rgba(99, 102, 241, 0.08) 40%, rgba(59, 130, 246, 0.14) 100%);
+            --gradient-highlight: linear-gradient(160deg, #8b5cf6 0%, #6366f1 30%, #60a5fa 70%, #818cf8 100%);
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.04);
+            --radius: 16px;
+            --radius-lg: 22px;
+            --radius-xl: 28px;
+            --font: 'Inter', 'SF Pro Display', 'PingFang SC', 'Microsoft YaHei', system-ui, -apple-system, sans-serif;
+            --transition: 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 0.42s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
         [data-theme="dark"] {
-            --m3-primary: #d0bcff;
-            --m3-on-primary: #381e72;
-            --m3-primary-container: #4f378b;
-            --m3-on-primary-container: #eaddff;
-            --m3-secondary: #ccc2dc;
-            --m3-on-secondary: #332d41;
-            --m3-secondary-container: #4a4458;
-            --m3-on-secondary-container: #e8def8;
-            --m3-tertiary: #efb8c8;
-            --m3-on-tertiary: #492532;
-            --m3-tertiary-container: #633b48;
-            --m3-on-tertiary-container: #ffd8e4;
-            --m3-error: #f2b8b5;
-            --m3-on-error: #601410;
-            --m3-error-container: #8c1d18;
-            --m3-on-error-container: #f9dedc;
-            --m3-surface: #1c1b1f;
-            --m3-on-surface: #e6e1e5;
-            --m3-surface-variant: #49454f;
-            --m3-on-surface-variant: #cac4d0;
-            --m3-surface-container-lowest: #0f0d13;
-            --m3-surface-container-low: #1d1b20;
-            --m3-surface-container: #211f26;
-            --m3-surface-container-high: #2b2930;
-            --m3-surface-container-highest: #36343b;
-            --m3-outline: #938f99;
-            --m3-outline-variant: #49454f;
-            --m3-shadow: rgba(0, 0, 0, 0.45);
-            --m3-shadow-strong: rgba(0, 0, 0, 0.6);
+            --bg: #0b0f1a;
+            --surface: rgba(22, 27, 44, 0.72);
+            --surface-solid: #161b2c;
+            --border: rgba(255, 255, 255, 0.10);
+            --text: #e8ecf4;
+            --text-secondary: #94a3b8;
+            --text-tertiary: #5c6b80;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.35);
+            --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.45);
         }
 
-        *,
-        *::before,
-        *::after {
-            box-sizing: border-box;
+        /* ===== 全局重置 ===== */
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
-
         html {
             font-size: 16px;
-            -webkit-text-size-adjust: 100%;
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Roboto', 'Segoe UI', system-ui, -apple-system, sans-serif;
-            min-height: 100vh;
-            min-height: 100dvh;
-            background: var(--m3-surface);
-            color: var(--m3-on-surface);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.3s var(--m3-transition), color 0.3s var(--m3-transition);
+            -webkit-tap-highlight-color: transparent;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            padding: 16px;
+        }
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            transition: background var(--transition-slow), color var(--transition-slow);
+            line-height: 1.5;
+            overflow-x: hidden;
+            padding: clamp(12px, 3vw, 28px);
+            padding-bottom: clamp(60px, 8vh, 100px);
+            background-image: radial-gradient(ellipse at 30% 10%, rgba(124, 58, 237, 0.06) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 85%, rgba(59, 130, 246, 0.05) 0%, transparent 55%),
+                radial-gradient(ellipse at 50% 50%, rgba(99, 102, 241, 0.03) 0%, transparent 70%);
+            background-attachment: fixed;
+        }
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(124, 58, 237, 0.25);
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(124, 58, 237, 0.45);
         }
 
-        .app-container {
-            width: 100%;
-            max-width: 800px;
+        /* ===== 工具类 ===== */
+        .app-wrapper {
+            max-width: 820px;
             margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: clamp(14px, 2.5vw, 22px);
         }
 
-        .m3-card {
-            background: var(--m3-surface-container);
-            border-radius: var(--m3-radius-lg);
-            box-shadow: var(--m3-elevation-2);
-            transition: background 0.3s var(--m3-transition), box-shadow 0.3s var(--m3-transition);
+        /* ===== 玻璃卡片 ===== */
+        .glass-card {
+            background: var(--surface);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-md);
+            padding: clamp(18px, 3.5vw, 30px);
+            transition: all var(--transition-slow);
+            position: relative;
             overflow: hidden;
         }
-        .m3-card-outlined {
-            background: var(--m3-surface-container-low);
-            border: 1px solid var(--m3-outline-variant);
-            border-radius: var(--m3-radius-lg);
-            transition: background 0.3s var(--m3-transition), border-color 0.3s var(--m3-transition);
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-accent);
+            opacity: 0.55;
+            border-radius: 3px 3px 0 0;
+            pointer-events: none;
+        }
+        .glass-card:hover {
+            box-shadow: var(--shadow-lg);
+            border-color: rgba(124, 58, 237, 0.20);
         }
 
+        /* ===== 按钮 ===== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            padding: 11px 22px;
+            border-radius: 24px;
+            font-size: 0.92rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all var(--transition);
+            white-space: nowrap;
+            font-family: var(--font);
+            letter-spacing: 0.01em;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .btn:active {
+            transform: scale(0.97);
+        }
+        .btn-primary {
+            background: var(--gradient-accent);
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(124, 58, 237, 0.30);
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.20) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        .btn-primary:hover:not(:disabled) {
+            box-shadow: 0 6px 22px rgba(124, 58, 237, 0.40);
+            transform: translateY(-2px);
+        }
+        .btn-primary:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+            filter: grayscale(30%);
+            pointer-events: none;
+        }
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+        }
+        .btn-ghost:hover {
+            border-color: #8b5cf6;
+            color: #7c3aed;
+            background: rgba(124, 58, 237, 0.04);
+        }
+        .btn-sm {
+            padding: 7px 15px;
+            font-size: 0.80rem;
+            border-radius: 18px;
+        }
+        .btn-block {
+            width: 100%;
+        }
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.12);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.25);
+        }
+        .btn-danger:hover {
+            background: rgba(239, 68, 68, 0.20);
+            border-color: #ef4444;
+        }
+
+        /* ===== 输入框 ===== */
+        .input-field {
+            width: 100%;
+            padding: 11px 16px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            background: var(--surface-solid);
+            color: var(--text);
+            font-size: 0.92rem;
+            font-family: var(--font);
+            outline: none;
+            transition: all var(--transition);
+            min-width: 0;
+        }
+        .input-field:focus {
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.08);
+        }
+        .input-field::placeholder {
+            color: var(--text-tertiary);
+        }
+
+        /* ===== Header ===== */
         .app-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 16px 20px;
-            gap: 12px;
             flex-wrap: wrap;
-            background: var(--m3-surface-container);
-            border-radius: var(--m3-radius-lg);
-            margin-bottom: 16px;
-            box-shadow: var(--m3-elevation-1);
+            gap: 10px;
+            padding: clamp(14px, 2vw, 20px) 0;
         }
-        .app-logo {
+        .app-header .brand {
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-weight: 500;
-            font-size: 1.25rem;
-            letter-spacing: -0.01em;
-            color: var(--m3-on-surface);
-            user-select: none;
-        }
-        .app-logo svg {
-            width: 32px;
-            height: 32px;
-            fill: var(--m3-primary);
-        }
-        .logo-text {
+            gap: 10px;
+            font-size: clamp(1.2rem, 2.8vw, 1.6rem);
             font-weight: 700;
-            font-size: 1.3rem;
-            background: linear-gradient(135deg, var(--m3-primary), var(--m3-tertiary));
+            letter-spacing: -0.02em;
+            background: var(--gradient-highlight);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        .header-actions {
+        .app-header .brand i {
+            font-size: clamp(1.2rem, 2.8vw, 1.6rem);
+            -webkit-text-fill-color: initial;
+            color: #7c3aed;
+        }
+        .app-header .header-actions {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             flex-wrap: wrap;
         }
-        .m3-icon-btn {
-            display: inline-flex;
+        .app-header .account-badge {
+            display: flex;
             align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
+            gap: 6px;
+            background: rgba(124, 58, 237, 0.08);
+            padding: 5px 12px 5px 14px;
+            border-radius: 20px;
+            border: 1px solid rgba(124, 58, 237, 0.15);
+            font-size: 0.80rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all var(--transition);
+            font-family: var(--font-mono, monospace);
+        }
+        .app-header .account-badge:hover {
+            background: rgba(124, 58, 237, 0.14);
+        }
+        .app-header .account-badge i {
+            color: #7c3aed;
+            font-size: 0.75rem;
+        }
+        .icon-btn {
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             border: none;
             background: transparent;
             cursor: pointer;
-            color: var(--m3-on-surface-variant);
-            transition: background 0.2s var(--m3-transition), color 0.2s var(--m3-transition);
-            position: relative;
-            -webkit-tap-highlight-color: transparent;
-        }
-        .m3-icon-btn:hover {
-            background: rgba(103, 80, 164, var(--m3-state-hover-opacity));
-        }
-        .m3-icon-btn:active {
-            background: rgba(103, 80, 164, var(--m3-state-pressed-opacity));
-        }
-        .m3-icon-btn svg {
-            width: 22px;
-            height: 22px;
-            fill: currentColor;
-        }
-        .m3-chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.78rem;
-            font-weight: 600;
-            letter-spacing: 0.03em;
-            text-transform: uppercase;
-            background: var(--m3-secondary-container);
-            color: var(--m3-on-secondary-container);
-            user-select: none;
-            transition: background 0.3s var(--m3-transition), color 0.3s var(--m3-transition);
-        }
-        .m3-chip svg {
-            width: 14px;
-            height: 14px;
-            fill: currentColor;
-        }
-
-        .m3-tabs {
-            display: flex;
-            gap: 4px;
-            padding: 8px 12px;
-            background: var(--m3-surface-container-low);
-            border-radius: var(--m3-radius-md);
-            margin-bottom: 16px;
-            overflow-x: auto;
-            scrollbar-width: none;
-            -webkit-overflow-scrolling: touch;
-        }
-        .m3-tabs::-webkit-scrollbar {
-            display: none;
-        }
-        .m3-tab {
-            flex: 1;
-            min-width: fit-content;
+            color: var(--text-secondary);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            padding: 12px 16px;
-            border-radius: var(--m3-radius-md);
-            border: none;
-            background: transparent;
-            cursor: pointer;
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: var(--m3-on-surface-variant);
-            transition: all 0.25s var(--m3-transition);
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-            position: relative;
-        }
-        .m3-tab svg {
-            width: 20px;
-            height: 20px;
-            fill: currentColor;
+            transition: all var(--transition);
+            font-size: 1.05rem;
             flex-shrink: 0;
         }
-        .m3-tab:hover {
-            background: rgba(103, 80, 164, var(--m3-state-hover-opacity));
-            color: var(--m3-on-surface);
-        }
-        .m3-tab.active {
-            background: var(--m3-primary-container);
-            color: var(--m3-on-primary-container);
-            font-weight: 600;
-        }
-        .m3-tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: 4px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 24px;
-            height: 3px;
-            border-radius: 3px;
-            background: var(--m3-primary);
+        .icon-btn:hover {
+            background: rgba(124, 58, 237, 0.08);
+            color: #7c3aed;
         }
 
-        .m3-panel {
-            display: none;
-            animation: panelFade 0.35s var(--m3-transition) forwards;
-        }
-        .m3-panel.active {
-            display: block;
-        }
-        @keyframes panelFade {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .panel-content {
-            padding: 24px 20px;
-            background: var(--m3-surface-container);
-            border-radius: var(--m3-radius-lg);
-            box-shadow: var(--m3-elevation-1);
-        }
-        @media (min-width: 600px) {
-            .panel-content { padding: 28px 24px; }
-        }
-
-        .upload-zone {
-            border: 2px dashed var(--m3-outline-variant);
-            border-radius: var(--m3-radius-md);
-            padding: 32px 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            cursor: pointer;
-            transition: all 0.3s var(--m3-transition);
-            position: relative;
-            overflow: hidden;
-            background: var(--m3-surface-container-low);
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-            text-align: center;
-        }
-        .upload-zone.dragover {
-            border-color: var(--m3-primary);
-            background: var(--m3-primary-container);
-            opacity: 0.9;
-        }
-        .upload-zone:active { transform: scale(0.98); }
-        .upload-zone .upload-icon {
-            width: 48px;
-            height: 48px;
-            fill: var(--m3-primary);
-            transition: transform 0.3s var(--m3-transition);
-        }
-        .upload-zone:hover .upload-icon { transform: translateY(-4px); }
-        .upload-zone .upload-title {
-            font-weight: 500;
-            font-size: 1.05rem;
-            color: var(--m3-on-surface);
-        }
-        .upload-zone .upload-subtitle {
-            font-size: 0.82rem;
-            color: var(--m3-on-surface-variant);
-        }
-        .upload-zone .upload-formats {
-            font-size: 0.75rem;
-            color: var(--m3-outline);
-        }
-        .upload-zone input[type="file"] {
-            position: absolute;
-            inset: 0;
-            opacity: 0;
-            cursor: pointer;
-            width: 100%;
-            height: 100%;
-        }
-
-        .preview-thumb {
-            max-width: 180px;
-            max-height: 140px;
-            border-radius: var(--m3-radius-sm);
-            object-fit: contain;
-            margin: 12px auto 0;
-            box-shadow: var(--m3-elevation-1);
-            display: block;
-            transition: all 0.3s var(--m3-transition);
-        }
-        .preview-thumb.hidden { display: none; }
-
-        .progress-container {
-            margin-top: 16px;
-            display: none;
-        }
-        .progress-container.visible { display: block; }
-        .progress-label {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-            font-size: 0.82rem;
-            font-weight: 500;
-            color: var(--m3-on-surface-variant);
-        }
-        .progress-percent {
-            font-weight: 700;
-            color: var(--m3-primary);
-            font-variant-numeric: tabular-nums;
-        }
-        .progress-track {
-            width: 100%;
-            height: 8px;
-            border-radius: 4px;
-            background: var(--m3-surface-variant);
-            overflow: hidden;
-        }
-        .progress-fill {
-            height: 100%;
-            border-radius: 4px;
-            background: var(--m3-primary);
-            transition: width 0.4s var(--m3-transition);
-            width: 0%;
-        }
-
-        .result-section {
-            margin-top: 16px;
-            display: none;
-        }
-        .result-section.visible { display: block; }
-        .result-box {
-            padding: 16px;
-            border-radius: var(--m3-radius-md);
-            background: var(--m3-surface-container-low);
-            border: 1px solid var(--m3-outline-variant);
-        }
-        .result-code {
-            font-size: 1.8rem;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            text-align: center;
-            padding: 8px 0;
-            color: var(--m3-primary);
-            user-select: all;
-            font-variant-numeric: tabular-nums;
-        }
-        .result-info {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            justify-content: center;
-            margin-top: 10px;
-            font-size: 0.8rem;
-            color: var(--m3-on-surface-variant);
-        }
-        .result-info .info-pill {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 4px 12px;
-            border-radius: 16px;
-            background: var(--m3-secondary-container);
-            color: var(--m3-on-secondary-container);
-            font-weight: 500;
-        }
-        .result-info .info-pill svg {
-            width: 14px;
-            height: 14px;
-            fill: currentColor;
-        }
-        .result-actions {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-            margin-top: 12px;
-            flex-wrap: wrap;
-        }
-
-        .m3-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 20px;
-            border-radius: var(--m3-radius-sm);
-            border: none;
-            cursor: pointer;
-            font-size: 0.85rem;
-            font-weight: 600;
-            font-family: inherit;
-            letter-spacing: 0.01em;
-            transition: all 0.25s var(--m3-transition);
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-            position: relative;
-        }
-        .m3-btn svg {
-            width: 18px;
-            height: 18px;
-            fill: currentColor;
-        }
-        .m3-btn-filled {
-            background: var(--m3-primary);
-            color: var(--m3-on-primary);
-            box-shadow: var(--m3-elevation-1);
-        }
-        .m3-btn-filled:hover { box-shadow: var(--m3-elevation-2); filter: brightness(1.05); }
-        .m3-btn-filled:active { box-shadow: none; filter: brightness(0.95); }
-        .m3-btn-tonal {
-            background: var(--m3-secondary-container);
-            color: var(--m3-on-secondary-container);
-        }
-        .m3-btn-tonal:hover { background: var(--m3-secondary-container); filter: brightness(0.95); box-shadow: var(--m3-elevation-1); }
-        .m3-btn-text {
-            background: transparent;
-            color: var(--m3-primary);
-            padding: 10px 12px;
-        }
-        .m3-btn-text:hover { background: rgba(103, 80, 164, var(--m3-state-hover-opacity)); }
-        .m3-btn-error {
-            background: var(--m3-error-container);
-            color: var(--m3-on-error-container);
-        }
-        .m3-btn:disabled { opacity: 0.5; pointer-events: none; }
-
-        .m3-text-field {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            flex: 1;
-            min-width: 140px;
-        }
-        .m3-text-field input {
-            padding: 14px 16px;
-            border-radius: var(--m3-radius-sm);
-            border: 1px solid var(--m3-outline-variant);
-            background: var(--m3-surface-container-lowest);
-            font-size: 0.95rem;
-            font-weight: 500;
-            letter-spacing: 0.06em;
-            color: var(--m3-on-surface);
-            transition: all 0.25s var(--m3-transition);
-            outline: none;
-            font-family: inherit;
-        }
-        .m3-text-field input:focus {
-            border-color: var(--m3-primary);
-            box-shadow: 0 0 0 2px rgba(103, 80, 164, 0.25);
-        }
-        .m3-text-field input::placeholder {
-            color: var(--m3-outline);
-            font-weight: 400;
-            letter-spacing: 0.02em;
-        }
-        .input-row {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
-        .metadata-section {
-            margin-top: 16px;
-            border-radius: var(--m3-radius-md);
-            border: 1px solid var(--m3-outline-variant);
-            background: var(--m3-surface-container-low);
-            overflow: hidden;
-        }
-        .metadata-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 14px 16px;
-            cursor: pointer;
-            user-select: none;
-            transition: background 0.2s var(--m3-transition);
-            background: var(--m3-surface-container);
-        }
-        .metadata-header:hover { background: var(--m3-surface-container-high); }
-        .metadata-header .m3-chip { margin-left: 8px; }
-        .metadata-toggle {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 500;
-            font-size: 0.9rem;
-            color: var(--m3-on-surface);
-        }
-        .metadata-toggle svg {
-            width: 20px;
-            height: 20px;
-            fill: var(--m3-primary);
-            transition: transform 0.3s var(--m3-transition);
-        }
-        .metadata-toggle svg.collapsed { transform: rotate(-90deg); }
-        .metadata-body {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s var(--m3-transition);
-        }
-        .metadata-body.expanded {
-            max-height: 600px;
-            overflow-y: auto;
-        }
-        .metadata-content {
-            padding: 12px 16px 16px;
+        /* ===== 登录/注册卡片 ===== */
+        .auth-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media (max-width: 640px) {
+            .auth-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .auth-card {
+            padding: 20px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.03);
+        }
+        .auth-card h3 {
+            font-size: 1.05rem;
+            font-weight: 650;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
             gap: 8px;
         }
-        .metadata-item {
+        .auth-card h3 i {
+            color: #7c3aed;
+        }
+        .auth-card .input-group {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .auth-card .input-group .input-field {
+            flex: 1;
+        }
+
+        /* ===== 状态横幅 ===== */
+        .status-banner {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 18px;
+            border-radius: var(--radius);
+            margin-bottom: 4px;
+            font-size: 0.90rem;
+            border: 1px solid var(--border);
+        }
+        .status-banner.warning {
+            background: rgba(251, 191, 36, 0.08);
+            border-color: rgba(251, 191, 36, 0.25);
+            color: #b45309;
+        }
+        .status-banner.success {
+            background: rgba(34, 197, 94, 0.06);
+            border-color: rgba(34, 197, 94, 0.20);
+            color: #16a34a;
+        }
+        .status-banner.info {
+            background: rgba(59, 130, 246, 0.06);
+            border-color: rgba(59, 130, 246, 0.20);
+            color: #2563eb;
+        }
+        .status-banner i {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        .status-banner .spacer {
+            flex: 1;
+        }
+        .status-banner .btn-sm {
+            flex-shrink: 0;
+        }
+
+        /* ===== 上传区域 ===== */
+        .upload-zone {
+            border: 2px dashed var(--border);
+            border-radius: var(--radius-lg);
+            padding: clamp(24px, 4vw, 40px) clamp(14px, 2.5vw, 24px);
+            text-align: center;
+            cursor: pointer;
+            transition: all var(--transition);
+            background: rgba(124, 58, 237, 0.015);
+            position: relative;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .upload-zone:hover,
+        .upload-zone.drag-over {
+            border-color: #8b5cf6;
+            background: rgba(124, 58, 237, 0.05);
+            transform: translateY(-1px);
+        }
+        .upload-zone.drag-over {
+            border-style: solid;
+            background: rgba(124, 58, 237, 0.08);
+            box-shadow: 0 0 0 8px rgba(124, 58, 237, 0.04);
+        }
+        .upload-zone .icon-wrap {
+            width: 56px;
+            height: 56px;
+            margin: 0 auto 12px;
+            border-radius: 50%;
+            background: var(--gradient-glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform var(--transition);
+            font-size: 1.6rem;
+            color: #7c3aed;
+        }
+        .upload-zone:hover .icon-wrap {
+            transform: scale(1.06);
+        }
+        .upload-zone .zone-title {
+            font-weight: 600;
+            font-size: 1.0rem;
+            color: var(--text);
+            margin-bottom: 2px;
+        }
+        .upload-zone .zone-hint {
+            font-size: 0.82rem;
+            color: var(--text-tertiary);
+        }
+        #fileInputRef {
+            display: none;
+        }
+
+        /* ===== 进度条 ===== */
+        .progress-wrap {
+            margin-top: 14px;
             display: flex;
             flex-direction: column;
-            gap: 2px;
-            padding: 8px 12px;
-            border-radius: var(--m3-radius-xs);
-            background: var(--m3-surface-container);
-            border: 1px solid var(--m3-outline-variant);
+            gap: 6px;
         }
-        .metadata-item .meta-label {
-            font-size: 0.7rem;
-            font-weight: 500;
-            color: var(--m3-on-surface-variant);
+        .progress-bar-outer {
+            height: 5px;
+            background: var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .progress-bar-inner {
+            height: 100%;
+            background: var(--gradient-accent);
+            border-radius: 8px;
+            transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            min-width: 0;
+        }
+        .progress-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.80rem;
+            color: var(--text-secondary);
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        /* ===== 统计卡片 ===== */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px;
+            margin: 6px 0 2px;
+        }
+        .stat-item {
+            background: rgba(124, 58, 237, 0.04);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 12px 14px;
+            text-align: center;
+            transition: all var(--transition);
+        }
+        .stat-item:hover {
+            border-color: rgba(124, 58, 237, 0.25);
+        }
+        .stat-item .stat-number {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1.2;
+        }
+        .stat-item .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
             text-transform: uppercase;
             letter-spacing: 0.04em;
+            margin-top: 2px;
         }
-        .metadata-item .meta-value {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--m3-on-surface);
-            word-break: break-all;
-        }
-        .metadata-empty {
-            text-align: center;
-            padding: 24px;
-            color: var(--m3-outline);
-            font-size: 0.85rem;
+        .stat-item .stat-icon {
+            color: #7c3aed;
+            margin-right: 4px;
+            font-size: 0.9rem;
         }
 
+        /* ===== 搜索栏 ===== */
+        .search-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0 4px;
+            flex-wrap: wrap;
+        }
+        .search-bar .input-field {
+            flex: 1;
+            min-width: 140px;
+            padding: 9px 14px;
+        }
+        .search-bar .sort-select {
+            padding: 9px 14px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            background: var(--surface-solid);
+            color: var(--text);
+            font-size: 0.85rem;
+            outline: none;
+            cursor: pointer;
+            transition: all var(--transition);
+            font-family: var(--font);
+        }
+        .search-bar .sort-select:focus {
+            border-color: #8b5cf6;
+        }
+
+        /* ===== 图库网格 ===== */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 14px;
+            margin-top: 12px;
+        }
+        @media (max-width: 480px) {
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+                gap: 10px;
+            }
+        }
+        .gallery-item {
+            position: relative;
+            border-radius: var(--radius);
+            overflow: hidden;
+            aspect-ratio: 1 / 1;
+            background: var(--border);
+            cursor: pointer;
+            transition: all var(--transition);
+            border: 1px solid var(--border);
+        }
+        .gallery-item:hover {
+            transform: scale(1.02);
+            border-color: rgba(124, 58, 237, 0.30);
+            box-shadow: var(--shadow-md);
+            z-index: 2;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform var(--transition);
+        }
+        .gallery-item:hover img {
+            transform: scale(1.04);
+        }
+        .gallery-item .item-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 10px 12px;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.60));
+            color: #fff;
+            font-size: 0.75rem;
+            opacity: 0;
+            transition: opacity var(--transition);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .gallery-item:hover .item-overlay {
+            opacity: 1;
+        }
+        .gallery-item .item-overlay .name {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 70%;
+        }
+        .gallery-item .item-overlay .size {
+            font-size: 0.70rem;
+            opacity: 0.8;
+        }
+        .gallery-empty {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-tertiary);
+        }
+        .gallery-empty i {
+            font-size: 2.8rem;
+            opacity: 0.4;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        /* ===== 图片预览模态框 ===== */
+        .modal-mask {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            transition: opacity var(--transition-slow);
+        }
+        .modal-content {
+            background: var(--surface);
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            max-width: 720px;
+            max-height: 92vh;
+            overflow-y: auto;
+            padding: clamp(16px, 3vw, 24px);
+            position: relative;
+            transition: transform var(--transition-slow);
+        }
+        .modal-content .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 12px;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(0, 0, 0, 0.06);
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition);
+            line-height: 1;
+            z-index: 5;
+        }
+        .modal-content .modal-close:hover {
+            background: rgba(124, 58, 237, 0.12);
+            color: #7c3aed;
+            transform: rotate(90deg);
+        }
+        .modal-content .preview-img-wrap {
+            border-radius: var(--radius);
+            overflow: hidden;
+            background: var(--border);
+            margin-bottom: 14px;
+            text-align: center;
+        }
+        .modal-content .preview-img-wrap img {
+            max-width: 100%;
+            max-height: 55vh;
+            display: block;
+            margin: 0 auto;
+            object-fit: contain;
+        }
+        .modal-content .preview-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 16px;
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            padding: 4px 0;
+        }
+        .modal-content .preview-meta strong {
+            color: var(--text);
+        }
+        .modal-content .preview-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 14px;
+        }
+        .modal-content .preview-actions .btn {
+            flex: 1;
+            min-width: 80px;
+        }
+
+        /* ===== Toast 通知 ===== */
         .toast-container {
             position: fixed;
-            bottom: 24px;
-            left: 50%;
-            transform: translateX(-50%);
+            top: 20px;
+            right: 20px;
             z-index: 9999;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 10px;
+            max-width: 380px;
+            width: 100%;
             pointer-events: none;
-            width: calc(100% - 32px);
-            max-width: 420px;
         }
-        .toast {
-            padding: 14px 18px;
-            border-radius: var(--m3-radius-sm);
-            background: var(--m3-surface-container-high);
-            border: 1px solid var(--m3-outline-variant);
-            box-shadow: var(--m3-elevation-3);
-            font-size: 0.85rem;
-            font-weight: 500;
+        .toast-item {
+            pointer-events: auto;
+            padding: 12px 18px;
+            border-radius: var(--radius);
+            background: var(--surface);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-lg);
             display: flex;
             align-items: center;
-            gap: 10px;
-            pointer-events: auto;
-            animation: toastIn 0.35s var(--m3-transition);
-            transition: opacity 0.3s var(--m3-transition), transform 0.3s var(--m3-transition);
-            color: var(--m3-on-surface);
+            gap: 12px;
+            font-size: 0.88rem;
+            color: var(--text);
+            animation: slideIn 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all var(--transition);
         }
-        .toast.removing { opacity: 0; transform: translateY(16px) scale(0.95); }
-        .toast svg { width: 20px; height: 20px; fill: currentColor; flex-shrink: 0; }
-        .toast.success svg { color: #2e7d32; }
-        .toast.error svg { color: var(--m3-error); }
-        .toast.warning svg { color: #ed6c02; }
-        .toast.info svg { color: var(--m3-primary); }
-        @keyframes toastIn {
-            from { opacity: 0; transform: translateY(20px) scale(0.92); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+        .toast-item.success {
+            border-left: 4px solid #22c55e;
         }
-
-        .perf-badge {
-            position: fixed;
-            top: 12px;
-            right: 12px;
-            z-index: 100;
-            font-size: 0.68rem;
-            padding: 6px 10px;
-            border-radius: 12px;
-            background: var(--m3-surface-container-high);
-            border: 1px solid var(--m3-outline-variant);
-            color: var(--m3-on-surface-variant);
-            opacity: 0;
-            transition: opacity 0.4s var(--m3-transition);
-            pointer-events: none;
-            user-select: none;
-            font-weight: 600;
+        .toast-item.error {
+            border-left: 4px solid #ef4444;
         }
-        .perf-badge.visible { opacity: 1; }
-
-        .mode-explanation {
-            margin-top: 16px;
-            padding: 16px;
-            border-radius: var(--m3-radius-md);
-            background: var(--m3-surface-container-low);
-            border: 1px solid var(--m3-outline-variant);
-            font-size: 0.8rem;
-            line-height: 1.7;
-            color: var(--m3-on-surface-variant);
+        .toast-item.warning {
+            border-left: 4px solid #f59e0b;
         }
-        .mode-explanation strong { color: var(--m3-primary); font-weight: 600; }
-        .mode-explanation .pros { color: #2e7d32; }
-        .mode-explanation .cons { color: var(--m3-error); }
-
-        @media (max-width: 480px) {
-            body { padding: 8px; }
-            .app-header { padding: 12px 14px; }
-            .logo-text { font-size: 1.1rem; }
-            .m3-tab { padding: 10px 8px; font-size: 0.72rem; gap: 4px; }
-            .m3-tab svg { width: 16px; height: 16px; }
-            .panel-content { padding: 16px 12px; }
-            .upload-zone { padding: 20px 12px; }
-            .result-code { font-size: 1.4rem; }
-            .m3-btn { padding: 8px 14px; font-size: 0.78rem; }
-            .metadata-content { grid-template-columns: 1fr; }
-            .app-container { padding: 4px; }
+        .toast-item.info {
+            border-left: 4px solid #3b82f6;
+        }
+        .toast-item .toast-icon {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        .toast-item .toast-close {
+            margin-left: auto;
+            cursor: pointer;
+            opacity: 0.5;
+            transition: opacity var(--transition);
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.0rem;
+        }
+        .toast-item .toast-close:hover {
+            opacity: 1;
         }
 
-        @media (min-width: 601px) {
-            .app-container { max-width: 860px; }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                transition-duration: 0.01ms !important;
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
             }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* ===== 响应式微调 ===== */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+                padding-bottom: 80px;
+            }
+            .glass-card {
+                border-radius: var(--radius-lg);
+                padding: 14px;
+            }
+            .app-header .brand {
+                font-size: 1.1rem;
+            }
+            .app-header .account-badge {
+                font-size: 0.70rem;
+                padding: 4px 10px 4px 12px;
+            }
+            .stats-row {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+            .stat-item {
+                padding: 8px 6px;
+            }
+            .stat-item .stat-number {
+                font-size: 1.1rem;
+            }
+            .stat-item .stat-label {
+                font-size: 0.65rem;
+            }
+            .search-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .search-bar .sort-select {
+                width: 100%;
+            }
+            .modal-content {
+                max-width: 98vw;
+                max-height: 94vh;
+                padding: 14px;
+            }
+            .modal-content .preview-actions .btn {
+                flex: 1 1 100%;
+            }
+            .toast-container {
+                top: 10px;
+                right: 10px;
+                max-width: calc(100% - 20px);
+            }
+        }
+        @media (min-width: 1400px) {
+            .app-wrapper {
+                max-width: 900px;
+            }
+        }
+
+        /* ===== 工具类 ===== */
+        .mt-8 {
+            margin-top: 8px;
+        }
+        .mt-12 {
+            margin-top: 12px;
+        }
+        .mt-16 {
+            margin-top: 16px;
+        }
+        .gap-8 {
+            gap: 8px;
+        }
+        .flex-center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .text-muted {
+            color: var(--text-tertiary);
+            font-size: 0.82rem;
+        }
+        .hidden {
+            display: none !important;
+        }
+        .w-full {
+            width: 100%;
+        }
+        .flex-wrap {
+            flex-wrap: wrap;
+        }
+
+        /* 动画 */
+        .fade-enter-active,
+        .fade-leave-active {
+            transition: opacity var(--transition-slow), transform var(--transition-slow);
+        }
+        .fade-enter-from,
+        .fade-leave-to {
+            opacity: 0;
+            transform: scale(0.96);
         }
     </style>
 </head>
+
 <body>
 
-    <div class="perf-badge" id="perfBadge" aria-hidden="true"></div>
-
-    <div class="app-container">
-        <header class="app-header">
-            <div class="app-logo">
-                <svg viewBox="0 0 24 24"><path d="M8.5 13.5 11 16l4-4.5 1.5 1.5L11 19l-5-5.5L8.5 13.5zM22 8v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V8c0-1.1.9-2 2-2h4l2-3h8l2 3h4c1.1 0 2 .9 2 2zm-2 0H4v12h16V8z"/></svg>
-                <span class="logo-text">元数据清除器</span>
-            </div>
-            <div class="header-actions">
-                <span class="m3-chip" id="modeBadge">
-                    <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z"/></svg>
-                    <span id="modeBadgeText">后端处理</span>
+    <div id="app">
+        <!-- ===== Toast 容器 ===== -->
+        <div class="toast-container">
+            <div v-for="(toast, idx) in toasts" :key="idx" class="toast-item" :class="toast.type">
+                <span class="toast-icon">
+                    <i v-if="toast.type === 'success'" class="fas fa-check-circle" style="color:#22c55e;"></i>
+                    <i v-else-if="toast.type === 'error'" class="fas fa-times-circle" style="color:#ef4444;"></i>
+                    <i v-else-if="toast.type === 'warning'" class="fas fa-triangle-exclamation" style="color:#f59e0b;"></i>
+                    <i v-else class="fas fa-info-circle" style="color:#3b82f6;"></i>
                 </span>
-                <button class="m3-icon-btn" id="modeToggleBtn" title="切换处理模式" aria-label="切换处理模式">
-                    <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 14H6v-2h6v2zm4-4H6v-2h10v2zm4-4H6V8h14v2z"/></svg>
-                </button>
-                <button class="m3-icon-btn" id="themeToggleBtn" title="切换主题" aria-label="切换主题">
-                    <svg id="themeIconLight" viewBox="0 0 24 24"><path d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.36 6.36-1.42-1.42M6.06 6.06 4.64 4.64m12.72 1.42 1.42-1.42M6.06 17.94l-1.42 1.42M12 7a5 5 0 100 10 5 5 0 000-10z"/></svg>
-                    <svg id="themeIconDark" viewBox="0 0 24 24" style="display:none;"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.25 1.2-1.2 2.16-2.45 2.36-1.65.27-3.27-.45-4.04-1.77-.77-1.32-.54-3.04.54-4.22A7.02 7.02 0 0012 3z"/></svg>
-                </button>
+                <span>{{ toast.message }}</span>
+                <button class="toast-close" @click="removeToast(idx)">&times;</button>
             </div>
-        </header>
+        </div>
 
-        <nav class="m3-tabs" role="tablist" aria-label="功能导航">
-            <button class="m3-tab active" role="tab" aria-selected="true" aria-controls="panel-upload" data-tab="upload">
-                <svg viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/></svg>
-                上传处理
-            </button>
-            <button class="m3-tab" role="tab" aria-selected="false" aria-controls="panel-query" data-tab="query">
-                <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 10-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1114 9.5 4.5 4.5 0 019.5 14z"/></svg>
-                查询信息
-            </button>
-            <button class="m3-tab" role="tab" aria-selected="false" aria-controls="panel-download" data-tab="download">
-                <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-                取件下载
-            </button>
-        </nav>
+        <div class="app-wrapper">
 
-        <section class="m3-panel active" id="panel-upload" role="tabpanel" aria-labelledby="tabUploadBtn">
-            <div class="panel-content">
-                <div class="upload-zone" id="uploadZone" role="button" tabindex="0" aria-label="上传图片文件">
-                    <svg class="upload-icon" viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/></svg>
-                    <div class="upload-title">拖拽图片到此处 或 点击上传</div>
-                    <div class="upload-subtitle">选择后自动清除所有 EXIF / GPS / 设备信息</div>
-                    <div class="upload-formats">支持 JPG · PNG · WEBP · GIF</div>
-                    <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp,image/gif" aria-label="选择图片文件">
+            <!-- ===== Header ===== -->
+            <header class="app-header">
+                <div class="brand">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <span>TG 云图库</span>
                 </div>
-
-                <img id="previewThumb" class="preview-thumb hidden" alt="图片预览" />
-
-                <div class="progress-container" id="progressContainer">
-                    <div class="progress-label">
-                        <span id="progressLabel">处理中...</span>
-                        <span class="progress-percent" id="progressPercent">0%</span>
-                    </div>
-                    <div class="progress-track">
-                        <div class="progress-fill" id="progressFill"></div>
-                    </div>
-                </div>
-
-                <div class="result-section" id="resultSection">
-                    <div class="result-box">
-                        <div class="result-code" id="resultCode">------</div>
-                        <div class="result-info" id="resultInfo"></div>
-                        <div class="result-actions" id="resultActions"></div>
-                    </div>
-                </div>
-
-                <div class="metadata-section" id="metadataSection" style="display:none;">
-                    <div class="metadata-header" id="metadataHeader">
-                        <span class="metadata-toggle">
-                            <svg viewBox="0 0 24 24" id="metadataChevron"><path d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z"/></svg>
-                            图片元数据 (EXIF/GPS/设备信息)
+                <div class="header-actions">
+                    <!-- 已登录时显示账号 -->
+                    <template v-if="accountId">
+                        <span class="account-badge" @click="copyAccount" title="点击复制账号">
+                            <i class="fas fa-user-circle"></i>
+                            {{ accountId.slice(0, 6) }}...{{ accountId.slice(-4) }}
+                            <i class="fas fa-copy" style="font-size:0.65rem;opacity:0.6;"></i>
                         </span>
-                        <span class="m3-chip" id="metadataCount">0 项</span>
+                        <button class="icon-btn" @click="logout" title="登出">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </button>
+                    </template>
+                    <!-- 主题切换 -->
+                    <button class="icon-btn" @click="toggleTheme" :title="theme === 'dark' ? '切换亮色' : '切换暗色'">
+                        <i v-if="theme === 'dark'" class="fas fa-sun"></i>
+                        <i v-else class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- ===== 未登录：登录/注册 ===== -->
+            <div v-if="!accountId" class="glass-card">
+                <div class="auth-grid">
+                    <!-- 登录 -->
+                    <div class="auth-card">
+                        <h3><i class="fas fa-sign-in-alt"></i> 登录</h3>
+                        <p class="text-muted" style="margin-bottom:10px;">输入 16 位账号登录</p>
+                        <div class="input-group">
+                            <input class="input-field" v-model="loginInput" placeholder="例如 aB8dEf01Gh23Ij4k" maxlength="16" @keyup.enter="doLogin" />
+                            <button class="btn btn-primary" @click="doLogin" :disabled="loginInput.length !== 16">
+                                登录
+                            </button>
+                        </div>
                     </div>
-                    <div class="metadata-body" id="metadataBody">
-                        <div class="metadata-content" id="metadataContent">
-                            <div class="metadata-empty">暂无元数据信息</div>
+                    <!-- 注册 -->
+                    <div class="auth-card">
+                        <h3><i class="fas fa-user-plus"></i> 注册</h3>
+                        <p class="text-muted" style="margin-bottom:10px;">生成新账号，需前往 Telegram 绑定</p>
+                        <button class="btn btn-primary btn-block" @click="doRegister" :disabled="registering">
+                            <i v-if="registering" class="fas fa-spinner fa-spin"></i>
+                            <span v-else><i class="fas fa-plus-circle"></i> 生成新账号</span>
+                        </button>
+                        <div v-if="newAccount" style="margin-top:12px;padding:10px;border-radius:var(--radius);background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.20);">
+                            <div style="font-weight:600;color:#16a34a;font-size:0.85rem;">
+                                <i class="fas fa-check-circle"></i> 账号已生成
+                            </div>
+                            <code style="display:block;margin:6px 0;font-size:0.9rem;word-break:break-all;font-family:var(--font-mono,monospace);background:var(--surface-solid);padding:6px 10px;border-radius:6px;">
+                                {{ newAccount }}
+                            </code>
+                            <div style="font-size:0.78rem;color:var(--text-secondary);">
+                                <i class="fas fa-info-circle"></i> 请复制账号，前往 Telegram 机器人 <strong>@Bcvyubot</strong> 发送 <strong>绑定</strong> 并粘贴此账号
+                            </div>
+                            <button class="btn btn-sm btn-ghost" style="margin-top:8px;" @click="copyNewAccount">
+                                <i class="fas fa-copy"></i> 复制账号
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
 
-        <section class="m3-panel" id="panel-query" role="tabpanel" aria-labelledby="tabQueryBtn">
-            <div class="panel-content">
-                <div class="input-row">
-                    <div class="m3-text-field">
-                        <input type="text" id="queryCodeInput" placeholder="输入 6 位物件码" maxlength="6" inputmode="numeric" pattern="[0-9]{6}" autocomplete="off" aria-label="物件码输入">
-                    </div>
-                    <button class="m3-btn m3-btn-filled" id="queryBtn">
-                        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 10-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1114 9.5 4.5 4.5 0 019.5 14z"/></svg>
-                        查询
+            <!-- ===== 已登录：主面板 ===== -->
+            <template v-else>
+
+                <!-- 状态横幅 -->
+                <div class="status-banner" :class="statusClass">
+                    <i :class="statusIcon"></i>
+                    <span>{{ statusText }}</span>
+                    <span class="spacer"></span>
+                    <button v-if="!isBound" class="btn btn-sm btn-primary" @click="refreshStatus">
+                        <i class="fas fa-sync-alt" :class="{ 'fa-spin': statusLoading }"></i> 刷新状态
+                    </button>
+                    <button v-else class="btn btn-sm btn-ghost" @click="refreshStatus">
+                        <i class="fas fa-sync-alt" :class="{ 'fa-spin': statusLoading }"></i>
                     </button>
                 </div>
-                <div id="queryResult" style="margin-top:16px;display:none;"></div>
-                <div id="queryError" style="margin-top:16px;display:none;"></div>
-            </div>
-        </section>
 
-        <section class="m3-panel" id="panel-download" role="tabpanel" aria-labelledby="tabDownloadBtn">
-            <div class="panel-content">
-                <div class="input-row">
-                    <div class="m3-text-field">
-                        <input type="text" id="downloadCodeInput" placeholder="输入 6 位物件码" maxlength="6" inputmode="numeric" pattern="[0-9]{6}" autocomplete="off" aria-label="物件码输入">
+                <!-- ===== 上传区域 ===== -->
+                <div class="glass-card">
+                    <div class="upload-zone" :class="{ 'drag-over': isDragging }" @click="triggerFileInput" @dragover.prevent="isDragging = true" @dragleave.prevent="isDragging = false" @drop.prevent="handleDrop">
+                        <div class="icon-wrap">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <p class="zone-title">{{ uploading ? '上传中...' : '点击或拖拽图片到此处' }}</p>
+                        <p class="zone-hint">支持 JPG / PNG / WEBP / GIF，单张最大 20 MB</p>
+                        <input type="file" id="fileInputRef" accept="image/*" @change="onFilePicked" ref="fileInputRef" :disabled="uploading || !isBound" />
                     </div>
-                    <button class="m3-btn m3-btn-filled" id="previewBtn">
-                        <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
-                        预览
-                    </button>
-                    <button class="m3-btn m3-btn-tonal" id="downloadBtn">
-                        <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-                        下载
-                    </button>
-                    <button class="m3-btn m3-btn-error" id="deleteBtn" style="display:none;">
-                        <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
-                        销毁
-                    </button>
-                </div>
-                <div id="downloadPreview" style="margin-top:16px;display:none;"></div>
-                <div id="downloadError" style="margin-top:16px;display:none;"></div>
-            </div>
-        </section>
 
-        <div class="mode-explanation" id="modeExplanation">
-            <strong>后端处理模式</strong>：图片会上传到服务器，服务器清除元数据后返回 6 位物件码，2 小时内可取件下载。
-            <span class="pros">优点：不占本地资源、支持 GIF 等更多格式。</span>
-            <span class="cons">缺点：需联网、图片经过服务器。</span>
-        </div>
+                    <!-- 上传进度 -->
+                    <div class="progress-wrap" v-if="uploading">
+                        <div class="progress-bar-outer">
+                            <div class="progress-bar-inner" :style="{ width: uploadProgress + '%' }"></div>
+                        </div>
+                        <div class="progress-meta">
+                            <span>{{ uploadStatus }}</span>
+                            <span>{{ Math.round(uploadProgress) }}%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ===== 统计 + 搜索 ===== -->
+                <div class="glass-card" style="padding:clamp(14px,2vw,20px);">
+                    <div class="stats-row">
+                        <div class="stat-item">
+                            <div class="stat-number"><i class="stat-icon fas fa-images"></i> {{ images.length }}</div>
+                            <div class="stat-label">图片总数</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number"><i class="stat-icon fas fa-weight-hanging"></i> {{ totalSize }}</div>
+                            <div class="stat-label">总大小</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number"><i class="stat-icon fas fa-clock"></i> {{ images.length > 0 ? '活跃' : '空' }}</div>
+                            <div class="stat-label">状态</div>
+                        </div>
+                    </div>
+
+                    <div class="search-bar">
+                        <input class="input-field" v-model="searchQuery" placeholder="🔍 搜索图片名称..." />
+                        <select class="sort-select" v-model="sortBy">
+                            <option value="newest">最新优先</option>
+                            <option value="oldest">最早优先</option>
+                            <option value="name">按名称</option>
+                            <option value="size">按大小</option>
+                        </select>
+                        <button class="btn btn-sm btn-ghost" @click="refreshGallery" :disabled="galleryLoading">
+                            <i class="fas fa-sync-alt" :class="{ 'fa-spin': galleryLoading }"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ===== 图库网格 ===== -->
+                <div class="glass-card" style="padding:clamp(14px,2vw,20px);">
+                    <div v-if="galleryLoading" class="text-center" style="padding:30px 0;">
+                        <i class="fas fa-spinner fa-spin" style="font-size:2rem;color:#7c3aed;"></i>
+                        <p class="text-muted" style="margin-top:8px;">加载图库中...</p>
+                    </div>
+                    <div v-else-if="filteredImages.length === 0" class="gallery-empty">
+                        <i class="fas fa-image"></i>
+                        <p>{{ searchQuery ? '没有匹配的图片' : '图库为空，上传第一张图片吧' }}</p>
+                    </div>
+                    <div v-else class="gallery-grid">
+                        <div v-for="img in filteredImages" :key="img.id" class="gallery-item" @click="openPreview(img)">
+                            <img :src="img.url" :alt="img.file_name" loading="lazy" @error="handleImageError($event, img)" />
+                            <div class="item-overlay">
+                                <span class="name">{{ img.file_name }}</span>
+                                <span class="size">{{ formatFileSize(img.file_size) }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-if="!galleryLoading && images.length > 0" style="margin-top:12px;text-align:center;font-size:0.80rem;color:var(--text-tertiary);">
+                        共 {{ images.length }} 张图片
+                    </div>
+                </div>
+
+            </template>
+
+            <!-- ===== Footer ===== -->
+            <footer style="text-align:center;padding:12px 0 4px;font-size:0.75rem;color:var(--text-tertiary);">
+                <i class="fas fa-shield-alt"></i> 无盘存储 · 数据仅存于 Telegram
+                <span style="margin:0 8px;">|</span>
+                <i class="fas fa-lock"></i> 端到端加密传输
+            </footer>
+
+        </div><!-- /app-wrapper -->
+
+        <!-- ===== 图片预览模态框 ===== -->
+        <teleport to="body">
+            <div class="modal-mask" v-if="previewVisible" @click.self="closePreview">
+                <div class="modal-content">
+                    <button class="modal-close" @click="closePreview">&times;</button>
+                    <div class="preview-img-wrap">
+                        <img :src="previewImage?.url" :alt="previewImage?.file_name" />
+                    </div>
+                    <div class="preview-meta">
+                        <span><strong>名称</strong> {{ previewImage?.file_name }}</span>
+                        <span><strong>大小</strong> {{ formatFileSize(previewImage?.file_size || 0) }}</span>
+                        <span><strong>ID</strong> #{{ previewImage?.id }}</span>
+                    </div>
+                    <div class="preview-actions">
+                        <button class="btn btn-primary" @click="copyLink">
+                            <i class="fas fa-link"></i> 复制直链
+                        </button>
+                        <button class="btn btn-ghost" @click="downloadImage">
+                            <i class="fas fa-download"></i> 下载
+                        </button>
+                        <button class="btn btn-ghost" @click="openInNewTab">
+                            <i class="fas fa-external-link-alt"></i> 新窗口
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </teleport>
+
     </div>
 
-    <div class="toast-container" id="toastContainer" aria-live="polite"></div>
-
     <script>
-        (function() {
-            'use strict';
+        const { createApp, ref, reactive, computed, watch, onMounted, nextTick, toRaw } = Vue;
 
-            // ===== Constants =====
-            const API_BASE = 'https://156.246.95.165.nip.io';
-            const API_UPLOAD = `${API_BASE}/api/upload`;
-            const API_INFO = `${API_BASE}/api/info`;
-            const API_FILE = `${API_BASE}/api/file`;
-            const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20 MB
-            const EXPIRE_SECONDS = 7200;
-            const MAX_CANVAS_DIMENSION = 4096;
-            const PERF_CHECK_INTERVAL = 3000;
-            const IDB_DB_NAME = 'meta-cleaner-db';
-            const IDB_STORE_NAME = 'blobs';
+        // ==================== API 基础 ====================
+        const API_BASE = 'https://node-0crq9b.156.246.95.165.nip.io';
 
-            // ===== State =====
-            let currentMode = localStorage.getItem('metaCleanerMode') || 'backend';
-            let currentTheme = localStorage.getItem('metaCleanerTheme') || 'light';
-            let activeTab = 'upload';
-            let uploadedFileName = '';
-            let currentObjectUrl = null;
-            let currentPreviewUrl = null;
-            let expireTimer = null;
-            let perfFrameCount = 0;
-            let perfLastTime = performance.now();
-            let perfFPS = 60;
-            let perfLowFrames = 0;
-            let perfMonitorRunning = false;
-            let isOffline = !navigator.onLine;
-            let currentController = null;
-            let currentMetadata = [];
-            let currentDeleteCode = null; // 用于删除按钮
+        // ==================== 工具函数 ====================
+        function formatFileSize(bytes) {
+            if (!bytes || bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return (bytes / Math.pow(k, i)).toFixed(1) + ' ' + sizes[i];
+        }
 
-            // ===== DOM Elements =====
-            const body = document.body;
-            const themeToggleBtn = document.getElementById('themeToggleBtn');
-            const themeIconLight = document.getElementById('themeIconLight');
-            const themeIconDark = document.getElementById('themeIconDark');
-            const modeToggleBtn = document.getElementById('modeToggleBtn');
-            const modeBadge = document.getElementById('modeBadge');
-            const modeBadgeText = document.getElementById('modeBadgeText');
-            const modeExplanation = document.getElementById('modeExplanation');
-            const tabButtons = document.querySelectorAll('.m3-tab');
-            const tabPanels = document.querySelectorAll('.m3-panel');
-            const uploadZone = document.getElementById('uploadZone');
-            const fileInput = document.getElementById('fileInput');
-            const previewThumb = document.getElementById('previewThumb');
-            const progressContainer = document.getElementById('progressContainer');
-            const progressLabel = document.getElementById('progressLabel');
-            const progressPercent = document.getElementById('progressPercent');
-            const progressFill = document.getElementById('progressFill');
-            const resultSection = document.getElementById('resultSection');
-            const resultCode = document.getElementById('resultCode');
-            const resultInfo = document.getElementById('resultInfo');
-            const resultActions = document.getElementById('resultActions');
-            const metadataSection = document.getElementById('metadataSection');
-            const metadataHeader = document.getElementById('metadataHeader');
-            const metadataBody = document.getElementById('metadataBody');
-            const metadataContent = document.getElementById('metadataContent');
-            const metadataCount = document.getElementById('metadataCount');
-            const metadataChevron = document.getElementById('metadataChevron');
-            const queryCodeInput = document.getElementById('queryCodeInput');
-            const queryBtn = document.getElementById('queryBtn');
-            const queryResult = document.getElementById('queryResult');
-            const queryError = document.getElementById('queryError');
-            const downloadCodeInput = document.getElementById('downloadCodeInput');
-            const previewBtn = document.getElementById('previewBtn');
-            const downloadBtn = document.getElementById('downloadBtn');
-            const deleteBtn = document.getElementById('deleteBtn');
-            const downloadPreview = document.getElementById('downloadPreview');
-            const downloadError = document.getElementById('downloadError');
-            const toastContainer = document.getElementById('toastContainer');
-            const perfBadge = document.getElementById('perfBadge');
+        function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-            // ===== Icons =====
-            const ICONS = {
-                success: '<svg viewBox="0 0 24 24"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>',
-                error: '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>',
-                warning: '<svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>',
-                info: '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>',
-                copy: '<svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>',
-                clock: '<svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>',
-                file: '<svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>',
-                image: '<svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>',
-                server: '<svg viewBox="0 0 24 24"><path d="M4 1h16c1.1 0 2 .9 2 2v4c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V3c0-1.1.9-2 2-2zm0 14h16c1.1 0 2 .9 2 2v4c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2v-4c0-1.1.9-2 2-2zm0-7h16c1.1 0 2 .9 2 2v4c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2v-4c0-1.1.9-2 2-2z"/></svg>',
-                browser: '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>',
-                trash: '<svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>',
-            };
+        // ==================== App ====================
+        const app = createApp({
+            setup() {
+                // ---- 状态 ----
+                const accountId = ref(localStorage.getItem('tg_gallery_account') || '');
+                const theme = ref(localStorage.getItem('tg_gallery_theme') || 'light');
 
-            // ===== Helper Functions =====
-            function escapeHtml(text) {
-                const div = document.createElement('div');
-                div.textContent = text;
-                return div.innerHTML;
-            }
+                // 登录/注册
+                const loginInput = ref('');
+                const registering = ref(false);
+                const newAccount = ref('');
 
-            function formatTime(seconds) {
-                if (seconds <= 0) return '已过期';
-                const h = Math.floor(seconds / 3600);
-                const m = Math.floor((seconds % 3600) / 60);
-                const s = Math.floor(seconds % 60);
-                if (h > 0) return `${h}小时 ${m}分 ${s}秒`;
-                if (m > 0) return `${m}分 ${s}秒`;
-                return `${s}秒`;
-            }
+                // 状态
+                const isBound = ref(false);
+                const statusLoading = ref(false);
+                const statusText = ref('检查绑定状态...');
+                const statusClass = ref('info');
 
-            // ===== Theme Management =====
-            function applyTheme(theme, persist = true) {
-                currentTheme = theme;
-                if (theme === 'dark') {
-                    body.setAttribute('data-theme', 'dark');
-                    themeIconLight.style.display = 'none';
-                    themeIconDark.style.display = 'block';
-                    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#1c1b1f');
-                } else {
-                    body.removeAttribute('data-theme');
-                    themeIconLight.style.display = 'block';
-                    themeIconDark.style.display = 'none';
-                    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#fdfcff');
-                }
-                if (persist) {
-                    try { localStorage.setItem('metaCleanerTheme', theme); } catch (e) {}
-                }
-            }
+                // 上传
+                const fileInputRef = ref(null);
+                const isDragging = ref(false);
+                const uploading = ref(false);
+                const uploadProgress = ref(0);
+                const uploadStatus = ref('');
 
-            themeToggleBtn.addEventListener('click', () => {
-                applyTheme(currentTheme === 'light' ? 'dark' : 'light');
-            });
+                // 图库
+                const images = ref([]);
+                const galleryLoading = ref(false);
+                const searchQuery = ref('');
+                const sortBy = ref('newest');
 
-            // ===== Mode Management =====
-            function applyMode(mode, persist = true) {
-                currentMode = mode;
-                if (mode === 'frontend') {
-                    modeBadgeText.textContent = '前端处理';
-                    modeExplanation.innerHTML =
-                        '<strong>前端处理模式</strong>：图片在浏览器本地用 Canvas 重新绘制，元数据自动剥离，不上传任何数据到服务器。' +
-                        '<span class="pros">优点：完全离线可用、隐私安全、速度极快。</span>' +
-                        '<span class="cons">缺点：不支持 GIF 动图、大图可能卡顿、依赖浏览器能力。</span>';
-                    modeBadge.querySelector('svg').outerHTML = ICONS.browser;
-                } else {
-                    modeBadgeText.textContent = '后端处理';
-                    modeExplanation.innerHTML =
-                        '<strong>后端处理模式</strong>：图片上传到服务器，服务器清除元数据后返回 6 位物件码，2 小时内可取件下载。' +
-                        '<span class="pros">优点：不占本地资源、支持 GIF 动图等更多格式。</span>' +
-                        '<span class="cons">缺点：需联网、图片经过服务器。</span>';
-                    modeBadge.querySelector('svg').outerHTML = ICONS.server;
-                }
-                if (persist) {
-                    try { localStorage.setItem('metaCleanerMode', mode); } catch (e) {}
-                }
-            }
+                // 预览
+                const previewVisible = ref(false);
+                const previewImage = ref(null);
 
-            modeToggleBtn.addEventListener('click', () => {
-                const newMode = currentMode === 'backend' ? 'frontend' : 'backend';
-                applyMode(newMode);
-                showToast(
-                    newMode === 'frontend' ? '已切换到前端处理模式，图片不会离开浏览器' : '已切换到后端处理模式，图片将上传服务器',
-                    'info'
-                );
-                resetUploadResult();
-                resetDownloadPanel();
-            });
+                // Toast
+                const toasts = reactive([]);
 
-            // ===== Tab Management =====
-            function switchTab(tabId) {
-                activeTab = tabId;
-                tabButtons.forEach(btn => {
-                    const isActive = btn.dataset.tab === tabId;
-                    btn.classList.toggle('active', isActive);
-                    btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+                // ---- 计算属性 ----
+                const filteredImages = computed(() => {
+                    let list = [...images.value];
+                    // 搜索
+                    if (searchQuery.value.trim()) {
+                        const q = searchQuery.value.trim().toLowerCase();
+                        list = list.filter(img => img.file_name.toLowerCase().includes(q));
+                    }
+                    // 排序
+                    switch (sortBy.value) {
+                        case 'newest':
+                            list.sort((a, b) => b.id - a.id);
+                            break;
+                        case 'oldest':
+                            list.sort((a, b) => a.id - b.id);
+                            break;
+                        case 'name':
+                            list.sort((a, b) => a.file_name.localeCompare(b.file_name));
+                            break;
+                        case 'size':
+                            list.sort((a, b) => (b.file_size || 0) - (a.file_size || 0));
+                            break;
+                    }
+                    return list;
                 });
-                tabPanels.forEach(panel => {
-                    panel.classList.toggle('active', panel.id === `panel-${tabId}`);
+
+                const totalSize = computed(() => {
+                    const total = images.value.reduce((sum, img) => sum + (img.file_size || 0), 0);
+                    return formatFileSize(total);
                 });
-                if (tabId === 'download') resetDownloadPanel();
-            }
 
-            tabButtons.forEach(btn => {
-                btn.addEventListener('click', () => switchTab(btn.dataset.tab));
-            });
-
-            // ===== Toast =====
-            function showToast(message, type = 'info', duration = 3500) {
-                const toast = document.createElement('div');
-                toast.className = `toast ${type}`;
-                toast.innerHTML = (ICONS[type] || ICONS.info) + `<span>${escapeHtml(message)}</span>`;
-                toastContainer.appendChild(toast);
-                const removeToast = () => {
-                    toast.classList.add('removing');
-                    setTimeout(() => toast.remove(), 300);
-                };
-                toast._removeTimer = setTimeout(removeToast, duration);
-                toast.addEventListener('click', () => {
-                    clearTimeout(toast._removeTimer);
-                    removeToast();
+                const statusIcon = computed(() => {
+                    if (statusLoading.value) return 'fas fa-spinner fa-spin';
+                    if (isBound.value) return 'fas fa-check-circle';
+                    return 'fas fa-triangle-exclamation';
                 });
-            }
 
-            // ===== Progress =====
-            function showProgress(label) {
-                progressContainer.classList.add('visible');
-                progressLabel.textContent = label;
-                setProgress(0);
-            }
-
-            function setProgress(value) {
-                const clamped = Math.max(0, Math.min(100, value));
-                progressFill.style.width = clamped + '%';
-                progressPercent.textContent = Math.round(clamped) + '%';
-            }
-
-            function hideProgress() {
-                progressContainer.classList.remove('visible');
-                setProgress(0);
-            }
-
-            // ===== Reset =====
-            function resetUploadResult() {
-                resultSection.classList.remove('visible');
-                previewThumb.classList.add('hidden');
-                previewThumb.src = '';
-                if (currentPreviewUrl) { URL.revokeObjectURL(currentPreviewUrl); currentPreviewUrl = null; }
-                if (currentObjectUrl) { URL.revokeObjectURL(currentObjectUrl); currentObjectUrl = null; }
-                if (expireTimer) { clearInterval(expireTimer); expireTimer = null; }
-                metadataSection.style.display = 'none';
-                currentMetadata = [];
-                currentDeleteCode = null;
-            }
-
-            function resetDownloadPanel() {
-                downloadPreview.style.display = 'none';
-                downloadError.style.display = 'none';
-                downloadCodeInput.value = '';
-                deleteBtn.style.display = 'none';
-                currentDeleteCode = null;
-            }
-
-            // ===== Show Upload Result =====
-            function showUploadResult(code, filename, expireSeconds, actions = [], canDelete = false) {
-                resultSection.classList.add('visible');
-                resultCode.textContent = code;
-                resultInfo.innerHTML = `
-                    <span class="info-pill">${ICONS.file} <span>${escapeHtml(filename)}</span></span>
-                    <span class="info-pill">${ICONS.clock} <span id="expireCountText">${formatTime(expireSeconds)}</span></span>
-                `;
-                resultActions.innerHTML = '';
-                actions.forEach(act => {
-                    const btn = document.createElement('button');
-                    btn.className = `m3-btn ${act.className || 'm3-btn-filled'}`;
-                    btn.innerHTML = (act.icon || '') + ` <span>${escapeHtml(act.label)}</span>`;
-                    btn.onclick = act.onClick;
-                    resultActions.appendChild(btn);
-                });
-                if (canDelete) {
-                    const delBtn = document.createElement('button');
-                    delBtn.className = 'm3-btn m3-btn-error';
-                    delBtn.innerHTML = ICONS.trash + ' <span>销毁</span>';
-                    delBtn.onclick = () => deleteFile(code);
-                    resultActions.appendChild(delBtn);
+                // ---- 方法 ----
+                // Toast
+                function addToast(message, type = 'info') {
+                    toasts.push({ message, type });
+                    if (toasts.length > 8) toasts.shift();
+                    // 自动消失
+                    setTimeout(() => {
+                        const idx = toasts.findIndex(t => t.message === message && t.type === type);
+                        if (idx !== -1) toasts.splice(idx, 1);
+                    }, 4500);
                 }
-                if (expireTimer) clearInterval(expireTimer);
-                let remaining = expireSeconds;
-                expireTimer = setInterval(() => {
-                    remaining--;
-                    const expireEl = document.getElementById('expireCountText');
-                    if (expireEl) expireEl.textContent = formatTime(Math.max(0, remaining));
-                    if (remaining <= 0) {
-                        clearInterval(expireTimer);
-                        showToast('该物件码已过期', 'warning');
-                    }
-                }, 1000);
-            }
 
-            function showUploadError(message) {
-                resultSection.classList.add('visible');
-                resultCode.textContent = 'ERROR';
-                resultInfo.innerHTML = '';
-                const errSpan = document.createElement('span');
-                errSpan.className = 'info-pill';
-                errSpan.innerHTML = ICONS.error + ` <span>${escapeHtml(message)}</span>`;
-                resultInfo.appendChild(errSpan);
-                resultActions.innerHTML = '';
-            }
-
-            // ===== Metadata Display =====
-            function displayMetadata(metadata) {
-                if (!metadata || metadata.length === 0) {
-                    metadataSection.style.display = 'none';
-                    return;
+                function removeToast(idx) {
+                    toasts.splice(idx, 1);
                 }
-                currentMetadata = metadata;
-                metadataSection.style.display = 'block';
-                metadataCount.textContent = `${metadata.length} 项`;
-                metadataContent.innerHTML = '';
-                metadata.forEach(item => {
-                    const div = document.createElement('div');
-                    div.className = 'metadata-item';
-                    div.innerHTML = `<span class="meta-label">${escapeHtml(item.label)}</span><span class="meta-value">${escapeHtml(item.value)}</span>`;
-                    metadataContent.appendChild(div);
-                });
-                metadataBody.classList.remove('expanded');
-                metadataChevron.classList.add('collapsed');
-            }
 
-            metadataHeader.addEventListener('click', () => {
-                const expanded = metadataBody.classList.toggle('expanded');
-                metadataChevron.classList.toggle('collapsed', !expanded);
-            });
-
-            // ===== EXIF / Metadata Parser =====
-            async function extractImageMetadata(file) {
-                try {
-                    if (file.type === 'image/jpeg') {
-                        return await parseJPEGEXIF(file);
-                    } else if (file.type === 'image/png') {
-                        return await parsePNGMetadata(file);
-                    } else if (file.type === 'image/webp') {
-                        return await parseWebPMetadata(file);
-                    } else {
-                        return [];
-                    }
-                } catch (e) {
-                    console.warn('元数据解析失败:', e);
-                    return [];
+                // 主题
+                function toggleTheme() {
+                    theme.value = theme.value === 'dark' ? 'light' : 'dark';
+                    localStorage.setItem('tg_gallery_theme', theme.value);
+                    document.documentElement.setAttribute('data-theme', theme.value);
                 }
-            }
 
-            async function parseJPEGEXIF(file) {
-                const arrayBuffer = await file.arrayBuffer();
-                const dataView = new DataView(arrayBuffer);
-                if (dataView.getUint16(0) !== 0xFFD8) return [];
-                let offset = 2;
-                const metadata = [];
-                const EXIF_IFD_TAGS = {
-                    0x010E: '图像描述', 0x010F: '设备制造商', 0x0110: '设备型号',
-                    0x0112: '方向', 0x0131: '软件', 0x0132: '修改时间',
-                    0x013B: '作者', 0x8298: '版权', 0x8769: 'Exif偏移',
-                    0x8825: 'GPS偏移', 0xA002: '图片宽度', 0xA003: '图片高度',
-                };
-                const EXIF_SUB_TAGS = {
-                    0x9003: '原始拍摄时间', 0x9201: '快门速度', 0x9202: '光圈值',
-                    0x9209: '闪光灯', 0x920A: '焦距', 0xA405: '35mm焦距',
-                    0xA406: '场景类型', 0xA408: '对比度', 0xA409: '饱和度', 0xA40A: '锐度'
-                };
-                const GPS_TAGS = {
-                    0x0001: '纬度参考', 0x0002: '纬度', 0x0003: '经度参考', 0x0004: '经度',
-                    0x0005: 'GPS状态', 0x001D: 'GPS日期'
-                };
-                let latRef = '';
-                let lonRef = '';
-
-                while (offset < arrayBuffer.byteLength) {
-                    if (dataView.getUint16(offset) !== 0xFFE1) {
-                        offset += 2;
-                        if (offset + 4 > arrayBuffer.byteLength) break;
-                        const segLen = dataView.getUint16(offset + 2);
-                        offset += 2 + segLen;
-                        continue;
-                    }
-                    const exifStart = offset + 4;
-                    if (dataView.getUint32(exifStart) !== 0x45786966) break;
-                    const tiffOffset = exifStart + 6;
-                    const byteOrder = dataView.getUint16(tiffOffset);
-                    const isLE = byteOrder === 0x4949;
-                    const readUint16 = (o) => dataView.getUint16(o, isLE);
-                    const readUint32 = (o) => dataView.getUint32(o, isLE);
-                    const ifd0Offset = tiffOffset + 2 + readUint32(tiffOffset + 4);
-                    const numEntries = readUint16(ifd0Offset);
-                    for (let i = 0; i < numEntries; i++) {
-                        const entryOffset = ifd0Offset + 2 + i * 12;
-                        const tag = readUint16(entryOffset);
-                        const type = readUint16(entryOffset + 2);
-                        const count = readUint32(entryOffset + 4);
-                        const valueOffset = entryOffset + 8;
-                        if (tag in EXIF_IFD_TAGS) {
-                            let value = '';
-                            const typeSizes = { 1: 1, 2: 1, 3: 2, 4: 4, 5: 8, 7: 1, 9: 4, 10: 8 };
-                            const typeSize = typeSizes[type] || 1;
-                            const totalBytes = typeSize * count;
-                            const valuePtr = totalBytes > 4 ? tiffOffset + readUint32(valueOffset) : valueOffset;
-                            try {
-                                if (type === 2) {
-                                    let str = '';
-                                    for (let b = 0; b < count; b++) {
-                                        str += String.fromCharCode(dataView.getUint8(valuePtr + b));
-                                    }
-                                    value = str.replace(/\0+$/, '').trim();
-                                } else {
-                                    value = readUint16(valuePtr).toString();
-                                }
-                            } catch (e) { value = '未知'; }
-                            if (value && value !== '未知') {
-                                metadata.push({ label: EXIF_IFD_TAGS[tag], value });
-                            }
-                        }
-                        if (tag === 0x8769) {
-                            const subIFDOffset = tiffOffset + readUint32(valueOffset);
-                            const subNumEntries = readUint16(subIFDOffset);
-                            for (let j = 0; j < subNumEntries; j++) {
-                                const subEntry = subIFDOffset + 2 + j * 12;
-                                const subTag = readUint16(subEntry);
-                                if (subTag in EXIF_SUB_TAGS) {
-                                    const subType = readUint16(subEntry + 2);
-                                    const subCount = readUint32(subEntry + 4);
-                                    const subValueOffset = subEntry + 8;
-                                    const subTypeSize = { 1: 1, 2: 1, 3: 2, 4: 4, 5: 8, 7: 1, 9: 4, 10: 8 } [subType] ||
-                                        1;
-                                    const subTotal = subTypeSize * subCount;
-                                    const subPtr = subTotal > 4 ? tiffOffset + readUint32(subValueOffset) : subValueOffset;
-                                    try {
-                                        if (subType === 2) {
-                                            let str = '';
-                                            for (let b = 0; b < subCount; b++) str += String.fromCharCode(dataView
-                                                .getUint8(subPtr + b));
-                                            metadata.push({ label: EXIF_SUB_TAGS[subTag], value: str.replace(
-                                                    /\0+$/, '').trim() });
-                                        } else {
-                                            metadata.push({ label: EXIF_SUB_TAGS[subTag], value: readUint16(
-                                                subPtr).toString() });
-                                        }
-                                    } catch (e) {}
-                                }
-                            }
-                        }
-                        if (tag === 0x8825) {
-                            const gpsOffset = tiffOffset + readUint32(valueOffset);
-                            const gpsNumEntries = readUint16(gpsOffset);
-                            for (let g = 0; g < gpsNumEntries; g++) {
-                                const gpsEntry = gpsOffset + 2 + g * 12;
-                                const gpsTag = readUint16(gpsEntry);
-                                const gpsType = readUint16(gpsEntry + 2);
-                                const gpsCount = readUint32(gpsEntry + 4);
-                                const gpsValueOffset = gpsEntry + 8;
-                                if (gpsTag === 0x0001) {
-                                    if (gpsType === 2) {
-                                        let str = '';
-                                        for (let b = 0; b < gpsCount; b++) str += String.fromCharCode(dataView.getUint8(
-                                            gpsValueOffset + b));
-                                        latRef = str.replace(/\0+$/, '').trim();
-                                    }
-                                    continue;
-                                }
-                                if (gpsTag === 0x0003) {
-                                    if (gpsType === 2) {
-                                        let str = '';
-                                        for (let b = 0; b < gpsCount; b++) str += String.fromCharCode(dataView.getUint8(
-                                            gpsValueOffset + b));
-                                        lonRef = str.replace(/\0+$/, '').trim();
-                                    }
-                                    continue;
-                                }
-                                if (gpsTag in GPS_TAGS) {
-                                    let gpsValue = '';
-                                    try {
-                                        if (gpsType === 2) {
-                                            let str = '';
-                                            for (let b = 0; b < gpsCount; b++) str += String.fromCharCode(dataView
-                                                .getUint8(gpsValueOffset + b));
-                                            gpsValue = str.replace(/\0+$/, '').trim();
-                                        } else if (gpsType === 5 && gpsCount === 3) {
-                                            const deg = readUint32(gpsValueOffset) / 1;
-                                            const min = readUint32(gpsValueOffset + 4) / 1;
-                                            const sec = readUint32(gpsValueOffset + 8) / 1000000;
-                                            gpsValue = `${deg}°${min}'${sec.toFixed(2)}"`;
-                                            if (gpsTag === 0x0002 && latRef === 'S') gpsValue = '-' + gpsValue;
-                                            if (gpsTag === 0x0004 && lonRef === 'W') gpsValue = '-' + gpsValue;
-                                        } else {
-                                            gpsValue = readUint16(gpsValueOffset).toString();
-                                        }
-                                        metadata.push({ label: GPS_TAGS[gpsTag], value: gpsValue });
-                                    } catch (e) {}
-                                }
-                            }
-                        }
-                    }
-                    break;
-                }
-                return metadata;
-            }
-
-            async function parsePNGMetadata(file) {
-                const arrayBuffer = await file.arrayBuffer();
-                const dataView = new DataView(arrayBuffer);
-                if (dataView.getUint32(0) !== 0x89504E47) return [];
-                let offset = 8;
-                const metadata = [];
-                while (offset < arrayBuffer.byteLength) {
-                    const length = dataView.getUint32(offset);
-                    const chunkType = String.fromCharCode(
-                        dataView.getUint8(offset + 4),
-                        dataView.getUint8(offset + 5),
-                        dataView.getUint8(offset + 6),
-                        dataView.getUint8(offset + 7)
-                    );
-                    const chunkDataStart = offset + 8;
-                    if (chunkType === 'tEXt') {
-                        const data = new Uint8Array(arrayBuffer.slice(chunkDataStart, chunkDataStart + length));
-                        const nullIndex = data.indexOf(0);
-                        if (nullIndex > 0) {
-                            const keyword = new TextDecoder().decode(data.slice(0, nullIndex));
-                            const value = new TextDecoder().decode(data.slice(nullIndex + 1));
-                            metadata.push({ label: keyword, value });
-                        }
-                    } else if (chunkType === 'eXIf') {
-                        const exifData = new Blob([arrayBuffer.slice(chunkDataStart, chunkDataStart + length)], { type: 'image/jpeg' });
-                        const exifMetadata = await parseJPEGEXIF(exifData);
-                        metadata.push(...exifMetadata);
-                    }
-                    offset += 12 + length;
-                }
-                return metadata;
-            }
-
-            async function parseWebPMetadata(file) {
-                const arrayBuffer = await file.arrayBuffer();
-                const dataView = new DataView(arrayBuffer);
-                if (dataView.getUint32(0) !== 0x52494646 || dataView.getUint32(8) !== 0x57454250) return [];
-                let offset = 12;
-                const metadata = [];
-                while (offset < arrayBuffer.byteLength) {
-                    const chunkId = String.fromCharCode(
-                        dataView.getUint8(offset),
-                        dataView.getUint8(offset + 1),
-                        dataView.getUint8(offset + 2),
-                        dataView.getUint8(offset + 3)
-                    );
-                    const chunkSize = dataView.getUint32(offset + 4, true);
-                    const chunkDataStart = offset + 8;
-                    if (chunkId === 'EXIF') {
-                        const exifData = new Blob([arrayBuffer.slice(chunkDataStart, chunkDataStart + chunkSize)], { type: 'image/jpeg' });
-                        const exifMetadata = await parseJPEGEXIF(exifData);
-                        metadata.push(...exifMetadata);
-                    } else if (chunkId === 'XMP ') {
-                        const xmpData = new TextDecoder().decode(new Uint8Array(arrayBuffer.slice(chunkDataStart,
-                            chunkDataStart + chunkSize)));
-                        metadata.push({ label: 'XMP数据', value: xmpData.slice(0, 200) });
-                    }
-                    offset += 8 + chunkSize;
-                    if (chunkSize % 2 === 1) offset += 1;
-                }
-                return metadata;
-            }
-
-            // ===== Backend Processing =====
-            async function processBackend(file) {
-                if (currentController) currentController.abort();
-                currentController = new AbortController();
-                const formData = new FormData();
-                formData.append('file', file);
-
-                showProgress('上传图片中...');
-                setProgress(0);
-
-                try {
-                    const result = await new Promise((resolve, reject) => {
-                        const xhr = new XMLHttpRequest();
-                        xhr.open('POST', API_UPLOAD, true);
-                        xhr.responseType = 'json';
-                        xhr.timeout = 120000;
-
-                        xhr.upload.addEventListener('progress', (e) => {
-                            if (e.lengthComputable) {
-                                setProgress(e.loaded / e.total * 85);
-                                progressLabel.textContent = '上传中...';
-                            }
-                        });
-                        xhr.upload.addEventListener('load', () => {
-                            setProgress(88);
-                            progressLabel.textContent = '服务器处理中...';
-                        });
-                        xhr.addEventListener('load', () => {
-                            if (xhr.status >= 200 && xhr.status < 300) {
-                                const data = xhr.response;
-                                if (data && data.ok === true && data.code) {
-                                    setProgress(100);
-                                    progressLabel.textContent = '完成！';
-                                    resolve(data);
-                                } else {
-                                    reject(new Error(data?.error || '上传失败'));
-                                }
-                            } else {
-                                let errorMsg = `上传失败 (${xhr.status})`;
-                                try {
-                                    const data = xhr.response;
-                                    if (data && data.error) errorMsg = data.error;
-                                } catch (e) {}
-                                reject(new Error(errorMsg));
-                            }
-                        });
-                        xhr.addEventListener('error', () => reject(new Error('网络错误')));
-                        xhr.addEventListener('timeout', () => reject(new Error('上传超时')));
-                        xhr.addEventListener('abort', () => reject(new Error('上传已取消')));
-                        xhr.send(formData);
-                        currentController._xhr = xhr;
-                        currentController.signal.addEventListener('abort', () => { try { xhr.abort(); } catch (e) {} });
+                // 账号
+                function copyAccount() {
+                    if (!accountId.value) return;
+                    navigator.clipboard?.writeText(accountId.value).then(() => {
+                        addToast('账号已复制到剪贴板', 'success');
+                    }).catch(() => {
+                        // fallback
+                        const ta = document.createElement('textarea');
+                        ta.value = accountId.value;
+                        ta.style.position = 'fixed';
+                        ta.style.opacity = '0';
+                        ta.style.left = '-9999px';
+                        document.body.appendChild(ta);
+                        ta.select();
+                        try { document.execCommand('copy');
+                            addToast('账号已复制', 'success'); } catch (_) { addToast('复制失败，请手动复制', 'error'); }
+                        document.body.removeChild(ta);
                     });
-
-                    const code = result.code;
-                    const expiresIn = result.expires_in || EXPIRE_SECONDS;
-                    const filename = file.name;
-                    uploadedFileName = filename;
-
-                    showUploadResult(code, filename, expiresIn, [
-                        { label: '复制物件码', icon: ICONS.copy, className: 'm3-btn-tonal', onClick: () => copyText(code) },
-                        { label: '预览图片', icon: ICONS.image, className: 'm3-btn-filled', onClick: () => openDownloadPreview(code) },
-                        { label: '下载图片', icon: ICONS.success, className: 'm3-btn-filled', onClick: () => triggerDownload(code) }
-                    ], true);
-
-                    showToast('上传成功，物件码 ' + code, 'success');
-                } catch (err) {
-                    const errMsg = mapError(err.message);
-                    showToast(errMsg, 'error');
-                    showUploadError(errMsg);
-                } finally {
-                    setTimeout(() => { if (progressFill.style.width === '100%') hideProgress(); }, 800);
-                    currentController = null;
                 }
-            }
 
-            function mapError(errorStr) {
-                const map = {
-                    'empty': '文件为空或字段名不对',
-                    'unsupported': '不支持的图片格式',
-                    'invalid_image': '图片文件损坏',
-                    'too_large': '文件超过 20MB 限制',
-                    'busy': '服务器繁忙，请稍后再试',
-                    'codes_exhausted': '取件码已用尽',
-                    'bad_code': '无效的物件码',
-                    'not_found': '物件码不存在',
-                    'expired': '物件码已过期',
-                };
-                return map[errorStr] || errorStr || '操作失败';
-            }
-
-            // ===== Frontend Processing =====
-            async function processFrontend(file) {
-                showProgress('正在读取图片...');
-                setProgress(5);
-
-                try {
-                    const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
-                    if (!validTypes.includes(file.type)) {
-                        if (file.type === 'image/gif') throw new Error('前端模式不支持 GIF 动图，请切换后端模式');
-                        throw new Error('前端仅支持 JPG、PNG、WEBP');
-                    }
-                    if (file.size > MAX_FILE_SIZE) throw new Error('文件超过 20MB 限制');
-
-                    const arrayBuffer = await file.arrayBuffer();
-                    setProgress(20);
-                    progressLabel.textContent = '解码图片...';
-
-                    let bitmap;
-                    try { bitmap = await createImageBitmap(new Blob([arrayBuffer], { type: file.type })); } catch (e) {
-                        bitmap = await loadImageFallback(URL.createObjectURL(new Blob([arrayBuffer], { type: file.type }))); }
-
-                    setProgress(45);
-                    progressLabel.textContent = '清除元数据中...';
-
-                    let width = bitmap.width;
-                    let height = bitmap.height;
-                    if (width > MAX_CANVAS_DIMENSION || height > MAX_CANVAS_DIMENSION) {
-                        const scale = Math.min(MAX_CANVAS_DIMENSION / width, MAX_CANVAS_DIMENSION / height);
-                        width = Math.round(width * scale);
-                        height = Math.round(height * scale);
-                    }
-
-                    const isJPEG = file.type === 'image/jpeg';
-                    const canvas = document.createElement('canvas');
-                    canvas.width = width;
-                    canvas.height = height;
-                    const ctx = canvas.getContext('2d', { alpha: !isJPEG });
-                    if (isJPEG) { ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, width, height); }
-                    ctx.imageSmoothingEnabled = true;
-                    ctx.imageSmoothingQuality = 'high';
-                    ctx.drawImage(bitmap, 0, 0, width, height);
-
-                    setProgress(65);
-                    progressLabel.textContent = '生成无元数据图片...';
-                    if (bitmap.close) bitmap.close();
-
-                    const blob = await new Promise((resolve, reject) => {
-                        canvas.toBlob(b => b ? resolve(b) : reject(new Error('导出失败')), file.type || 'image/png', 0.92);
+                function copyNewAccount() {
+                    if (!newAccount.value) return;
+                    navigator.clipboard?.writeText(newAccount.value).then(() => {
+                        addToast('新账号已复制到剪贴板', 'success');
+                    }).catch(() => {
+                        const ta = document.createElement('textarea');
+                        ta.value = newAccount.value;
+                        ta.style.position = 'fixed';
+                        ta.style.opacity = '0';
+                        ta.style.left = '-9999px';
+                        document.body.appendChild(ta);
+                        ta.select();
+                        try { document.execCommand('copy');
+                            addToast('账号已复制', 'success'); } catch (_) { addToast('复制失败，请手动复制', 'error'); }
+                        document.body.removeChild(ta);
                     });
+                }
 
-                    setProgress(85);
-                    progressLabel.textContent = '创建本地物件码...';
+                function logout() {
+                    accountId.value = '';
+                    localStorage.removeItem('tg_gallery_account');
+                    images.value = [];
+                    isBound.value = false;
+                    previewVisible.value = false;
+                    addToast('已登出', 'info');
+                }
 
-                    const localCode = generateLocalCode();
-                    const blobUrl = URL.createObjectURL(blob);
-                    if (currentObjectUrl) URL.revokeObjectURL(currentObjectUrl);
-                    currentObjectUrl = blobUrl;
-
-                    try { await storeBlobInIDB(localCode, blob); } catch (e) { console.warn('IDB存储失败', e); }
+                // ---- 注册 ----
+                async function doRegister() {
+                    if (registering.value) return;
+                    registering.value = true;
+                    newAccount.value = '';
                     try {
-                        localStorage.setItem(`metaCleanerLocal_${localCode}`, JSON.stringify({
-                            code: localCode,
-                            filename: file.name,
-                            createdAt: Date.now(),
-                            expiresAt: Date.now() + EXPIRE_SECONDS * 1000
-                        }));
-                    } catch (e) {}
-
-                    setProgress(100);
-                    progressLabel.textContent = '完成！';
-                    uploadedFileName = file.name;
-
-                    showUploadResult(localCode, file.name, EXPIRE_SECONDS, [
-                        { label: '复制物件码', icon: ICONS.copy, className: 'm3-btn-tonal', onClick: () => copyText(localCode) },
-                        { label: '下载图片', icon: ICONS.success, className: 'm3-btn-filled', onClick: () => downloadFrontendBlob(localCode, file.name) },
-                        { label: '预览图片', icon: ICONS.image, className: 'm3-btn-tonal', onClick: () => previewFrontendBlob(localCode) }
-                    ], false);
-
-                    if (currentPreviewUrl) URL.revokeObjectURL(currentPreviewUrl);
-                    currentPreviewUrl = blobUrl;
-                    previewThumb.src = blobUrl;
-                    previewThumb.classList.remove('hidden');
-
-                    showToast('前端处理完成，图片未离开浏览器', 'success');
-                    canvas.width = 0; canvas.height = 0;
-
-                } catch (err) {
-                    const errMsg = mapError(err.message) || err.message;
-                    showToast(errMsg, 'error');
-                    showUploadError(errMsg);
-                } finally {
-                    setTimeout(() => { if (progressFill.style.width === '100%') hideProgress(); }, 800);
-                }
-            }
-
-            function loadImageFallback(url) {
-                return new Promise((resolve, reject) => {
-                    const img = new Image();
-                    img.onload = () => { URL.revokeObjectURL(url); resolve(img); };
-                    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('图片解码失败')); };
-                    img.src = url;
-                });
-            }
-
-            function generateLocalCode() {
-                const stored = [];
-                try {
-                    for (let i = 0; i < localStorage.length; i++) {
-                        const k = localStorage.key(i);
-                        if (k?.startsWith('metaCleanerLocal_')) stored.push(k.replace('metaCleanerLocal_', ''));
-                    }
-                } catch (e) {}
-                let code;
-                do { code = String(Math.floor(100000 + Math.random() * 900000)); } while (stored.includes(code));
-                return code;
-            }
-
-            // ===== IndexedDB Helpers =====
-            let dbPromise = null;
-
-            function openIDB() {
-                if (!dbPromise) {
-                    dbPromise = new Promise((resolve, reject) => {
-                        if (!('indexedDB' in window)) { reject(new Error('不支持IDB')); return; }
-                        const req = indexedDB.open(IDB_DB_NAME, 1);
-                        req.onupgradeneeded = (e) => {
-                            const db = e.target.result;
-                            if (!db.objectStoreNames.contains(IDB_STORE_NAME)) db.createObjectStore(IDB_STORE_NAME, { keyPath: 'code' });
-                        };
-                        req.onsuccess = (e) => resolve(e.target.result);
-                        req.onerror = (e) => reject(e.target.error);
-                    });
-                }
-                return dbPromise;
-            }
-
-            async function storeBlobInIDB(code, blob) {
-                const db = await openIDB();
-                return new Promise((resolve, reject) => {
-                    const tx = db.transaction(IDB_STORE_NAME, 'readwrite');
-                    const store = tx.objectStore(IDB_STORE_NAME);
-                    store.put({ code, blob, timestamp: Date.now() });
-                    tx.oncomplete = () => resolve();
-                    tx.onerror = (e) => reject(e.target.error);
-                });
-            }
-
-            async function getBlobFromIDB(code) {
-                try {
-                    const db = await openIDB();
-                    return new Promise((resolve) => {
-                        const tx = db.transaction(IDB_STORE_NAME, 'readonly');
-                        const req = tx.objectStore(IDB_STORE_NAME).get(code);
-                        req.onsuccess = () => resolve(req.result?.blob || null);
-                        req.onerror = () => resolve(null);
-                    });
-                } catch (e) { return null; }
-            }
-
-            async function deleteBlobFromIDB(code) {
-                try {
-                    const db = await openIDB();
-                    return new Promise((resolve) => {
-                        const tx = db.transaction(IDB_STORE_NAME, 'readwrite');
-                        tx.objectStore(IDB_STORE_NAME).delete(code);
-                        tx.oncomplete = () => resolve();
-                        tx.onerror = () => resolve();
-                    });
-                } catch (e) {}
-            }
-
-            async function cleanupExpiredIDB() {
-                try {
-                    const db = await openIDB();
-                    const tx = db.transaction(IDB_STORE_NAME, 'readwrite');
-                    const store = tx.objectStore(IDB_STORE_NAME);
-                    const req = store.openCursor();
-                    req.onsuccess = (e) => {
-                        const cursor = e.target.result;
-                        if (cursor) {
-                            const data = getLocalCodeData(cursor.value.code);
-                            if (!data || Date.now() > data.expiresAt) store.delete(cursor.value.code);
-                            cursor.continue();
+                        const res = await fetch(`${API_BASE}/api/register`, { method: 'POST' });
+                        if (!res.ok) {
+                            const err = await res.json().catch(() => ({}));
+                            throw new Error(err.detail || `HTTP ${res.status}`);
                         }
-                    };
-                } catch (e) {}
-            }
-
-            // ===== Upload Zone Events =====
-            uploadZone.addEventListener('click', (e) => { if (e.target !== fileInput) fileInput.click(); });
-            uploadZone.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault();
-                    fileInput.click(); } });
-            fileInput.addEventListener('change', () => { if (fileInput.files[0]) handleFile(fileInput.files[0]); });
-
-            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(ev => uploadZone.addEventListener(ev, e => { e
-                    .preventDefault(); e.stopPropagation(); }));
-            uploadZone.addEventListener('dragenter', () => uploadZone.classList.add('dragover'));
-            uploadZone.addEventListener('dragover', () => uploadZone.classList.add('dragover'));
-            uploadZone.addEventListener('dragleave', (e) => { if (!uploadZone.contains(e.relatedTarget)) uploadZone
-                    .classList.remove('dragover'); });
-            uploadZone.addEventListener('drop', (e) => {
-                uploadZone.classList.remove('dragover');
-                if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
-            });
-
-            document.addEventListener('paste', (e) => {
-                if (activeTab !== 'upload') return;
-                const items = e.clipboardData?.items;
-                if (items) {
-                    for (const item of items) {
-                        if (item.type.startsWith('image/')) {
-                            const f = item.getAsFile();
-                            if (f) { handleFile(f); e.preventDefault(); break; }
+                        const data = await res.json();
+                        if (data.status === 'success' && data.account_id) {
+                            newAccount.value = data.account_id;
+                            addToast('账号创建成功！请前往 Telegram 绑定', 'success');
+                            // 自动填入登录框
+                            loginInput.value = data.account_id;
+                        } else {
+                            throw new Error('注册响应异常');
                         }
+                    } catch (e) {
+                        addToast('注册失败: ' + e.message, 'error');
+                    } finally {
+                        registering.value = false;
                     }
                 }
-            });
 
-            // ===== File Handler =====
-            async function handleFile(file) {
-                resetUploadResult();
-                uploadedFileName = file.name;
-
-                if (!file.type.startsWith('image/')) { showToast('不支持的格式', 'error'); return; }
-                if (file.size > MAX_FILE_SIZE) { showToast('文件超过 20MB', 'error'); return; }
-                if (file.size === 0) { showToast('文件为空', 'error'); return; }
-
-                if (file.type !== 'image/gif') {
-                    const previewUrl = URL.createObjectURL(file);
-                    if (currentPreviewUrl) URL.revokeObjectURL(currentPreviewUrl);
-                    currentPreviewUrl = previewUrl;
-                    previewThumb.src = previewUrl;
-                    previewThumb.classList.remove('hidden');
-                } else {
-                    previewThumb.classList.add('hidden');
-                }
-
-                const metadata = await extractImageMetadata(file);
-                displayMetadata(metadata);
-
-                if (currentMode === 'frontend') await processFrontend(file);
-                else await processBackend(file);
-            }
-
-            // ===== Query =====
-            queryBtn.addEventListener('click', async () => {
-                const code = queryCodeInput.value.trim();
-                if (!/^\d{6}$/.test(code)) {
-                    showToast('请输入6位数字物件码', 'warning');
-                    queryError.style.display = 'block';
-                    queryError.innerHTML = `<div class="m3-card-outlined" style="padding:16px;">${ICONS.error} <span>请输入6位数字物件码</span></div>`;
-                    queryResult.style.display = 'none';
-                    return;
-                }
-                await performQuery(code);
-            });
-            queryCodeInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') queryBtn.click(); });
-            queryCodeInput.addEventListener('input', () => {
-                queryCodeInput.value = queryCodeInput.value.replace(/\D/g, '').slice(0, 6);
-                queryError.style.display = 'none'; queryResult.style.display = 'none';
-            });
-
-            async function performQuery(code) {
-                queryResult.style.display = 'none'; queryError.style.display = 'none';
-                queryBtn.disabled = true;
-                queryBtn.innerHTML = '<span class="spinner" style="width:16px;height:16px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:spin 0.7s linear infinite;"></span> 查询中...';
-
-                try {
-                    const localData = getLocalCodeData(code);
-                    if (localData) {
-                        const remaining = Math.max(0, EXPIRE_SECONDS - Math.floor((Date.now() - localData.createdAt) / 1000));
-                        if (remaining <= 0) { removeLocalCode(code); await deleteBlobFromIDB(code); throw new Error('expired'); }
-                        queryResult.style.display = 'block';
-                        queryResult.innerHTML = `
-                            <div class="m3-card-outlined" style="padding:16px;">
-                                <div style="display:flex;justify-content:space-between;padding:8px 0;"><span style="color:var(--m3-on-surface-variant);">${ICONS.file} 文件名</span><strong>${escapeHtml(localData.filename)}</strong></div>
-                                <div style="display:flex;justify-content:space-between;padding:8px 0;"><span style="color:var(--m3-on-surface-variant);">${ICONS.clock} 剩余时间</span><strong>${formatTime(remaining)}</strong></div>
-                                <div style="display:flex;justify-content:space-between;padding:8px 0;"><span style="color:var(--m3-on-surface-variant);">${ICONS.server} 处理方式</span><strong>前端本地</strong></div>
-                            </div>`;
-                        showToast('查询成功', 'success');
+                // ---- 登录 ----
+                async function doLogin() {
+                    const id = loginInput.value.trim();
+                    if (id.length !== 16) {
+                        addToast('请输入16位账号', 'warning');
                         return;
                     }
-                    const response = await fetch(`${API_INFO}/${code}`, { signal: AbortSignal.timeout(10000) });
-                    if (response.ok) {
-                        const data = await response.json();
-                        if (data.ok) {
-                            queryResult.style.display = 'block';
-                            queryResult.innerHTML = `
-                                <div class="m3-card-outlined" style="padding:16px;">
-                                    <div style="display:flex;justify-content:space-between;padding:8px 0;"><span style="color:var(--m3-on-surface-variant);">${ICONS.file} 剩余时间</span><strong>${formatTime(data.expires_in || 0)}</strong></div>
-                                    <div style="display:flex;justify-content:space-between;padding:8px 0;"><span style="color:var(--m3-on-surface-variant);">${ICONS.clock} 过期时间</span><strong>${new Date((data.expires_at || 0) * 1000).toLocaleString()}</strong></div>
-                                    <div style="display:flex;justify-content:space-between;padding:8px 0;"><span style="color:var(--m3-on-surface-variant);">${ICONS.server} 处理方式</span><strong>后端服务器</strong></div>
-                                </div>`;
-                            showToast('查询成功', 'success');
-                        } else throw new Error(data.error || '查询失败');
-                    } else if (response.status === 404) throw new Error('not_found');
-                    else if (response.status === 410) throw new Error('expired');
-                    else throw new Error('bad_code');
-                } catch (err) {
-                    const errMsg = mapError(err.message) || err.message;
-                    queryError.style.display = 'block';
-                    queryError.innerHTML = `<div class="m3-card-outlined" style="padding:16px;border-color:var(--m3-error);">${ICONS.error} <span>${escapeHtml(errMsg)}</span></div>`;
-                    showToast(errMsg, 'error');
-                } finally {
-                    queryBtn.disabled = false;
-                    queryBtn.innerHTML = `${ICONS.info} 查询`;
-                }
-            }
-
-            function getLocalCodeData(code) {
-                try { const d = localStorage.getItem(`metaCleanerLocal_${code}`); return d ? JSON.parse(d) : null; } catch (
-                    e) { return null; }
-            }
-
-            function removeLocalCode(code) {
-                try { localStorage.removeItem(`metaCleanerLocal_${code}`); } catch (e) {}
-            }
-
-            // ===== Download =====
-            downloadBtn.addEventListener('click', () => {
-                const code = downloadCodeInput.value.trim();
-                if (!/^\d{6}$/.test(code)) {
-                    showToast('请输入6位数字物件码', 'warning');
-                    downloadError.style.display = 'block';
-                    downloadError.innerHTML = `<div class="m3-card-outlined" style="padding:16px;">${ICONS.error} <span>请输入6位数字物件码</span></div>`;
-                    downloadPreview.style.display = 'none';
-                    return;
-                }
-                triggerDownload(code);
-            });
-            previewBtn.addEventListener('click', () => {
-                const code = downloadCodeInput.value.trim();
-                if (!/^\d{6}$/.test(code)) {
-                    showToast('请输入6位数字物件码', 'warning');
-                    downloadError.style.display = 'block';
-                    downloadError.innerHTML = `<div class="m3-card-outlined" style="padding:16px;">${ICONS.error} <span>请输入6位数字物件码</span></div>`;
-                    downloadPreview.style.display = 'none';
-                    return;
-                }
-                openDownloadPreview(code);
-            });
-            deleteBtn.addEventListener('click', () => {
-                if (currentDeleteCode) deleteFile(currentDeleteCode);
-            });
-            downloadCodeInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') triggerDownload(downloadCodeInput
-                    .value.trim()); });
-            downloadCodeInput.addEventListener('input', () => {
-                downloadCodeInput.value = downloadCodeInput.value.replace(/\D/g, '').slice(0, 6);
-                downloadError.style.display = 'none'; downloadPreview.style.display = 'none';
-                deleteBtn.style.display = 'none';
-                currentDeleteCode = null;
-            });
-
-            async function triggerDownload(code) {
-                const localData = getLocalCodeData(code);
-                if (localData) {
-                    const remaining = EXPIRE_SECONDS - Math.floor((Date.now() - localData.createdAt) / 1000);
-                    if (remaining <= 0) { removeLocalCode(code); await deleteBlobFromIDB(code); showToast('物件码已过期',
-                            'error'); return; }
-                    await downloadFrontendBlob(code, localData.filename);
-                    return;
-                }
-                // 后端下载：直接跳转
-                window.location.href = `${API_FILE}/${code}`;
-                showToast('下载已触发', 'success');
-            }
-
-            async function openDownloadPreview(code) {
-                const localData = getLocalCodeData(code);
-                if (localData) {
-                    const remaining = EXPIRE_SECONDS - Math.floor((Date.now() - localData.createdAt) / 1000);
-                    if (remaining <= 0) { removeLocalCode(code); await deleteBlobFromIDB(code); showToast('物件码已过期',
-                            'error'); return; }
-                    const blob = await getBlobFromIDB(code);
-                    if (blob) {
-                        const url = URL.createObjectURL(blob);
-                        downloadPreview.style.display = 'block';
-                        downloadPreview.innerHTML = `<div class="m3-card-outlined" style="padding:16px;text-align:center;">${ICONS.image} <span>本地图片预览：</span><br><img src="${url}" style="max-width:100%;max-height:280px;border-radius:12px;margin-top:8px;"></div>`;
-                        downloadError.style.display = 'none';
-                        setTimeout(() => URL.revokeObjectURL(url), 30000);
-                    } else {
-                        downloadPreview.style.display = 'none';
-                        downloadError.style.display = 'block';
-                        downloadError.innerHTML = `<div class="m3-card-outlined" style="padding:16px;">${ICONS.error} <span>图片数据已失效</span></div>`;
+                    accountId.value = id;
+                    localStorage.setItem('tg_gallery_account', id);
+                    addToast('登录成功', 'success');
+                    // 重置状态
+                    isBound.value = false;
+                    images.value = [];
+                    await checkStatus();
+                    if (isBound.value) {
+                        await loadGallery();
                     }
-                    return;
                 }
-                // 后端预览
-                downloadPreview.style.display = 'block';
-                downloadPreview.innerHTML = `<div class="m3-card-outlined" style="padding:16px;text-align:center;"><span style="color:var(--m3-primary);">加载预览中...</span></div>`;
-                downloadError.style.display = 'none';
-                deleteBtn.style.display = 'inline-flex';
-                currentDeleteCode = code;
-                const img = new Image();
-                img.onload = () => {
-                    downloadPreview.innerHTML = `<div class="m3-card-outlined" style="padding:16px;text-align:center;">${ICONS.image} <span>图片预览：</span><br><img src="${API_FILE}/${code}" style="max-width:100%;max-height:280px;border-radius:12px;margin-top:8px;"></div>`;
-                };
-                img.onerror = () => {
-                    downloadPreview.style.display = 'none';
-                    downloadError.style.display = 'block';
-                    downloadError.innerHTML = `<div class="m3-card-outlined" style="padding:16px;border-color:var(--m3-error);">${ICONS.error} <span>预览失败，物件码可能不存在或已过期</span></div>`;
-                    deleteBtn.style.display = 'none';
-                    currentDeleteCode = null;
-                };
-                img.src = `${API_FILE}/${code}?t=${Date.now()}`;
-            }
 
-            async function downloadFrontendBlob(code, filename) {
-                const blob = await getBlobFromIDB(code);
-                if (!blob) { showToast('图片数据已失效', 'error'); return; }
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                const ext = filename.split('.').pop() || 'jpg';
-                a.href = url;
-                a.download = filename.replace(/\.[^.]+$/, '') + '_cleaned.' + ext;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                setTimeout(() => URL.revokeObjectURL(url), 5000);
-                showToast('下载已开始', 'success');
-            }
-
-            // ===== Delete =====
-            async function deleteFile(code) {
-                if (!confirm(`确定销毁物件码 ${code} 吗？此操作不可撤销。`)) return;
-                try {
-                    const response = await fetch(`${API_FILE}/${code}`, { method: 'DELETE' });
-                    if (response.ok) {
-                        const data = await response.json();
-                        if (data.ok) {
-                            showToast(`物件码 ${code} 已销毁`, 'success');
-                            // 清理相关显示
-                            if (downloadCodeInput.value === code) resetDownloadPanel();
-                            if (resultCode.textContent === code) resetUploadResult();
-                        } else {
-                            throw new Error(data.error || '删除失败');
-                        }
-                    } else {
-                        let errMsg = `删除失败 (${response.status})`;
-                        try {
-                            const data = await response.json();
-                            if (data.error) errMsg = data.error;
-                        } catch (e) {}
-                        throw new Error(errMsg);
-                    }
-                } catch (err) {
-                    showToast(mapError(err.message) || err.message, 'error');
-                }
-            }
-
-            // ===== Copy =====
-            async function copyText(text) {
-                try { await navigator.clipboard.writeText(text); showToast('已复制', 'success'); } catch (e) {
-                    const ta = document.createElement('textarea');
-                    ta.value = text;
-                    ta.style.position = 'fixed';
-                    ta.style.opacity = '0';
-                    document.body.appendChild(ta);
-                    ta.select();
-                    try { document.execCommand('copy'); showToast('已复制', 'success'); } catch (err) { showToast('复制失败',
-                            'warning'); }
-                    document.body.removeChild(ta);
-                }
-            }
-
-            // ===== Performance Monitor =====
-            function startPerfMonitor() {
-                if (perfMonitorRunning) return;
-                perfMonitorRunning = true;
-                perfFrameCount = 0;
-                perfLastTime = performance.now();
-                perfFPS = 60;
-                perfLowFrames = 0;
-
-                function checkPerf() {
-                    const now = performance.now();
-                    const delta = now - perfLastTime;
-                    if (delta >= PERF_CHECK_INTERVAL) {
-                        perfFPS = (perfFrameCount * 1000) / delta;
-                        perfFrameCount = 0;
-                        perfLastTime = now;
-                        if (perfFPS < 30) {
-                            perfLowFrames++;
-                            if (perfLowFrames >= 2 && perfBadge) {
-                                perfBadge.textContent = `低帧率: ${Math.round(perfFPS)} FPS`;
-                                perfBadge.classList.add('visible');
-                                setTimeout(() => { if (perfFPS > 40) perfBadge.classList.remove('visible'); }, 3000);
+                // ---- 状态检查 ----
+                async function checkStatus() {
+                    if (!accountId.value) return;
+                    statusLoading.value = true;
+                    statusText.value = '检查绑定状态...';
+                    statusClass.value = 'info';
+                    try {
+                        const res = await fetch(`${API_BASE}/api/account/status`, {
+                            headers: { 'Authorization': `Bearer ${accountId.value}` }
+                        });
+                        if (!res.ok) {
+                            if (res.status === 401 || res.status === 403) {
+                                isBound.value = false;
+                                statusText.value = '账号无效或未授权，请重新登录';
+                                statusClass.value = 'error';
+                                addToast('账号无效，请重新登录', 'error');
+                                return;
                             }
-                        } else {
-                            perfLowFrames = 0;
+                            throw new Error(`HTTP ${res.status}`);
                         }
+                        const data = await res.json();
+                        isBound.value = data.is_bound === true;
+                        if (isBound.value) {
+                            statusText.value = '✅ 已绑定 Telegram，可以上传图片';
+                            statusClass.value = 'success';
+                        } else {
+                            statusText.value = '⚠️ 未绑定 Telegram，暂无法上传图片。请前往 @Bcvyubot 绑定';
+                            statusClass.value = 'warning';
+                        }
+                    } catch (e) {
+                        isBound.value = false;
+                        statusText.value = '状态查询失败: ' + e.message;
+                        statusClass.value = 'error';
+                        addToast('状态查询失败', 'error');
+                    } finally {
+                        statusLoading.value = false;
                     }
-                    perfFrameCount++;
-                    requestAnimationFrame(checkPerf);
                 }
-                requestAnimationFrame(checkPerf);
-            }
 
-            // ===== Network =====
-            window.addEventListener('online', () => { isOffline = false; showToast('网络已恢复', 'success'); });
-            window.addEventListener('offline', () => { isOffline = true; showToast('网络断开，前端模式仍可用', 'warning'); });
-
-            // ===== Cleanup =====
-            function cleanupMemory() {
-                if (currentPreviewUrl && !previewThumb.src.includes(currentPreviewUrl)) {
-                    URL.revokeObjectURL(currentPreviewUrl);
-                    currentPreviewUrl = null;
+                function refreshStatus() {
+                    checkStatus();
                 }
-                cleanupExpiredLocalCodes();
-            }
 
-            function cleanupExpiredLocalCodes() {
-                try {
-                    const keys = [];
-                    for (let i = 0; i < localStorage.length; i++) {
-                        const k = localStorage.key(i);
-                        if (k?.startsWith('metaCleanerLocal_')) keys.push(k);
-                    }
-                    keys.forEach(k => {
-                        try {
-                            const d = JSON.parse(localStorage.getItem(k));
-                            if (d?.expiresAt && Date.now() > d.expiresAt) {
-                                const code = k.replace('metaCleanerLocal_', '');
-                                localStorage.removeItem(k);
-                                deleteBlobFromIDB(code);
+                // ---- 图库 ----
+                async function loadGallery() {
+                    if (!accountId.value || !isBound.value) return;
+                    galleryLoading.value = true;
+                    try {
+                        const res = await fetch(`${API_BASE}/api/images`, {
+                            headers: { 'Authorization': `Bearer ${accountId.value}` }
+                        });
+                        if (!res.ok) {
+                            if (res.status === 401 || res.status === 403) {
+                                addToast('登录已过期，请重新登录', 'error');
+                                logout();
+                                return;
                             }
-                        } catch (e) { localStorage.removeItem(k); }
+                            throw new Error(`HTTP ${res.status}`);
+                        }
+                        const data = await res.json();
+                        if (data.status === 'success' && Array.isArray(data.images)) {
+                            images.value = data.images;
+                        } else {
+                            images.value = [];
+                        }
+                    } catch (e) {
+                        addToast('加载图库失败: ' + e.message, 'error');
+                        images.value = [];
+                    } finally {
+                        galleryLoading.value = false;
+                    }
+                }
+
+                function refreshGallery() {
+                    if (isBound.value) loadGallery();
+                    else addToast('请先绑定 Telegram', 'warning');
+                }
+
+                // ---- 上传 ----
+                function triggerFileInput() {
+                    if (!isBound.value) {
+                        addToast('请先绑定 Telegram 才能上传', 'warning');
+                        return;
+                    }
+                    if (uploading.value) return;
+                    if (fileInputRef.value) fileInputRef.value.click();
+                }
+
+                function onFilePicked(e) {
+                    const file = e.target.files[0];
+                    if (file) startUpload(file);
+                    e.target.value = '';
+                }
+
+                function handleDrop(e) {
+                    isDragging.value = false;
+                    const file = e.dataTransfer.files[0];
+                    if (file && file.type.startsWith('image/')) {
+                        startUpload(file);
+                    } else {
+                        addToast('请拖拽图片文件', 'warning');
+                    }
+                }
+
+                async function startUpload(file) {
+                    if (!isBound.value) {
+                        addToast('请先绑定 Telegram', 'warning');
+                        return;
+                    }
+                    if (uploading.value) return;
+                    if (file.size > 20 * 1024 * 1024) {
+                        addToast('图片大小超过 20 MB 限制', 'error');
+                        return;
+                    }
+
+                    uploading.value = true;
+                    uploadProgress.value = 0;
+                    uploadStatus.value = '准备上传...';
+
+                    const formData = new FormData();
+                    formData.append('file', file);
+
+                    try {
+                        const xhr = new XMLHttpRequest();
+                        const promise = new Promise((resolve, reject) => {
+                            xhr.open('POST', `${API_BASE}/api/upload`);
+                            xhr.setRequestHeader('Authorization', `Bearer ${accountId.value}`);
+                            xhr.upload.onprogress = (e) => {
+                                if (e.total > 0) {
+                                    uploadProgress.value = (e.loaded / e.total) * 100;
+                                    uploadStatus.value = `上传中 ${Math.round(uploadProgress.value)}%`;
+                                }
+                            };
+                            xhr.onload = () => {
+                                if (xhr.status >= 200 && xhr.status < 300) {
+                                    try {
+                                        const data = JSON.parse(xhr.responseText);
+                                        resolve(data);
+                                    } catch (_) { reject(new Error('解析响应失败')); }
+                                } else {
+                                    try {
+                                        const err = JSON.parse(xhr.responseText);
+                                        reject(new Error(err.detail || `HTTP ${xhr.status}`));
+                                    } catch (_) { reject(new Error(`HTTP ${xhr.status}`)); }
+                                }
+                            };
+                            xhr.onerror = () => reject(new Error('网络错误'));
+                            xhr.send(formData);
+                        });
+
+                        const data = await promise;
+                        if (data.status === 'success') {
+                            uploadProgress.value = 100;
+                            uploadStatus.value = '上传完成 ✅';
+                            addToast(`上传成功: ${data.file_name}`, 'success');
+                            // 刷新图库
+                            await loadGallery();
+                        } else {
+                            throw new Error(data.detail || '上传失败');
+                        }
+                    } catch (e) {
+                        addToast('上传失败: ' + e.message, 'error');
+                        uploadStatus.value = '上传失败';
+                    } finally {
+                        setTimeout(() => {
+                            uploading.value = false;
+                            uploadProgress.value = 0;
+                            uploadStatus.value = '';
+                        }, 600);
+                    }
+                }
+
+                // ---- 图片预览 ----
+                function openPreview(img) {
+                    previewImage.value = img;
+                    previewVisible.value = true;
+                    document.body.style.overflow = 'hidden';
+                }
+
+                function closePreview() {
+                    previewVisible.value = false;
+                    previewImage.value = null;
+                    document.body.style.overflow = '';
+                }
+
+                function copyLink() {
+                    if (!previewImage.value) return;
+                    const url = previewImage.value.url;
+                    navigator.clipboard?.writeText(url).then(() => {
+                        addToast('直链已复制到剪贴板', 'success');
+                    }).catch(() => {
+                        const ta = document.createElement('textarea');
+                        ta.value = url;
+                        ta.style.position = 'fixed';
+                        ta.style.opacity = '0';
+                        ta.style.left = '-9999px';
+                        document.body.appendChild(ta);
+                        ta.select();
+                        try { document.execCommand('copy');
+                            addToast('直链已复制', 'success'); } catch (_) { addToast('复制失败，请手动复制', 'error'); }
+                        document.body.removeChild(ta);
                     });
-                } catch (e) {}
-                cleanupExpiredIDB();
-            }
+                }
 
-            const memoryCleanupInterval = setInterval(cleanupMemory, 60000);
+                function downloadImage() {
+                    if (!previewImage.value) return;
+                    const url = previewImage.value.url;
+                    const name = previewImage.value.file_name || 'image.jpg';
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = name;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    addToast('开始下载', 'info');
+                }
 
-            // ===== Init =====
-            function init() {
-                applyTheme(currentTheme, false);
-                applyMode(currentMode, false);
-                startPerfMonitor();
-                cleanupExpiredLocalCodes();
+                function openInNewTab() {
+                    if (!previewImage.value) return;
+                    window.open(previewImage.value.url, '_blank');
+                }
 
-                document.addEventListener('visibilitychange', () => { if (document.hidden) cleanupMemory(); });
-                window.addEventListener('beforeunload', () => {
-                    if (currentPreviewUrl) URL.revokeObjectURL(currentPreviewUrl);
-                    if (currentObjectUrl) URL.revokeObjectURL(currentObjectUrl);
-                    if (expireTimer) clearInterval(expireTimer);
-                    clearInterval(memoryCleanupInterval);
-                    if (currentController) { try { currentController.abort(); } catch (e) {} }
+                function handleImageError(event, img) {
+                    // 图片加载失败时显示占位
+                    event.target.style.display = 'none';
+                    const parent = event.target.parentElement;
+                    const fallback = document.createElement('div');
+                    fallback.style.cssText =
+                        'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:var(--border);color:var(--text-tertiary);font-size:1.6rem;';
+                    fallback.innerHTML = '<i class="fas fa-image"></i>';
+                    parent.appendChild(fallback);
+                }
+
+                // ---- 生命周期 ----
+                onMounted(async () => {
+                    // 主题
+                    document.documentElement.setAttribute('data-theme', theme.value);
+
+                    // 如果已有账号，自动登录
+                    if (accountId.value) {
+                        await checkStatus();
+                        if (isBound.value) {
+                            await loadGallery();
+                        }
+                    }
+
+                    // 键盘关闭预览
+                    document.addEventListener('keydown', (e) => {
+                        if (e.key === 'Escape' && previewVisible.value) {
+                            closePreview();
+                        }
+                    });
                 });
-            }
 
-            if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-            else init();
-        })();
+                // 监听账号变化
+                watch(accountId, (val) => {
+                    if (!val) {
+                        images.value = [];
+                        isBound.value = false;
+                        previewVisible.value = false;
+                    }
+                });
+
+                // ---- 暴露 ----
+                return {
+                    accountId,
+                    theme,
+                    loginInput,
+                    registering,
+                    newAccount,
+                    isBound,
+                    statusLoading,
+                    statusText,
+                    statusClass,
+                    statusIcon,
+                    fileInputRef,
+                    isDragging,
+                    uploading,
+                    uploadProgress,
+                    uploadStatus,
+                    images,
+                    galleryLoading,
+                    searchQuery,
+                    sortBy,
+                    filteredImages,
+                    totalSize,
+                    previewVisible,
+                    previewImage,
+                    toasts,
+                    toggleTheme,
+                    copyAccount,
+                    copyNewAccount,
+                    logout,
+                    doRegister,
+                    doLogin,
+                    checkStatus,
+                    refreshStatus,
+                    loadGallery,
+                    refreshGallery,
+                    triggerFileInput,
+                    onFilePicked,
+                    handleDrop,
+                    startUpload,
+                    openPreview,
+                    closePreview,
+                    copyLink,
+                    downloadImage,
+                    openInNewTab,
+                    handleImageError,
+                    formatFileSize,
+                    removeToast,
+                    addToast,
+                };
+            }
+        });
+
+        app.mount('#app');
     </script>
+
 </body>
 </html>
