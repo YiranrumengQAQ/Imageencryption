@@ -8,7 +8,7 @@
     <!-- Vue 3 -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js">
     </script>
-    <!-- Font Awesome 6 (免费图标库) -->
+    <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 
     <style>
@@ -51,7 +51,6 @@
             --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.45);
         }
 
-        /* ===== 全局重置 ===== */
         * {
             margin: 0;
             padding: 0;
@@ -93,7 +92,6 @@
             background: rgba(124, 58, 237, 0.45);
         }
 
-        /* ===== 工具类 ===== */
         .app-wrapper {
             max-width: 820px;
             margin: 0 auto;
@@ -102,7 +100,6 @@
             gap: clamp(14px, 2.5vw, 22px);
         }
 
-        /* ===== 玻璃卡片 ===== */
         .glass-card {
             background: var(--surface);
             backdrop-filter: blur(18px);
@@ -132,7 +129,6 @@
             border-color: rgba(124, 58, 237, 0.20);
         }
 
-        /* ===== 按钮 ===== */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -208,7 +204,6 @@
             border-color: #ef4444;
         }
 
-        /* ===== 输入框 ===== */
         .input-field {
             width: 100%;
             padding: 11px 16px;
@@ -230,7 +225,6 @@
             color: var(--text-tertiary);
         }
 
-        /* ===== Header ===== */
         .app-header {
             display: flex;
             align-items: center;
@@ -303,7 +297,6 @@
             color: #7c3aed;
         }
 
-        /* ===== 登录/注册卡片 ===== */
         .auth-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -340,44 +333,6 @@
             flex: 1;
         }
 
-        /* ===== 状态横幅 ===== */
-        .status-banner {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 18px;
-            border-radius: var(--radius);
-            margin-bottom: 4px;
-            font-size: 0.90rem;
-            border: 1px solid var(--border);
-        }
-        .status-banner.warning {
-            background: rgba(251, 191, 36, 0.08);
-            border-color: rgba(251, 191, 36, 0.25);
-            color: #b45309;
-        }
-        .status-banner.success {
-            background: rgba(34, 197, 94, 0.06);
-            border-color: rgba(34, 197, 94, 0.20);
-            color: #16a34a;
-        }
-        .status-banner.info {
-            background: rgba(59, 130, 246, 0.06);
-            border-color: rgba(59, 130, 246, 0.20);
-            color: #2563eb;
-        }
-        .status-banner i {
-            font-size: 1.2rem;
-            flex-shrink: 0;
-        }
-        .status-banner .spacer {
-            flex: 1;
-        }
-        .status-banner .btn-sm {
-            flex-shrink: 0;
-        }
-
-        /* ===== 上传区域 ===== */
         .upload-zone {
             border: 2px dashed var(--border);
             border-radius: var(--radius-lg);
@@ -431,7 +386,6 @@
             display: none;
         }
 
-        /* ===== 进度条 ===== */
         .progress-wrap {
             margin-top: 14px;
             display: flex;
@@ -460,7 +414,6 @@
             flex-wrap: wrap;
         }
 
-        /* ===== 统计卡片 ===== */
         .stats-row {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
@@ -497,7 +450,6 @@
             font-size: 0.9rem;
         }
 
-        /* ===== 搜索栏 ===== */
         .search-bar {
             display: flex;
             align-items: center;
@@ -526,7 +478,6 @@
             border-color: #8b5cf6;
         }
 
-        /* ===== 图库网格 ===== */
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -606,7 +557,6 @@
             display: block;
         }
 
-        /* ===== 图片预览模态框 ===== */
         .modal-mask {
             position: fixed;
             inset: 0;
@@ -695,7 +645,6 @@
             min-width: 80px;
         }
 
-        /* ===== Toast 通知 ===== */
         .toast-container {
             position: fixed;
             top: 20px;
@@ -766,7 +715,6 @@
             }
         }
 
-        /* ===== 响应式微调 ===== */
         @media (max-width: 600px) {
             body {
                 padding: 10px;
@@ -823,7 +771,6 @@
             }
         }
 
-        /* ===== 工具类 ===== */
         .mt-8 {
             margin-top: 8px;
         }
@@ -858,7 +805,6 @@
             flex-wrap: wrap;
         }
 
-        /* 动画 */
         .fade-enter-active,
         .fade-leave-active {
             transition: opacity var(--transition-slow), transform var(--transition-slow);
@@ -933,44 +879,17 @@
                     <!-- 注册 -->
                     <div class="auth-card">
                         <h3><i class="fas fa-user-plus"></i> 注册</h3>
-                        <p class="text-muted" style="margin-bottom:10px;">生成新账号，需前往 Telegram 绑定</p>
+                        <p class="text-muted" style="margin-bottom:10px;">生成新账号，自动登录</p>
                         <button class="btn btn-primary btn-block" @click="doRegister" :disabled="registering">
                             <i v-if="registering" class="fas fa-spinner fa-spin"></i>
                             <span v-else><i class="fas fa-plus-circle"></i> 生成新账号</span>
                         </button>
-                        <div v-if="newAccount" style="margin-top:12px;padding:10px;border-radius:var(--radius);background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.20);">
-                            <div style="font-weight:600;color:#16a34a;font-size:0.85rem;">
-                                <i class="fas fa-check-circle"></i> 账号已生成
-                            </div>
-                            <code style="display:block;margin:6px 0;font-size:0.9rem;word-break:break-all;font-family:var(--font-mono,monospace);background:var(--surface-solid);padding:6px 10px;border-radius:6px;">
-                                {{ newAccount }}
-                            </code>
-                            <div style="font-size:0.78rem;color:var(--text-secondary);">
-                                <i class="fas fa-info-circle"></i> 请复制账号，前往 Telegram 机器人 <strong>@Bcvyubot</strong> 发送 <strong>绑定</strong> 并粘贴此账号
-                            </div>
-                            <button class="btn btn-sm btn-ghost" style="margin-top:8px;" @click="copyNewAccount">
-                                <i class="fas fa-copy"></i> 复制账号
-                            </button>
-                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- ===== 已登录：主面板 ===== -->
             <template v-else>
-
-                <!-- 状态横幅 -->
-                <div class="status-banner" :class="statusClass">
-                    <i :class="statusIcon"></i>
-                    <span>{{ statusText }}</span>
-                    <span class="spacer"></span>
-                    <button v-if="!isBound" class="btn btn-sm btn-primary" @click="refreshStatus">
-                        <i class="fas fa-sync-alt" :class="{ 'fa-spin': statusLoading }"></i> 刷新状态
-                    </button>
-                    <button v-else class="btn btn-sm btn-ghost" @click="refreshStatus">
-                        <i class="fas fa-sync-alt" :class="{ 'fa-spin': statusLoading }"></i>
-                    </button>
-                </div>
 
                 <!-- ===== 上传区域 ===== -->
                 <div class="glass-card">
@@ -980,7 +899,7 @@
                         </div>
                         <p class="zone-title">{{ uploading ? '上传中...' : '点击或拖拽图片到此处' }}</p>
                         <p class="zone-hint">支持 JPG / PNG / WEBP / GIF，单张最大 20 MB</p>
-                        <input type="file" id="fileInputRef" accept="image/*" @change="onFilePicked" ref="fileInputRef" :disabled="uploading || !isBound" />
+                        <input type="file" id="fileInputRef" accept="image/*" @change="onFilePicked" ref="fileInputRef" :disabled="uploading" />
                     </div>
 
                     <!-- 上传进度 -->
@@ -1076,7 +995,10 @@
                     </div>
                     <div class="preview-actions">
                         <button class="btn btn-primary" @click="copyLink">
-                            <i class="fas fa-link"></i> 复制直链
+                            <i class="fas fa-link"></i> 复制压缩直链
+                        </button>
+                        <button class="btn btn-ghost" @click="copyRawLink">
+                            <i class="fas fa-file-image"></i> 复制原图直链
                         </button>
                         <button class="btn btn-ghost" @click="downloadImage">
                             <i class="fas fa-download"></i> 下载
@@ -1094,10 +1016,8 @@
     <script>
         const { createApp, ref, reactive, computed, watch, onMounted, nextTick, toRaw } = Vue;
 
-        // ==================== API 基础 ====================
         const API_BASE = 'https://node-0crq9b.156.246.95.165.nip.io';
 
-        // ==================== 工具函数 ====================
         function formatFileSize(bytes) {
             if (!bytes || bytes === 0) return '0 B';
             const k = 1024;
@@ -1106,25 +1026,14 @@
             return (bytes / Math.pow(k, i)).toFixed(1) + ' ' + sizes[i];
         }
 
-        function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
-
-        // ==================== App ====================
         const app = createApp({
             setup() {
                 // ---- 状态 ----
                 const accountId = ref(localStorage.getItem('tg_gallery_account') || '');
                 const theme = ref(localStorage.getItem('tg_gallery_theme') || 'light');
 
-                // 登录/注册
                 const loginInput = ref('');
                 const registering = ref(false);
-                const newAccount = ref('');
-
-                // 状态
-                const isBound = ref(false);
-                const statusLoading = ref(false);
-                const statusText = ref('检查绑定状态...');
-                const statusClass = ref('info');
 
                 // 上传
                 const fileInputRef = ref(null);
@@ -1149,12 +1058,10 @@
                 // ---- 计算属性 ----
                 const filteredImages = computed(() => {
                     let list = [...images.value];
-                    // 搜索
                     if (searchQuery.value.trim()) {
                         const q = searchQuery.value.trim().toLowerCase();
                         list = list.filter(img => img.file_name.toLowerCase().includes(q));
                     }
-                    // 排序
                     switch (sortBy.value) {
                         case 'newest':
                             list.sort((a, b) => b.id - a.id);
@@ -1177,18 +1084,10 @@
                     return formatFileSize(total);
                 });
 
-                const statusIcon = computed(() => {
-                    if (statusLoading.value) return 'fas fa-spinner fa-spin';
-                    if (isBound.value) return 'fas fa-check-circle';
-                    return 'fas fa-triangle-exclamation';
-                });
-
                 // ---- 方法 ----
-                // Toast
                 function addToast(message, type = 'info') {
                     toasts.push({ message, type });
                     if (toasts.length > 8) toasts.shift();
-                    // 自动消失
                     setTimeout(() => {
                         const idx = toasts.findIndex(t => t.message === message && t.type === type);
                         if (idx !== -1) toasts.splice(idx, 1);
@@ -1199,40 +1098,19 @@
                     toasts.splice(idx, 1);
                 }
 
-                // 主题
                 function toggleTheme() {
                     theme.value = theme.value === 'dark' ? 'light' : 'dark';
                     localStorage.setItem('tg_gallery_theme', theme.value);
                     document.documentElement.setAttribute('data-theme', theme.value);
                 }
 
-                // 账号
                 function copyAccount() {
                     if (!accountId.value) return;
                     navigator.clipboard?.writeText(accountId.value).then(() => {
                         addToast('账号已复制到剪贴板', 'success');
                     }).catch(() => {
-                        // fallback
                         const ta = document.createElement('textarea');
                         ta.value = accountId.value;
-                        ta.style.position = 'fixed';
-                        ta.style.opacity = '0';
-                        ta.style.left = '-9999px';
-                        document.body.appendChild(ta);
-                        ta.select();
-                        try { document.execCommand('copy');
-                            addToast('账号已复制', 'success'); } catch (_) { addToast('复制失败，请手动复制', 'error'); }
-                        document.body.removeChild(ta);
-                    });
-                }
-
-                function copyNewAccount() {
-                    if (!newAccount.value) return;
-                    navigator.clipboard?.writeText(newAccount.value).then(() => {
-                        addToast('新账号已复制到剪贴板', 'success');
-                    }).catch(() => {
-                        const ta = document.createElement('textarea');
-                        ta.value = newAccount.value;
                         ta.style.position = 'fixed';
                         ta.style.opacity = '0';
                         ta.style.left = '-9999px';
@@ -1248,7 +1126,6 @@
                     accountId.value = '';
                     localStorage.removeItem('tg_gallery_account');
                     images.value = [];
-                    isBound.value = false;
                     previewVisible.value = false;
                     addToast('已登出', 'info');
                 }
@@ -1257,7 +1134,6 @@
                 async function doRegister() {
                     if (registering.value) return;
                     registering.value = true;
-                    newAccount.value = '';
                     try {
                         const res = await fetch(`${API_BASE}/api/register`, { method: 'POST' });
                         if (!res.ok) {
@@ -1266,10 +1142,12 @@
                         }
                         const data = await res.json();
                         if (data.status === 'success' && data.account_id) {
-                            newAccount.value = data.account_id;
-                            addToast('账号创建成功！请前往 Telegram 绑定', 'success');
-                            // 自动填入登录框
-                            loginInput.value = data.account_id;
+                            addToast('账号创建成功，自动登录中', 'success');
+                            // 自动登录
+                            accountId.value = data.account_id;
+                            localStorage.setItem('tg_gallery_account', data.account_id);
+                            // 加载图库
+                            await loadGallery();
                         } else {
                             throw new Error('注册响应异常');
                         }
@@ -1290,61 +1168,12 @@
                     accountId.value = id;
                     localStorage.setItem('tg_gallery_account', id);
                     addToast('登录成功', 'success');
-                    // 重置状态
-                    isBound.value = false;
-                    images.value = [];
-                    await checkStatus();
-                    if (isBound.value) {
-                        await loadGallery();
-                    }
-                }
-
-                // ---- 状态检查 ----
-                async function checkStatus() {
-                    if (!accountId.value) return;
-                    statusLoading.value = true;
-                    statusText.value = '检查绑定状态...';
-                    statusClass.value = 'info';
-                    try {
-                        const res = await fetch(`${API_BASE}/api/account/status`, {
-                            headers: { 'Authorization': `Bearer ${accountId.value}` }
-                        });
-                        if (!res.ok) {
-                            if (res.status === 401 || res.status === 403) {
-                                isBound.value = false;
-                                statusText.value = '账号无效或未授权，请重新登录';
-                                statusClass.value = 'error';
-                                addToast('账号无效，请重新登录', 'error');
-                                return;
-                            }
-                            throw new Error(`HTTP ${res.status}`);
-                        }
-                        const data = await res.json();
-                        isBound.value = data.is_bound === true;
-                        if (isBound.value) {
-                            statusText.value = '✅ 已绑定 Telegram，可以上传图片';
-                            statusClass.value = 'success';
-                        } else {
-                            statusText.value = '⚠️ 未绑定 Telegram，暂无法上传图片。请前往 @Bcvyubot 绑定';
-                            statusClass.value = 'warning';
-                        }
-                    } catch (e) {
-                        isBound.value = false;
-                        statusText.value = '状态查询失败: ' + e.message;
-                        statusClass.value = 'error';
-                        addToast('状态查询失败', 'error');
-                    } finally {
-                        statusLoading.value = false;
-                    }
-                }
-
-                function refreshStatus() {
-                    checkStatus();
+                    await loadGallery();
                 }
 
                 // ---- 图库 ----
                 async function loadGallery() {
-                    if (!accountId.value || !isBound.value) return;
+                    if (!accountId.value) return;
                     galleryLoading.value = true;
                     try {
                         const res = await fetch(`${API_BASE}/api/images`, {
@@ -1373,16 +1202,11 @@
                 }
 
                 function refreshGallery() {
-                    if (isBound.value) loadGallery();
-                    else addToast('请先绑定 Telegram', 'warning');
+                    loadGallery();
                 }
 
                 // ---- 上传 ----
                 function triggerFileInput() {
-                    if (!isBound.value) {
-                        addToast('请先绑定 Telegram 才能上传', 'warning');
-                        return;
-                    }
                     if (uploading.value) return;
                     if (fileInputRef.value) fileInputRef.value.click();
                 }
@@ -1404,10 +1228,6 @@
                 }
 
                 async function startUpload(file) {
-                    if (!isBound.value) {
-                        addToast('请先绑定 Telegram', 'warning');
-                        return;
-                    }
                     if (uploading.value) return;
                     if (file.size > 20 * 1024 * 1024) {
                         addToast('图片大小超过 20 MB 限制', 'error');
@@ -1454,7 +1274,6 @@
                             uploadProgress.value = 100;
                             uploadStatus.value = '上传完成 ✅';
                             addToast(`上传成功: ${data.file_name}`, 'success');
-                            // 刷新图库
                             await loadGallery();
                         } else {
                             throw new Error(data.detail || '上传失败');
@@ -1471,7 +1290,7 @@
                     }
                 }
 
-                // ---- 图片预览 ----
+                // ---- 预览 ----
                 function openPreview(img) {
                     previewImage.value = img;
                     previewVisible.value = true;
@@ -1488,7 +1307,7 @@
                     if (!previewImage.value) return;
                     const url = previewImage.value.url;
                     navigator.clipboard?.writeText(url).then(() => {
-                        addToast('直链已复制到剪贴板', 'success');
+                        addToast('压缩直链已复制', 'success');
                     }).catch(() => {
                         const ta = document.createElement('textarea');
                         ta.value = url;
@@ -1498,7 +1317,26 @@
                         document.body.appendChild(ta);
                         ta.select();
                         try { document.execCommand('copy');
-                            addToast('直链已复制', 'success'); } catch (_) { addToast('复制失败，请手动复制', 'error'); }
+                            addToast('压缩直链已复制', 'success'); } catch (_) { addToast('复制失败，请手动复制', 'error'); }
+                        document.body.removeChild(ta);
+                    });
+                }
+
+                function copyRawLink() {
+                    if (!previewImage.value) return;
+                    const url = previewImage.value.url + '?raw=true';
+                    navigator.clipboard?.writeText(url).then(() => {
+                        addToast('原图直链已复制', 'success');
+                    }).catch(() => {
+                        const ta = document.createElement('textarea');
+                        ta.value = url;
+                        ta.style.position = 'fixed';
+                        ta.style.opacity = '0';
+                        ta.style.left = '-9999px';
+                        document.body.appendChild(ta);
+                        ta.select();
+                        try { document.execCommand('copy');
+                            addToast('原图直链已复制', 'success'); } catch (_) { addToast('复制失败，请手动复制', 'error'); }
                         document.body.removeChild(ta);
                     });
                 }
@@ -1522,7 +1360,6 @@
                 }
 
                 function handleImageError(event, img) {
-                    // 图片加载失败时显示占位
                     event.target.style.display = 'none';
                     const parent = event.target.parentElement;
                     const fallback = document.createElement('div');
@@ -1533,19 +1370,11 @@
                 }
 
                 // ---- 生命周期 ----
-                onMounted(async () => {
-                    // 主题
+                onMounted(() => {
                     document.documentElement.setAttribute('data-theme', theme.value);
-
-                    // 如果已有账号，自动登录
                     if (accountId.value) {
-                        await checkStatus();
-                        if (isBound.value) {
-                            await loadGallery();
-                        }
+                        loadGallery();
                     }
-
-                    // 键盘关闭预览
                     document.addEventListener('keydown', (e) => {
                         if (e.key === 'Escape' && previewVisible.value) {
                             closePreview();
@@ -1553,27 +1382,18 @@
                     });
                 });
 
-                // 监听账号变化
                 watch(accountId, (val) => {
                     if (!val) {
                         images.value = [];
-                        isBound.value = false;
                         previewVisible.value = false;
                     }
                 });
 
-                // ---- 暴露 ----
                 return {
                     accountId,
                     theme,
                     loginInput,
                     registering,
-                    newAccount,
-                    isBound,
-                    statusLoading,
-                    statusText,
-                    statusClass,
-                    statusIcon,
                     fileInputRef,
                     isDragging,
                     uploading,
@@ -1590,12 +1410,9 @@
                     toasts,
                     toggleTheme,
                     copyAccount,
-                    copyNewAccount,
                     logout,
                     doRegister,
                     doLogin,
-                    checkStatus,
-                    refreshStatus,
                     loadGallery,
                     refreshGallery,
                     triggerFileInput,
@@ -1605,6 +1422,7 @@
                     openPreview,
                     closePreview,
                     copyLink,
+                    copyRawLink,
                     downloadImage,
                     openInNewTab,
                     handleImageError,
